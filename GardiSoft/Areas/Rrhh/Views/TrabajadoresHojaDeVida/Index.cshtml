@@ -1,0 +1,352 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*<h2>Hoja de vida del trabajador</h2>*@
+
+
+
+    @Html.AntiForgeryToken()
+
+    <div class="well">
+        <div class="form-inline">
+            <h4>Utilice el formulario para buscar trabajadores</h4>
+
+
+            <hr />
+          
+                  RUT o Nombre: <input type="text" id="rut" class="form-control" value="@ViewBag.rut" />
+            <input type="submit" class="btn btn-success" id="buscar" value="Buscar" />
+                    
+
+            </div>
+        </div>
+
+
+
+            <div class="row">
+
+             
+              
+                    <h1 id="nombreCompleto"></h1>
+                    <p class="lead" id="cargoLugar"></p>
+               
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-lg-12 col-md-12 col-sm-12">
+
+                    <div class="page-header">
+                        <h1 id="forms">Evaluación de desempeño</h1>
+                    </div>
+
+                    <div id="evaluacion"></div>
+
+                </div>
+            </div>
+            <div class="row" style="margin-top:40px">
+
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Historial De Cargos</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-striped table-hover ">
+                            <thead>
+                                <tr>
+
+                                    <th>Cargo </th>
+                                    <th>Inicio</th>
+                                    <th>Termino </th>
+                                </tr>
+                            </thead>
+                            <tbody id="cargos">
+                                <tr></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+
+
+                <div class="panel panel-warning">
+                    <div class="panel-heading" >
+                        <h3 class="panel-title">Licencias Médicas</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-striped table-hover ">
+                            <thead>
+                                <tr>
+                                    <th>Especialidad</th>
+                                    <th>Enfermedad </th>
+                                    <th>Fecha</th>
+                                    <th>Dias</th>
+                                </tr>
+                            </thead>
+                            <tbody id="licencias"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+               
+                <div class="panel panel-danger">
+                    <div class="panel-heading" style="background-color:#d9534f !important">
+                        <h3 class="panel-title">Excepciones</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-striped table-hover ">
+                            <thead>
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>Inicio</th>
+                                    <th>Termino</th>
+                                </tr>
+                            </thead>
+                            <tbody id="excepciones"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="page-header">
+                    <h1 id="forms">Cursos Externos</h1>
+                </div>
+                <table class="table table-striped table-hover ">
+                    <thead>
+                        <tr>
+
+                            <th>Curso </th>
+                            <th>Lugar</th>
+                            <th>Valor Empresa </th>
+                            <th>Valor Empresa </th>
+                        </tr>
+                    </thead>
+                    <tbody id="capacitacionesExternas"></tbody>
+                </table>
+
+
+
+                <div class="page-header">
+                    <h1 id="forms">Cursos Internos</h1>
+                </div>
+                <table class="table table-striped table-hover ">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Año </th>
+                            <th>Asociado a</th>
+                            <th>Estado </th>
+                        </tr>
+                    </thead>
+                    <tbody id="CursoInterno"></tbody>
+                </table>
+
+
+
+            </div>
+
+
+
+
+            @section Scripts{
+
+
+                <script type="text/javascript">
+
+
+                    $(document).ready(function () {
+
+
+                        $("#rut").trabajadores();
+
+
+
+                        if ($("#rut").val() != "")
+                        {
+                            cargarHojaDeVida();
+                        }
+
+
+                        $("#buscar").on('click', function () {
+
+                            cargarHojaDeVida();
+
+                        });
+                       
+
+
+
+                    });
+
+                    function cargarHojaDeVida()
+                    {
+                       
+                        $.ajax({
+                            url: '@Url.Action("VerCursosExternos", "TrabajadoresHojaDeVida")',
+                            datatype: 'html',
+                            type:'GET',
+                            async: true,
+                            data: { rut: $("#rut").val() },
+                            success: function (data) {
+                                var data = eval(data);
+
+                                var texto = "";
+                                $.each(data, function (i, item) {
+                                   
+                                    texto += "<tr><td>" + item.x.Curso + "</td><td>" + item.x.Otec + "</td><td>" + item.x.CostoEmpresa + "</td><td>" + item.Year + "</td> </tr>"
+
+
+                                });
+                                $("#capacitacionesExternas").html(texto);
+
+
+                            }
+                        });
+
+                        $.ajax({
+                            url: '@Url.Action("VerDatosTrabajador", "TrabajadoresHojaDeVida")',
+                            datatype: 'html',
+                            async: true,
+                            data: { rut: $("#rut").val() },
+                            success: function (data) {
+                                var data = eval(data);
+
+                                $("#nombreCompleto").text(data.Nombre + ' ' + data.ApellidoPaterno + ' ' + data.ApellidoMaterno);
+                                $("#cargoLugar").text(data.Cargo + ', ' + data.CentroCosto);
+
+                                
+
+                            }
+                        });
+
+                        $.ajax({
+                            url: '@Url.Action("VerExcepciones", "TrabajadoresHojaDeVida")',
+                            datatype: 'html',
+                            async: true,
+                            data: { rut: $("#rut").val() },
+                            success: function (data) {
+                                var data = eval(data);
+
+                                var texto = "";
+                                $.each(data, function (i, item) {
+                                    texto += "<tr><td>" + item.TexGlosa + "</td><td>" + item.ExcFecInicio + "</td><td>" + item.ExcFecTermino + "</td></tr>";
+
+                                });
+                                $("#excepciones").html(texto);
+
+
+                            }
+                        });
+
+                        $.ajax({
+                            url: '@Url.Action("VerHistorialDeCargos", "TrabajadoresHojaDeVida")',
+                            datatype: 'html',
+                            async: true,
+                            data: { rut: $("#rut").val() },
+                            success: function (data) {
+                                var cargos = eval(data);
+
+                                var texto = "";
+                                $.each(cargos, function (i, item) {
+                                    texto += "<tr><td>" + item.Cargo + "</td><td>" + item.Inicio + "</td><td>" + item.Termino + "</td></tr>";
+
+                                });
+                                $("#cargos").html(texto);
+
+                            }
+                        });
+
+                
+
+                        $.ajax({
+                            url: '@Url.Action("VerLicenciasMedicas", "TrabajadoresHojaDeVida")',
+                            datatype: 'html',
+                            async: true,
+                            data: { rut: $("#rut").val() },
+                            success: function (data) {
+                                var data = eval(data);
+
+                                var texto = "";
+                                $.each(data, function (i, item) {
+                                    texto += "<tr><td>" + item.Especialidad + "</td><td>" + item.tipo + "</td><td>" + item.fechaEmision + "</td><td>" + item.LicDias + "</td></tr>"
+
+                                });
+                                $("#licencias").html(texto);
+
+                            }
+                        });
+
+                        $.ajax({
+                            url: '@Url.Action("VerCursosInternos", "TrabajadoresHojaDeVida")',
+                            datatype: 'html',
+                            async: true,
+                            data: { rut: $("#rut").val()},
+                            success: function (data) {
+                                var data = eval(data);
+                           
+                                //CursoInterno
+                                var texto = "";
+                                $.each(data, function (i, item) {
+                                    texto += "<tr><td>" + item.nombre + "</td><td>" + item.año + "</td><td>" + item.EFC + "</td><td>" + item.Estado + "</td></tr>";
+
+
+                                });
+
+                                $("#CursoInterno").html(texto);
+
+
+                            }
+                        });
+
+                   
+
+
+                        $.ajax({
+                            url: '@Url.Action("VerEDD", "TrabajadoresHojaDeVida")',
+                            datatype: 'html',
+                            data: {rut : $("#rut").val()},
+                            success: function (data) {
+                                var data = eval(data);
+                              
+
+
+                                var texto = "";
+                                $.each(data, function (i, item) {
+
+                                    var clase = "danger";
+                                    if (item.valor > 1.5 && item.valor < 2.3) {
+                                        clase = "warning";
+                                    }
+                                    if (item.valor >= 2.3 && item.valor <= 3.5) {
+                                        clase = "success";
+                                    }
+                                    if (item.valor >= 3.5) {
+                                        clase = "info";
+                                    }
+
+
+
+                                    texto += '<div class="col-lg-3 col-md-3 col-sm-3"><p style="text-align:center;margin-top:15px;"><button type="button" class="btn btn-' + clase + ' btn-circle btn-xl">';
+                                    texto += item.valor;
+                                    texto += '</button> </p> <p style="text-align:center">' + item.nombreCompetencia + '</p> </div>';
+
+                                });
+
+                                if (data.length == 0)
+                                {
+                                    texto = "<h3>No se ha realizado la evaluación</h3>";
+                                }
+
+                                $("#evaluacion").html(texto);
+
+                            }
+                        });
+
+                    }
+
+                </script>
+            }

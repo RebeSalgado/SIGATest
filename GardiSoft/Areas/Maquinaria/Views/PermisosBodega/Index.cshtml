@@ -1,0 +1,251 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Administracion Permisos Bodegas</h2>
+
+@*-- AGREGAR --*@
+
+<div class="well">
+    <div class="form-horizontal">
+        <h4>Utilice el formulario para asignar permisos a los usuarios</h4>
+        <hr />
+
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Nombre Usuario</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" id="txtNombreUsuario" placeholder="escriba aquí el nombre del Usuario">
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Numero Bodega</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" name="idBodega" id="txtNumeroBodega" disabled placeholder="Código de bodega" autocomplete="off">
+                <input type="submit" value="Seleccionar Bodega" id="btnBuscarBodega" class="btn btn-success" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Numero Bodega</label>
+            <div class="col-md-10">
+                @Html.DropDownList("Rol", null, htmlAttributes: new { @class = "form-control" })
+                
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Guardar" id="btnGuardarPermiso" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+    <div id="VerPermisos"> Permisos</div>
+</div>
+
+
+
+@*--MODAL ELIMINAR --*@
+
+<div class="modal fade " id="mdlEliminarPermiso" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Eliminar Permiso</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="NombrePlan" class="col-sm-2 control-label">Nombre Usuario</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control " disabled id="txtEliminarPermiso" placeholder=" " autocomplete="off">
+                        </div>
+                        <div class="col-sm-10">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger EliminarPermiso" data-dismiss="modal">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*MODAL BODEGAS*@
+
+<div class="modal fade" id="mdlBodegas" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Bodegas</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <p>Seleccione Bodega</p>
+                    <div id="VerSeleccionarBodega"> </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+<script type="text/javascript">
+
+    $(document).ready(function () {
+     
+        CargarPermisos();
+
+        $.ajax({
+            url: '@Url.Action("VerBodegas", "PermisosBodega")',
+            datatype: 'json',
+            type: 'POST',
+            async: true,
+            //data: { Busqueda: $("#txtProductoBuscar").val(), bodegaId: $("#idBodega").val() }, // o sin stringify para datos primitivos  {rut : item.rut },
+            success: function (data) {
+
+                var r = eval(data);
+
+                $("#VerSeleccionarBodega").jsonTabla({ tabla: r, lengthMenu: [[5, 10, 25], [5, 10, 25]] });
+
+            }
+        });
+
+        var idPermiso = 0;
+
+    });
+
+
+
+    //CARGAR PERMISOS 
+
+
+
+    function CargarPermisos() {
+        $.ajax({
+            url: '@Url.Action("VerPermisos", "PermisosBodega")',
+            datatype: 'json',
+            type: 'POST',
+            contentType: 'application/json',
+            async: true,
+            success: function (data) {
+                data = eval(data);
+
+                $("#VerPermisos").jsonTabla({ tabla: data });
+            }
+        });
+    }
+
+
+    //GUARDAR PERMISOS
+    
+    $("#btnGuardarPermiso").click(function () {
+
+        $.ajax({
+            url: '@Url.Action("GuardarPermiso", "PermisosBodega")',
+            datatype: 'json',
+            type: 'POST',
+            contentType: 'application/json',
+            async: true,
+            data: JSON.stringify({ Usuario: $("#txtNombreUsuario").val(), Bodega: $("#txtNumeroBodega").attr('idbodega'),Rol : $("#Rol").val() }), // o sin stringify para datos primitivos  {rut : item.rut },
+            success: function (data) {
+                data = eval(data);
+                if (data.Resultado == "Guardado") {
+                    $.notificar({ text: 'Guardado', title: 'Exito', type: 'success' });
+                    $("#txtNombreUsuario").val('')
+                    $("#txtNumeroBodega").val('')
+                    CargarPermisos();
+                }
+                else {
+                    $.notificar({ text: 'no se pudo guardar', title: 'ups', type: 'danger' });
+                }
+                //$("#VerReporte").jsonTabla({ tabla: data });
+            }
+        });
+    });
+
+    //ELIMINAR PERMISO  
+
+
+
+
+    $(document).on('click', ".Eliminar", function () {
+        idPermiso = $(this).attr('idPermiso');
+
+        $("#mdlEliminarPermiso").modal('show');
+        var cant = $(this).closest('tr').find("td:eq(1)").html();
+        $("#txtEliminarPermiso").val(cant);
+
+    });
+
+    $(document).on('click', ".EliminarPermiso", function () {
+        $.ajax({
+            url: '@Url.Action("EliminarPermiso", "PermisosBodega")',
+            datatype: 'json',
+            type: 'POST',
+            contentType: 'application/json',
+            async: true,
+            data: JSON.stringify({ Id: idPermiso }), // o sin stringify para datos primitivos  {rut : item.rut },
+            success: function (data) {
+                data = eval(data);
+                if (data.Resultado == "Guardado") {
+                    $.notificar({ text: 'Permiso Eliminado', title: 'Todo listo', type: 'success' });
+                    CargarPermisos();
+                }
+                else {
+                    $.notificar({ text: 'No se puede Eliminar Permiso.', title: 'Todo listo', type: 'danger' });
+                }
+
+
+            }
+        });
+
+    });
+
+
+
+    // *****************************************BODEGAS***************************************
+    $("#btnBuscarBodega").click(function () {
+        $("#mdlBodegas").modal('show');
+
+      
+
+    });
+
+
+
+
+
+
+
+    $(document).on('click', '.Seleccionar', function () {
+
+        idBodega = $(this).attr('idBodega');
+        $("#txtNumeroBodega").attr('idBodega', idBodega);
+        var Bod = $(this).closest('tr').find("td:eq(0)").html();
+        $("#txtNumeroBodega").val(Bod);
+        $("#mdlBodegas").modal('hide');
+
+    });
+
+
+
+
+
+
+</script>
+
+}

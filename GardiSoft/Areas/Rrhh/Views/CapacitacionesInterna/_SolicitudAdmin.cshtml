@@ -1,0 +1,76 @@
+﻿@model IEnumerable<Entidades.Rrhh.Capacitaciones.Capacitacion>
+
+
+
+@if (Model.Count() > 0)
+{
+
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Nombre)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.CantidadHoras)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FechaInicio)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Relator)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Estado)
+                </th>
+                @*<th>
+                        @Html.DisplayNameFor(model => model.ContactoOtec)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.MailContactoOtec)
+                    </th>*@
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TipoEfc.Nombre)
+                    </td>
+
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CantidadHoras)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FechaInicio)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Relator)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Estado)
+                    </td>
+                    @*<td>
+                                               @Html.DisplayFor(modelItem => item.ContactoOtec)
+                                           </td>
+                                           <td>
+                                               @Html.DisplayFor(modelItem => item.MailContactoOtec)
+                        *                   </td>*@
+                    <td>
+                        @Html.ActionLink("Invitar a trabajador", "AgregarTrabajadoresAdmin", new { id = item.Id }) |
+                       @* <a id="@item.Id" class="solicitar">Solicitar a RRHH</a>*@
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+}
+else
+{
+    <p class="lead">Hola, debes crear al menos una solicitud para incorporar trabajadores.</p>
+}

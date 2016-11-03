@@ -1,0 +1,155 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Persmisos Calendario De Operaciones</h2>
+
+@*--   AGREGAR  --*@
+<div class="well">
+    <div class="form-horizontal">
+        <h4>PERSMISOS</h4>
+        <hr />
+
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">USUARIO</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" id="txtNombreUsuario" placeholder="escriba aquí el nombre del usuario">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" value="Agregar" id="Agregar" class="btn btn-success Agregar">Agregar Usuario</button>
+            </div>
+        </div>
+    </div>
+    <div class="VerUsuarios" id="VerUsuarios"> USUARIOS</div>
+</div>
+
+
+
+
+@*--MODAL ELIMINAR --*@
+
+<div class="modal fade " id="mdlEliminar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Eliminar Usuario</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="NombrePlan" class="col-sm-2 control-label">Usuario</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control " disabled id="txtEliminarUsuario" placeholder=" " autocomplete="off">
+                        </div>
+                        <div class="col-sm-10">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger EliminarU" id="EliminarU" data-dismiss="modal">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            var idusuario = 0;
+
+            VerUsuarios();
+
+
+    });
+
+
+    //CARGAR PLAN PARTES
+    function VerUsuarios() {
+        $.ajax({
+            url: '@Url.Action("VerUsuarios", "CalendarioPermisos")',
+            datatype: 'json',
+            type: 'POST',
+            contentType: 'application/json',
+           // data: JSON.stringify({ idPlan: $("#idPlan").val() }),
+            async: true,
+            success: function (data) {
+                data = eval(data);
+
+                $("#VerUsuarios").jsonTabla({ tabla: data });
+            }
+        });
+    }
+
+
+        $("#Agregar").click(function () {
+
+            $.ajax({
+                url: '@Url.Action("AgregarUsuario", "CalendarioPermisos")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ Usuario: $("#txtNombreUsuario").val() }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    if (data.Resultado == "Guardado") {
+                        $.notificar({ text: 'Guardado', title: 'Exito', type: 'success' });
+                        $("#txtNombreUsuario").val('');
+                        VerUsuarios();
+                    }
+                    else {
+                        $.notificar({ text: 'no se pudo guardar', title: 'ups', type: 'danger' });
+                    }
+                    //$("#VerReporte").jsonTabla({ tabla: data });
+                }
+            });
+        });
+
+
+        //ELIMINAR USUARIO
+
+
+        $(document).on('click', ".Eliminar", function () {
+            idusuario = $(this).attr('idusuario');
+
+            $("#mdlEliminar").modal('show');
+            var cant = $(this).closest('tr').find("td:eq(1)").html();
+            $("#txtEliminarUsuario").val(cant);
+
+        });
+
+
+        $(document).on('click', ".EliminarU", function () {
+            $.ajax({
+                url: '@Url.Action("EliminarUsuario", "CalendarioPermisos")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ Id: idusuario }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    if (data.Resultado == "Guardado") {
+                        $.notificar({ text: 'Usuario Eliminado', title: 'Todo listo', type: 'success' });
+                        VerUsuarios();
+                    }
+                    else {
+                        $.notificar({ text: 'No se puede Eliminar Usuario.', title: 'Todo listo', type: 'danger' });
+                    }
+
+
+                }
+            });
+
+        });
+
+</script>
+}

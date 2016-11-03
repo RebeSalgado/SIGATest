@@ -1,0 +1,85 @@
+﻿@model IEnumerable<Entidades.Rrhh.Capacitaciones.CursoTrabajadores>
+
+@{
+    ViewBag.Title = "VerLista";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    td {
+        font-size: 12px;
+    }
+</style>
+
+<h2>Asistentes</h2>
+<h4>Marque los participantes</h4>
+
+
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                @Html.DisplayNameFor(model => model.RutTrabajador)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Realizada)
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.RutTrabajador)
+                </td>
+                <td style="text-align:center">
+                    @Html.CheckBoxFor(modelItem => item.Realizada, htmlAttributes: new { @Style = "width:30px; height: 30px;", @class = "presente", @id = Html.DisplayFor(modelItem => item.Id) })
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@section Scripts{
+
+
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+
+            //$('table').DataTable({
+            //    dom: 'Bfrtip',
+            //    buttons: [
+
+            //        'excelHtml5',
+
+            //    ]
+            //});
+
+
+            $(".presente").on("change", function () {
+
+                
+                $.ajax({
+                    url: '@Url.Action("Presente","CapacitacionesInterna")',
+                    data: { id: $(this).attr('id') },
+                    datatype: 'html',
+                    success: function (data) {
+
+                    }
+                });
+
+
+            });
+
+
+        });
+    </script>
+}

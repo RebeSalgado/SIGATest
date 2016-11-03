@@ -1,0 +1,28 @@
+﻿@model Entidades.Control.Nivel_Control
+
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+<div>
+    <h4>Nivel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "EditarNivel", new { id = Model.Id_Nivel }) |
+    @Html.ActionLink("Volver a Gestion", "Index")
+</p>

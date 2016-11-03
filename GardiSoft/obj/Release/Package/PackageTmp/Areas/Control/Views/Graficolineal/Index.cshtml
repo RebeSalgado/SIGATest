@@ -1,0 +1,166 @@
+﻿@model IEnumerable<Entidades.Control.ControlIndicador>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="col-md-12">
+    <div class="form-inline formulario" id="formulario" name="formulario">
+        <h3>Meta y real por Indicador</h3>
+        <hr />
+        <div class="form-group">
+            <label for="exampleInputName2">Indicador</label>
+            <select type="text" class="form-control input-sm IdIndicador" id="IdIndicador">
+                <option value="-1">Seleccione</option>
+            </select>
+        </div>
+
+        <!-- <div class="form-group">
+             <label for="exampleInputName2">Fecha Inicio</label>
+             <select type="text" class="form-control input-sm FechaInicio" id="FechaInicio">
+                 <option value="-1">Seleccione</option>
+             </select>
+         </div>
+
+         <div class="form-group">
+             <label for="exampleInputName2">Fecha Fin</label>
+             <select type="text" class="form-control input-sm FechaFin" id="FechaFin">
+                 <option value="-1">Seleccione</option>
+             </select>
+         </div>-->
+
+
+
+        <button type="submit" class="btn btn-success btn-sm Envía" id="Envía">Generar</button>
+
+
+        <div id="container" style="min-width: 250px; height: 400px; margin: 0 auto"></div>
+    </div>
+</div>
+<br />
+<div id="link">
+    <h5>@Html.ActionLink("Ir a Gráfico Lineal", "Index", "GraficoLineal")</h5>
+</div>
+
+
+
+
+
+@section Scripts{
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+
+            $.ajax({
+                url: '@Url.Action("TraeIndicador", "Graficolineal")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                //  data: JSON.stringify({ idactividad: $("#idactividad").val() }),
+                async: true,
+                success: function (data) {
+                    data = eval(data);
+                    var texto = "";
+
+                    $.each(data, function (i, item) {
+                        texto += "<option value='" + item.Id_Indicador + "'> " + item.Nombre + " </option>";
+
+
+                    });
+
+                    $("#IdIndicador").html(texto);
+                }
+            });
+
+
+            $("#Envía").click(function () {
+
+                var IdIndicador = $(this).closest('.formulario').find('.IdIndicador').val();
+                //var FechaInicio = $(this).closest('.formulario').find('.FechaInicio').val();
+                //var FechaFin = $(this).closest('.formulario').find('.FechaFin').val();
+
+                $.ajax({
+                    url: '@Url.Action("MetaxReal", "GraficoBarras")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ IdIndicador: IdIndicador }),
+                    async: true,
+                    success: function (data) {
+                        data = eval(data);
+
+
+                        var data1 = [];
+                        var data2 = [];
+                        var data3 = [];
+
+
+                        for (var i in data) {
+                            var serie = [data[i].Meta];
+                            data1.push(parseInt(serie));
+
+                            //data1.push([serie]);
+                        }
+                        for (var i in data) {
+                            var serie = [data[i].Nreal];
+                            data2.push(parseInt(serie));
+
+                        }
+                        for (var i in data) {
+                            var serie = new Date(data[i].fecha);
+                            data3.push(serie);
+
+
+                        }
+
+                        $(function () {
+
+                            Highcharts.chart('container', {
+                                title: {
+                                    text: 'Grafico Meta'
+                                },
+
+                                subtitle: {
+                                    text: 'Meta y real por fecha',
+
+                                },
+
+
+                                xAxis: {
+                                    type: 'datetime',
+                                    categories: data3,
+                                    labels: {
+                                        format: '{value: %b/%Y}'
+                                    }
+
+                                },
+
+                                series: [{
+                                    name: 'Meta',
+                                    color: 'green',
+                                    data: data1,
+
+                                }, {
+                                    name: 'Real',
+                                    color: 'orange',
+                                    data: data2,
+
+                                }]
+                            });
+                        });
+                    }
+
+                });
+            });
+        });
+    </script>
+}
+
+
+
+
+
+

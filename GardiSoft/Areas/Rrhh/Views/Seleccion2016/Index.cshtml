@@ -1,0 +1,139 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Selección 2016</h2>
+
+@*-- FILTRAR --*@
+
+<div class="well">
+    <div class="form-horizontal">
+        <h4>Buscar</h4>
+        <hr />
+
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Edad </label>
+            <div class="col-md-10">
+                <div class="input-group"> 
+                    <div class="input-group col-sm-7">
+                        <input id="txtEdad1" type="text" required class="form-control" value ="0" placeholder="Desde">
+                        <span class="input-group-addon">-</span>
+                        <input id="txtEdad2" type="text" required class="form-control" value= "100"placeholder="Hasta">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Comuna</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" id="txtComuna" placeholder="Comuna ej Conchalí , San Antonio">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Región</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" id="txtRegion" placeholder="Región ej Región Metropolitana, Valparaíso">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Nombre Oficio</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" id="txtOficio" placeholder="Oficio ej Carpintero, Pintor">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Nombre Instituto</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" id="txtInstituto" placeholder="Instituto ej Duoc, Inacap">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Título</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" id="txtTitulo" placeholder="Título ej Ingeniero en Informatíca">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Cargo</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" id="txtCargo" placeholder="Cargo ej Jefe Cuadrilla">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Buscar" id="btnFiltrar" class="btn btn-success" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Reestablecer Filtros" id="btnResetear" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="VerSeleccion"> </div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+        $("#btnFiltrar").click(function () {
+            $.ajax({
+                url: '@Url.Action("FiltrarBusqueda", "Seleccion2016")',
+                datatype: 'json',
+                type: 'POST',
+                async: true,
+                data: { Edad1: $("#txtEdad1").val(), Edad2: $("#txtEdad2").val(),  Comuna: $("#txtComuna").val(), Region: $("#txtRegion").val(), NombreOficio: $("#txtOficio").val(), NombreInstituto: $("#txtInstituto").val(), NombreTitulo: $("#txtTitulo").val(), CargoPostula: $("#txtCargo").val() },
+                success: function (data) {
+                    var r = eval(data);
+                    $("#VerSeleccion").jsonTabla({ tabla: r, lengthMenu: [[-1], [-1]] });
+
+                    $("#VerSeleccion tr").each(function (i, item) {
+                        $(item).find('td:eq(1)').css('display', 'none');
+                        $(item).find('td:eq(2)').css('display', 'none');
+                        $(item).find('td:eq(4)').css('display', 'none');
+                        $(item).find('td:eq(6)').css('display', 'none');
+                        $(item).find('td:eq(8)').css('display', 'none');
+                        $(item).find('td:eq(9)').css('display', 'none');
+                        $(item).find('td:eq(12)').css('display', 'none');
+                        $(item).find('td:eq(13)').css('display', 'none');
+                        $(item).find('td:eq(14)').css('display', 'none');
+                        $(item).find('td:eq(15)').css('display', 'none');
+                        $(item).find('td:eq(16)').css('display', 'none');
+                        $(item).find('td:eq(17)').css('display', 'none');
+                    });
+                }
+            });
+        });
+
+        $("#btnResetear").click(function () {
+            $("#txtEdad1").val('0')
+            $("#txtEdad2").val('100')
+            $("#txtComuna").val('')
+            $("#txtRegion").val('')
+            $("#txtOficio").val('')
+            $("#txtInstituto").val('')
+            $("#txtTitulo").val('')
+            $("#txtCargo").val('')
+
+        });
+
+    </script>
+}

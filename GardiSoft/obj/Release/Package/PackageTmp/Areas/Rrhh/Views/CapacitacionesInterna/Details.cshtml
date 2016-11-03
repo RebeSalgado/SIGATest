@@ -1,0 +1,91 @@
+﻿@model Entidades.Rrhh.Capacitaciones.Interna
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Interna</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TipoInterno.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TipoInterno.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CodSense)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CodSense)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NombreOtec)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NombreOtec)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ValorCurso)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ValorCurso)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CantidadHoras)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CantidadHoras)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaInicio)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaInicio)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.fechaTermino)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fechaTermino)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ContactoOtec)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ContactoOtec)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MailContacto)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MailContacto)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,283 @@
+﻿@model System.Data.DataTable
+
+@{
+    ViewBag.Title = "Asistencia";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Asistencia</h2>
+<h4>Aquí verás a todos los trabajadores de su tarja</h4>
+<hr />
+
+<div class="row">
+
+    <p style="text-align:right;margin-right:20px;"> <a class="btn btn-primary" href="#" id="nuevoTrabajadorModal">Agregar Trabajador</a></p>
+
+    @Html.Hidden("id", (object)ViewBag.Id)
+</div>
+<br />
+<br />
+<div class="row">
+    <p style="margin:0px;padding:0px;text-align:right;margin-right:20px;"><a href="#" id="mensajeGuardar">¿y el botón guardar?</a></p>
+    <div class="container">
+        <div id="asistencia" style="height:auto;overflow:hidden;"></div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="mensajeGuardarModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Guardado Automatico</h4>
+            </div>
+            @using (Html.BeginForm("AgregarTrabajador", "Tarja"))
+            {
+                <div class="modal-body">
+                    <div class="form-horizontal">
+
+                        <h3>Sorpresa</h3>
+                        <p class="lead">No hay, el sistema guarda cada vez que haces un cambio. </p>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Ok, Gracias</button>
+
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="nuevoTrabajador" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Bienvenido trabajador</h4>
+            </div>
+            @using (Html.BeginForm("AgregarTrabajador", "Tarja"))
+            {
+            <div class="modal-body">
+                <div class="form-horizontal">
+
+
+                    <div class="form-group">
+                        @Html.Label("Rut", "Rut o nombre", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.Editor("Rut", new { htmlAttributes = new { @class = "form-control", @AutoComplete = "off" } })
+                            <h5 class="nombre"></h5>
+                            @Html.Hidden("Nombre", null, new { @Class = "nombre" })
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.Label("Ubicacion", "Ubicación", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownList("Ubicacion", null, htmlAttributes: new { @class = "form-control", @AutoComplete = "off" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.Label("Sindicato", "En sindicato", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.CheckBox("Sindicato", new { htmlAttributes = new { @class = "form-control", @AutoComplete = "off" } })
+                        </div>
+                    </div>
+
+                    @Html.Hidden("idTarja", (object)ViewBag.Id)
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-success" id="btnIngresar">Ingresar trabajador</button>
+            </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts
+{
+    <script type="text/javascript">
+        var hot = null;
+        var encabezados = @Html.Raw(ViewBag.Encabezados);
+        var cambios = [];
+        $(document).ready(function () {
+
+            $("#mensajeGuardar").click(function(){
+
+                $("#mensajeGuardarModal").modal('show');
+
+            });
+
+
+            cargarAsistencia();
+
+            $("#Rut").typeahead({
+                source: function (query, process) {
+                    var nombres = [];
+
+                    var obj = {};
+                    obj.busqueda = $("#Rut").val();
+                    obj.cantidad = 20;
+                    $.ajax({
+                        url: 'http://informatica.gardilcic.cl/webservice/rrhhService.svc/BuscarTrabajadores',
+                        type: "POST",
+                        async: true,
+                        data: JSON.stringify(obj),
+                        dataType: "JSON",
+                        success: function (datos) {
+                            var objeto = eval(datos.d);
+
+                            $.map(objeto, function (item) {
+                                var nombre = item.ApellidoPaterno + " " + item.ApellidoMaterno + " " + item.Nombre;
+                                var itm = {
+                                    rut: item.Rut,
+                                    name: nombre,
+                                    id: item.Id,
+                                    cargo: item.Cargo,
+                                    toString: function () {
+                                        return JSON.stringify(this);
+                                    },
+                                    toLowerCase: function () {
+                                        return this.name.toLowerCase();
+                                    },
+                                    indexOf: function (string) {
+                                        return String.prototype.indexOf.apply(this.name, arguments);
+                                    },
+                                    replace: function (string) {
+                                        var value = '';
+                                        value += this.name;
+                                        if (typeof (this.level) != 'undefined') {
+                                            value += ' <span class="pull-right muted">';
+                                            value += this.level;
+                                            value += '</span>';
+                                        }
+                                        return String.prototype.replace.apply('<div style="padding: 1px 2px; font-size: 12px;">' + value + '</div>', arguments);
+                                    }
+                                };
+                                nombres.push(itm);
+                            });
+                            return process(nombres);
+                        }
+                    });
+                },
+                matcher: function () {
+                    return true;
+                },
+                property: 'name',
+                items: 10,
+                minLength: 3,
+                updater: function (item) {
+                    var item = JSON.parse(item);
+                    $(".nombre").html(item.name)
+                    $(".nombre").val(item.name)
+
+
+
+                    return item.rut;
+                }
+            });
+
+
+
+
+
+
+            $("#nuevoTrabajadorModal").click(function(){
+                $("#nuevoTrabajador").modal('show');
+            });
+
+        });
+
+        function cambio(changes,source)
+        {
+
+            if(changes != null)
+            {
+
+
+                for(var i= 0; i < changes.length;i++)
+                {
+
+                    cambio = {};
+                    cambio.Rut = hot.getDataAtCell(changes[i][0],0);
+                    cambio.Fecha = encabezados[changes[i][1]];
+                    cambio.Estado = changes[i][3];
+                    cambio.idTarja = $("#id").val();
+
+                    $.ajax({
+                        url: '@Url.Action("GuardaAsistencia", "Tarja")',
+                        datatype: 'json',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        async: true,
+                        data: JSON.stringify({ trabajador: cambio}), // o sin stringify para datos primitivos  {rut : item.rut },
+                        success: function (data) {
+                        data = eval(data);
+
+                            if(data.Resultado == "error")
+                            {
+                                console.log(changes);
+                                console.log("fila");
+                                console.log(changes[0][0]);
+                                console.log("columna");
+                                console.log(changes[i][1]);
+                                console.log("valor old");
+                                console.log(changes[i][2]);
+                                $.notificar({ text: data.Mensaje, title: 'Error', type: 'danger'});
+                                hot.setDataAtCell(changes[i][0],changes[i][1],"A")
+
+                            }
+
+                        }
+                    });
+
+
+
+
+                }
+
+
+            }
+        }
+
+
+        function agregarTrabajador(data)
+        {
+            $("#nuevoTrabajador").modal('hide');
+            cargarAsistencia();
+        }
+
+        function cargarAsistencia()
+        {
+            var data = [
+
+                        @foreach(var item in ViewBag.Data)
+            {
+                @Html.Raw(item)
+            }
+            ];
+
+            var container = $('#asistencia')[0];
+            hot = new Handsontable(container, {
+                data: data,
+                fixedColumnsLeft: 2,
+                minSpareRows: 0,
+                minSpaceCols: 0,
+                rowHeaders:true,
+                colHeaders:  @Html.Raw(ViewBag.Encabezados),
+                contextMenu: false,
+                afterChange : cambio
+
+            });
+        }
+
+    </script>
+}

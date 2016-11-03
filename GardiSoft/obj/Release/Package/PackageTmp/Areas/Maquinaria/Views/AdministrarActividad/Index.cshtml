@@ -1,0 +1,185 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Administrar Actividad</h2>
+@*-- AGREGAR --*@
+
+<input type="hidden" id="idactividad" value="@ViewBag.Id" />
+
+<div class="well">
+    <div class="form-horizontal">
+        <h4>Ingresa Nuevas Actividades a : @ViewBag.PlanParte</h4>
+        <hr />
+
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Actividad</label>
+                <div class="col-md-10">
+                    <input type="text" class="form-control" id="txtDescripcionActividad" placeholder="escriba aqui la descripcion de la actividad">
+                </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Frecuencia </label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" id="txtFrecuenciaActividad" placeholder="Frecuencia de la actividad ">
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Minutos</label>
+            <div class="col-md-10">
+
+                <input type="text" class="form-control" id="txtTiempoActividad" placeholder="Tiempo Estimado en minutos">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" value="Agregar" id="Agregar" class="btn btn-success"><i class="glyphicon glyphicon-floppy-disk Agregar"></i>  Agregar</button>
+            </div>
+        </div>
+    </div>
+    <div class="VerPlanPartes" id="VerPlanPartes"> </div>
+</div>
+
+
+@*--MODAL ELIMINAR --*@
+
+<div class="modal fade " id="mdlEliminar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Eliminar Plan</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="NombrePlan" class="col-sm-2 control-label">Nombre Plan</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control " disabled id="txtEliminarActividad" placeholder=" " autocomplete="off">
+                        </div>
+                        <div class="col-sm-10">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger EliminarActividad" id="EliminarActividad" data-dismiss="modal">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="VerActividad" id="VerActividad"> ACTIVIDADES</div>
+
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            idactividad = 0;
+
+            VerActividad();
+    });
+
+
+    function VerActividad(){
+        $.ajax({
+            url: '@Url.Action("VerActividad", "AdministrarActividad")',
+            datatype: 'json',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ idactividad: $("#idactividad").val() }),
+            async: true,
+            success: function (data) {
+                data = eval(data);
+
+                $("#VerActividad").jsonTabla({ tabla: data });
+            }
+        });
+    }
+
+
+
+
+        // GUARDAR NUEVA ACTIVIDAD 
+
+        $("#Agregar").click(function () {
+
+            $.ajax({
+                url: '@Url.Action("GuardarActividad", "AdministrarActividad")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ idparte: $("#idactividad").val(), Descripcion: $("#txtDescripcionActividad").val(), Frecuencia: $("#txtFrecuenciaActividad").val(), MinutosEstimados: $("#txtTiempoActividad").val() }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    if (data.Resultado == "Guardado") {
+                        $.notificar({ text: 'Guardado', title: 'Exito', type: 'success' });
+                        VerActividad();
+                        $("#txtDescripcionActividad").val('');
+                        $("#txtFrecuenciaActividad").val('');
+                        $("#txtTiempoActividad").val('');
+                    }
+                    else {
+                        $.notificar({ text: 'no se pudo guardar', title: 'ups', type: 'danger' });
+                    }
+                    //$("#VerReporte").jsonTabla({ tabla: data });
+                }
+            });
+        });
+
+
+
+        // ELIMINAR ACTIVIDAD   
+
+        $(document).on('click', ".Eliminar", function () {
+            idactividad = $(this).attr('idactividad');
+
+            $("#mdlEliminar").modal('show');
+            var cant = $(this).closest('tr').find("td:eq(2)").html();
+            $("#txtEliminarActividad").val(cant);
+
+        });
+
+
+        $(document).on('click', ".EliminarActividad", function () {
+            $.ajax({
+                url: '@Url.Action("EliminarActividad", "AdministrarActividad")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ Id: idactividad }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    if (data.Resultado == "Guardado") {
+                        $.notificar({ text: 'Plan Eliminado', title: 'Todo listo', type: 'success' });
+                        VerActividad();
+                    }
+                    else {
+                        $.notificar({ text: 'No se puede Eliminar Plan.', title: 'Todo listo', type: 'danger' });
+                    }
+
+
+                }
+            });
+
+        });
+
+
+
+    </script>
+
+}

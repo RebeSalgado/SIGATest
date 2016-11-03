@@ -1,0 +1,292 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Checklist Confirmacion de Procesos Turno</h2>
+
+<div class="well">
+
+    <h4>Utilice el formulario para registrar
+     los horarios</h4>
+    <hr />
+    <div class="form-horizontal ">
+
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Area</label>
+            <div class="col-md-10">
+                <select id="ddlArea" class="form-control"></select>
+            </div>
+
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Fecha</label>
+                <div class="col-md-10">
+                    <input type="date" class="form-control txtFecha">
+                </div>
+            </div>
+
+            <!--Se implementa combo proyecto-->
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Proyecto</label>
+                <div class="col-md-10">
+                    <select id="ddlProyecto" class="form-control"></select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Nivel</label>
+                <div class="col-md-10">
+                    <select id="ddlNivel" class="form-control"></select>
+                </div>
+            </div>
+            <!-- <div class="form-group">
+             <label for="inputEmail3" class="col-sm-2 control-label">Area</label>
+             <div class="col-md-10">
+                 <select id="ddlArea" class="form-control">
+                 </select>
+             </div>
+         </div>-->
+
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Turno</label>
+                <div class="col-md-10">
+                    <select id="ddlTurno" class="form-control"></select>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10" style="text-align:left">
+                    <input type="button" value="Filtrar" id="btnFiltrar" class="btn btn-success">
+                </div>
+            </div>
+
+            <hr />
+        </div>
+</div>
+    </div>
+
+<div class="Formulario">
+    <div id="IngresoCheck" style="text-align:center;" class="col-md-offset-3"></div>
+    <br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10" style="text-align:center">
+            <input type="button" value="Guardar" class="btn btn-success btnGuardar">
+            <input type="button" value="Agregar" class="btn btn-success btnGuardar">
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+
+@Scripts.Render("~/bundles/handsomeTable")
+
+    <script type="text/javascript">
+
+    $(document).ready(function () {
+
+        OcultarBoton();
+
+        function OcultarBoton() {
+            $(".btnGuardar").hide();
+        }
+
+        function CargarChecks() {
+
+            $("#IngresoCheck").html('');
+
+            $.ajax({
+                url: '@Url.Action("CargarCheck", "ControlTiempoInteriorMina")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ Fecha: $(".txtFecha").val(), IdNivel: $("#ddlNivel").val(), IdArea: $("#ddlArea").val(), IdTurno: $("#ddlTurno").val() }),
+                success: function (data) {
+                    data = eval(data);
+
+                    var container = document.getElementById('IngresoCheck');
+                    hot = new Handsontable(container, {
+                        data: data,
+                        fixedColumnsLeft: 1,
+                        minSpareRows: 0,
+                        minSpaceCols: 0,
+                        maxRows: 13,
+                        rowHeaders: true,
+                        colHeaders: ['Id', 'Actividad / Día-Turno', 'META', "" + $(".txtFecha").val() + "", 'Observacion'],
+                        contextMenu: false,
+                        //formulas: true,
+                        //tableClassName: ['table', 'table-bordered'],
+                        columns: [
+                            {
+                                data: 'Id'
+                            },
+                            {
+                                data: 'Actividad / Día-Turno',
+                                readOnly: true
+                            },
+
+                            {
+                                data: 'META',
+                                readOnly: true
+                            },
+
+                            {
+                                data: 'Valor',
+
+                            },
+                            {
+                                data: 'Observacion'
+                            }
+                        ]
+                    });
+                }
+            });
+
+        }
+
+
+
+
+
+        
+        $.ajax({
+            url: '@Url.Action("VerNivel", "ControlTiempoInteriorMina")',
+            datatype: 'json',
+            type: 'POST',
+            contentType: 'application/json',
+            async: true,
+            //data: JSON.stringify({ id: $("#idOt").val(), correo: $("#txtMailAprobador").val() }),
+            success: function (data) {
+                data = eval(data);
+
+                var texto = "";
+                $.each(data, function (i, item) {
+
+                    texto+= "<option value='"+ item.Id +"'> "+ item.Descripcion +" </option>"
+
+                });
+
+                $("#ddlNivel").html(texto);
+
+            }
+        });
+
+
+
+        $.ajax({
+            url: '@Url.Action("VerArea", "ControlTiempoInteriorMina")',
+            datatype: 'json',
+            type: 'POST',
+            contentType: 'application/json',
+            async: true,
+            //data: JSON.stringify({ id: $("#idOt").val(), correo: $("#txtMailAprobador").val() }),
+            success: function (data) {
+                data = eval(data);
+
+                var texto = "";
+                $.each(data, function (i, item) {
+
+                    texto += "<option value='" + item.Id + "'> " + item.Descripcion + " </option>"
+
+                });
+
+                $("#ddlArea").html(texto);
+
+            }
+        });
+
+
+
+        $.ajax({
+            url: '@Url.Action("VerTurno", "ControlTiempoInteriorMina")',
+            datatype: 'json',
+            type: 'POST',
+            contentType: 'application/json',
+            async: true,
+            //data: JSON.stringify({ id: $("#idOt").val(), correo: $("#txtMailAprobador").val() }),
+            success: function (data) {
+                data = eval(data);
+
+                var texto = "";
+                $.each(data, function (i, item) {
+
+                    texto += "<option value='" + item.Id + "'> " + item.Descripcion + " </option>"
+
+                });
+
+                $("#ddlTurno").html(texto);
+
+            }
+        });
+
+
+
+
+        $(document).on('click', "#btnFiltrar", function () {
+
+
+            CargarChecks();
+            
+            $(".btnGuardar").show();
+
+        });
+
+
+        $(document).on('click', '.btnGuardar', function () {
+
+
+                    for (i = 0 ; i < hot.countRows() ; i++) {
+
+                 
+
+                        $.ajax({
+                            url: '@Url.Action("GuardarValorKpi", "ControlTiempoInteriorMina")',
+                            datatype: 'json',
+                            type: 'POST',
+                            contentType: 'application/json',
+                            async: true,
+                            data: JSON.stringify({ IdControl: hot.getDataAtCell(i, 0), Valor: hot.getDataAtCell(i, 3), FechaIngreso: $(".txtFecha").val(), Observacion: hot.getDataAtCell(i, 4) }),
+                            success: function (data) {
+                                data = eval(data);
+
+
+                                if (data.Resultado == "Guardado") {
+                                    $.notificar({ text: 'Guardado', title: 'Exito', type: 'success' });
+                                    $("#IngresoCheck").html('');
+                                }
+                                else {
+                                    $.notificar({ text: 'no se pudo guardar', title: 'ups', type: 'danger' });
+                                }
+
+
+                            }
+
+                            });
+
+
+
+                        //for(j=0; j< hot.countCols();j++)
+                        //{
+
+                        //}
+                    }
+
+
+            $(".btnGuardar").hide();
+            
+
+
+        });
+
+
+ 
+
+
+
+    });
+
+    </script>
+}

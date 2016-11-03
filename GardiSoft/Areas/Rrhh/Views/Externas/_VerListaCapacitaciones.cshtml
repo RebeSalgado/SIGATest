@@ -1,0 +1,74 @@
+﻿@model IEnumerable<Entidades.Rrhh.Capacitaciones.Externa>
+
+<table class="table">
+    <tr>
+        <th>
+           Categoria
+        </th>
+        <th>
+            Subproyecto
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Otec)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NombreCurso)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CantidadHoras)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaInicio)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ContactoOtec)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Usuario)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Estado)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Categoria.Nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SubProyecto.Nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Otec)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NombreCurso)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CantidadHoras)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaInicio)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ContactoOtec)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Usuario)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Estado)
+        </td>
+        <td>
+           
+            @Html.ActionLink("Invitar trabajador", "AgregarTrabajador", new { id=item.Id }) |
+      
+            <a id="@item.Id" class="solicitar">Solicitar a RRHH</a>
+            
+        </td>
+    </tr>
+}
+
+</table>

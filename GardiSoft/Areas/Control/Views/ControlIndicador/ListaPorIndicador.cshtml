@@ -1,0 +1,91 @@
+﻿@model IEnumerable<Entidades.Control.ControlIndicador>
+
+@{
+   
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("ListaPorIndicador", "ControlIndicador", FormMethod.Get))
+{
+    <p><!--Manda los datos ingresados para filtrar-->
+        Filtre por Indicador : @Html.TextBox("IdIndicador")
+        <hr />
+        Filtre por fecha: @Html.DropDownList("fecha" , "Seleccione...")
+        <input type="submit" value="Busqueda" class="btn btn-success" />
+    </p>
+}
+<div id="agregar" style="display:normal; overflow-x:auto" class="well row" >
+    <table class="table table-hover" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+        <tr role="row">
+            <th class="success">
+                @Html.DisplayNameFor(model => model.Indicador.Nombre)
+            </th>
+            <th class="success">
+                @Html.DisplayNameFor(model => model.Usuario.Email)
+            </th>
+            <th class="success">
+                @Html.DisplayNameFor(model => model.Nreal)
+            </th>
+            <th class="success">
+                @Html.DisplayNameFor(model => model.Desviacion)
+            </th>
+            <th class="success">
+                @Html.DisplayNameFor(model => model.fecha)
+            </th>
+            <th class="success">
+                @Html.DisplayNameFor(model => model.Meta)
+            </th>
+            <th class="success"></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td >
+                    @Html.DisplayFor(modelItem => item.Indicador.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Usuario.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nreal)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Desviacion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.fecha)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Meta)
+                </td>
+                <td>
+                    @Html.ActionLink("Editar", "EditarControl", new { id = item.Id_Control }) |
+                    @Html.ActionLink("Detalles", "DetallesControl", new { id = item.Id_Control }) |
+                    @Html.ActionLink("Borrar", "BorrarControl", new { id = item.Id_Control })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+<div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite"></div>
+<div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
+    <ul class="pagination">
+        <li class="paginate_button previous disabled" id="DataTables_Table_0_previous"><a href="#" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0">Previous</a></li>
+        <li class="paginate_button active"><a href="#" aria-controls="DataTables_Table_0" data-dt-idx="1" tabindex="0">1</a></li>
+        <li class="paginate_button "><a href="#" aria-controls="DataTables_Table_0" data-dt-idx="2" tabindex="0">2</a></li>
+        <li class="paginate_button "><a href="#" aria-controls="DataTables_Table_0" data-dt-idx="3" tabindex="0">3</a></li>
+        <li class="paginate_button "><a href="#" aria-controls="DataTables_Table_0" data-dt-idx="4" tabindex="0">4</a></li>
+        <li class="paginate_button "><a href="#" aria-controls="DataTables_Table_0" data-dt-idx="5" tabindex="0">5</a></li>
+        <li class="paginate_button disabled" id="DataTables_Table_0_ellipsis"><a href="#" aria-controls="DataTables_Table_0" data-dt-idx="6" tabindex="0">…</a></li>
+        <li class="paginate_button "><a href="#" aria-controls="DataTables_Table_0" data-dt-idx="7" tabindex="0">62</a></li>
+        <li class="paginate_button next" id="DataTables_Table_0_next"><a href="#" aria-controls="DataTables_Table_0" data-dt-idx="8" tabindex="0">Next</a></li>
+    </ul>
+</div>
+<div style="background-color: azure">
+    @Html.ActionLink("Volver a Control Indicadores", "Index")
+</div>
+@Scripts.Render("~/bundles/handsomeTable")
+
+<script type="text/javascript"></script>

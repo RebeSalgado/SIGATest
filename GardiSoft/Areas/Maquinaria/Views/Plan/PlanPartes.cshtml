@@ -1,0 +1,165 @@
+﻿
+@{
+    ViewBag.Title = "PlanPartes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Plan Partes</h2>
+
+@*-- AGREGAR --*@
+
+<input type="hidden" id="idPlan" value="@ViewBag.Id"/>
+
+<div class="well">
+    <div class="form-horizontal">
+        <h4>Ingresa Nuevo Plan Partes a : @ViewBag.Plan</h4>
+        <hr />
+
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Plan Partes</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" id="txtNombrePlan" placeholder="escriba aquí el nombre del Plan">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" value="Agregar" id="Agregar" class="btn btn-success"><i class="glyphicon glyphicon-floppy-disk"></i>  Agregar</button>
+            </div>
+        </div>
+    </div>
+    <div class="VerPlanPartes" id="VerPlanPartes"> PLAN PARTES</div>
+</div>
+ 
+
+@*--MODAL ELIMINAR --*@
+
+<div class="modal fade " id="mdlEliminar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Eliminar Plan</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="NombrePlan" class="col-sm-2 control-label">Nombre Plan</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control " disabled id="txtEliminarPlanPartes" placeholder=" " autocomplete="off">
+                        </div>
+                        <div class="col-sm-10">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger EliminarPlanP" id="EliminarPlanP" data-dismiss="modal">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var idPlan = 0;
+
+            var idactividad = 0;
+
+            CargarPlan();
+        });
+
+        //CARGAR PLAN PARTES
+        function CargarPlan() {
+            $.ajax({
+                url: '@Url.Action("VerPlanPartes", "Plan")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ idPlan: $("#idPlan").val() }),
+                async: true,
+                success: function (data) {
+                    data = eval(data);
+
+                    $("#VerPlanPartes").jsonTabla({ tabla: data });
+                }
+            });
+        }
+
+        //AGREGAR PLAN PARTES
+        $("#Agregar").click(function () {
+
+            $.ajax({
+                url: '@Url.Action("GuardarPlanPartes", "Plan")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ nombrePlan: $("#txtNombrePlan").val(), idPlan: $("#idPlan").val() }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    if (data.Resultado == "Guardado") {
+                        $.notificar({ text: 'Guardado', title: 'Exito', type: 'success' });
+                        CargarPlan();
+                    }
+                    else {
+                        $.notificar({ text: 'no se pudo guardar', title: 'ups', type: 'danger' });
+                    }
+                    //$("#VerReporte").jsonTabla({ tabla: data });
+                }
+            });
+        });
+
+
+
+
+        // ELIMINAR PLAN PARTES 
+
+        $(document).on('click', ".Eliminar", function () {
+            idplan = $(this).attr('idplan');
+
+            $("#mdlEliminar").modal('show');
+            var cant = $(this).closest('tr').find("td:eq(2)").html();
+            $("#txtEliminarPlanPartes").val(cant);
+
+        });
+
+
+        $(document).on('click', "#EliminarPlanP", function () {
+            $.ajax({
+                url: '@Url.Action("EliminarPlanPartes", "Plan")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ id: idplan }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    if (data.Resultado == "Guardado") {
+                        $.notificar({ text: 'Plan Eliminado', title: 'Todo listo', type: 'success' });
+                        CargarPlan();
+                    }
+                    else {
+                        $.notificar({ text: 'No se puede Eliminar Plan.', title: 'Todo listo', type: 'danger' });
+                    }
+
+
+                }
+            });
+
+        });
+
+
+        // ADMINISTRAR
+
+        //SOLUCION..    
+
+        $(document).on('click', ".Administrar", function () {
+            idactividad = $(this).attr('idactividad');
+            location.href = '@Url.Action("Index", "AdministrarActividad")' + '/index/' + idactividad;
+        });
+
+</script>
+}

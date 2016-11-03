@@ -1,0 +1,277 @@
+C:\SIGA\GardiSoft\bin\roslyn\csc.exe
+C:\SIGA\GardiSoft\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\SIGA\GardiSoft\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\SIGA\GardiSoft\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\SIGA\GardiSoft\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\SIGA\GardiSoft\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\SIGA\GardiSoft\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\SIGA\GardiSoft\bin\roslyn\System.Collections.Immutable.dll
+C:\SIGA\GardiSoft\bin\roslyn\System.Reflection.Metadata.dll
+C:\SIGA\GardiSoft\bin\roslyn\vbc.exe
+C:\SIGA\GardiSoft\bin\roslyn\VBCSCompiler.exe
+C:\SIGA\GardiSoft\bin\roslyn\VBCSCompiler.exe.config
+C:\SIGA\GardiSoft\bin\GardiSoft.dll.config
+C:\SIGA\GardiSoft\bin\GardiSoft.dll
+C:\SIGA\GardiSoft\bin\GardiSoft.pdb
+C:\SIGA\GardiSoft\bin\Entidades.dll
+C:\SIGA\GardiSoft\bin\Entidades.pdb
+C:\SIGA\GardiSoft\bin\Ionic.Zip.xml
+C:\SIGA\GardiSoft\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\SIGA\GardiSoft\bin\NPOI.xml
+C:\SIGA\GardiSoft\bin\NPOI.OOXML.xml
+C:\SIGA\GardiSoft\bin\NPOI.OpenXml4Net.xml
+C:\SIGA\GardiSoft\bin\System.Web.Helpers.xml
+C:\SIGA\GardiSoft\bin\System.Web.Mvc.xml
+C:\SIGA\GardiSoft\bin\System.Web.Optimization.xml
+C:\SIGA\GardiSoft\bin\System.Web.Razor.xml
+C:\SIGA\GardiSoft\bin\System.Web.WebPages.xml
+C:\SIGA\GardiSoft\bin\System.Web.WebPages.Deployment.xml
+C:\SIGA\GardiSoft\bin\System.Web.WebPages.Razor.xml
+C:\SIGA\GardiSoft\bin\Antlr3.Runtime.pdb
+C:\SIGA\GardiSoft\bin\Newtonsoft.Json.xml
+C:\SIGA\GardiSoft\bin\EntityFramework.xml
+C:\SIGA\GardiSoft\bin\EntityFramework.SqlServer.xml
+C:\SIGA\GardiSoft\bin\Microsoft.AspNet.Identity.Core.xml
+C:\SIGA\GardiSoft\bin\Microsoft.AspNet.Identity.Owin.xml
+C:\SIGA\GardiSoft\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+C:\SIGA\GardiSoft\bin\Microsoft.Owin.xml
+C:\SIGA\GardiSoft\bin\Microsoft.Owin.Host.SystemWeb.xml
+C:\SIGA\GardiSoft\bin\Microsoft.Owin.Security.xml
+C:\SIGA\GardiSoft\bin\Microsoft.Owin.Security.Facebook.xml
+C:\SIGA\GardiSoft\bin\Microsoft.Owin.Security.Cookies.xml
+C:\SIGA\GardiSoft\bin\Microsoft.Owin.Security.OAuth.xml
+C:\SIGA\GardiSoft\bin\Microsoft.Owin.Security.Google.xml
+C:\SIGA\GardiSoft\bin\Microsoft.Owin.Security.Twitter.xml
+C:\SIGA\GardiSoft\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+C:\SIGA\GardiSoft\bin\es\System.Web.Helpers.resources.dll
+C:\SIGA\GardiSoft\bin\es\System.Web.Mvc.resources.dll
+C:\SIGA\GardiSoft\bin\es\System.Web.Optimization.resources.dll
+C:\SIGA\GardiSoft\bin\es\System.Web.Razor.resources.dll
+C:\SIGA\GardiSoft\bin\es\System.Web.WebPages.resources.dll
+C:\SIGA\GardiSoft\bin\es\System.Web.WebPages.Deployment.resources.dll
+C:\SIGA\GardiSoft\bin\es\System.Web.WebPages.Razor.resources.dll
+C:\SIGA\GardiSoft\bin\es\EntityFramework.resources.dll
+C:\SIGA\GardiSoft\bin\es\EntityFramework.SqlServer.resources.dll
+C:\SIGA\GardiSoft\bin\es\Microsoft.AspNet.Identity.Core.resources.dll
+C:\SIGA\GardiSoft\bin\es\Microsoft.AspNet.Identity.Owin.resources.dll
+C:\SIGA\GardiSoft\bin\es\Microsoft.AspNet.Identity.EntityFramework.resources.dll
+C:\SIGA\GardiSoft\bin\es\Microsoft.Owin.resources.dll
+C:\SIGA\GardiSoft\bin\es\Microsoft.Owin.Host.SystemWeb.resources.dll
+C:\SIGA\GardiSoft\bin\es\Microsoft.Owin.Security.resources.dll
+C:\SIGA\GardiSoft\bin\es\Microsoft.Owin.Security.Facebook.resources.dll
+C:\SIGA\GardiSoft\bin\es\Microsoft.Owin.Security.Google.resources.dll
+C:\SIGA\GardiSoft\bin\es\Microsoft.Owin.Security.Twitter.resources.dll
+C:\SIGA\GardiSoft\bin\es\Microsoft.Owin.Security.MicrosoftAccount.resources.dll
+C:\SIGA\GardiSoft\obj\Debug\GardiSoft.csprojResolveAssemblyReference.cache
+C:\SIGA\GardiSoft\obj\Debug\GardiSoft.dll
+C:\SIGA\GardiSoft\obj\Debug\GardiSoft.pdb
+J:\SIGA\GardiSoft\bin\roslyn\csc.exe
+J:\SIGA\GardiSoft\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+J:\SIGA\GardiSoft\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+J:\SIGA\GardiSoft\bin\roslyn\Microsoft.CodeAnalysis.dll
+J:\SIGA\GardiSoft\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+J:\SIGA\GardiSoft\bin\roslyn\Microsoft.CSharp.Core.targets
+J:\SIGA\GardiSoft\bin\roslyn\Microsoft.VisualBasic.Core.targets
+J:\SIGA\GardiSoft\bin\roslyn\System.Collections.Immutable.dll
+J:\SIGA\GardiSoft\bin\roslyn\System.Reflection.Metadata.dll
+J:\SIGA\GardiSoft\bin\roslyn\vbc.exe
+J:\SIGA\GardiSoft\bin\roslyn\VBCSCompiler.exe
+J:\SIGA\GardiSoft\bin\roslyn\VBCSCompiler.exe.config
+J:\SIGA\GardiSoft\bin\GardiSoft.dll.config
+J:\SIGA\GardiSoft\bin\GardiSoft.dll
+J:\SIGA\GardiSoft\bin\GardiSoft.pdb
+J:\SIGA\GardiSoft\bin\Entidades.dll
+J:\SIGA\GardiSoft\bin\Entidades.pdb
+J:\SIGA\GardiSoft\bin\Ionic.Zip.xml
+J:\SIGA\GardiSoft\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+J:\SIGA\GardiSoft\bin\NPOI.xml
+J:\SIGA\GardiSoft\bin\NPOI.OOXML.xml
+J:\SIGA\GardiSoft\bin\NPOI.OpenXml4Net.xml
+J:\SIGA\GardiSoft\bin\System.Web.Helpers.xml
+J:\SIGA\GardiSoft\bin\System.Web.Mvc.xml
+J:\SIGA\GardiSoft\bin\System.Web.Optimization.xml
+J:\SIGA\GardiSoft\bin\System.Web.Razor.xml
+J:\SIGA\GardiSoft\bin\System.Web.WebPages.xml
+J:\SIGA\GardiSoft\bin\System.Web.WebPages.Deployment.xml
+J:\SIGA\GardiSoft\bin\System.Web.WebPages.Razor.xml
+J:\SIGA\GardiSoft\bin\Antlr3.Runtime.pdb
+J:\SIGA\GardiSoft\bin\Newtonsoft.Json.xml
+J:\SIGA\GardiSoft\bin\EntityFramework.xml
+J:\SIGA\GardiSoft\bin\EntityFramework.SqlServer.xml
+J:\SIGA\GardiSoft\bin\Microsoft.AspNet.Identity.Core.xml
+J:\SIGA\GardiSoft\bin\Microsoft.AspNet.Identity.Owin.xml
+J:\SIGA\GardiSoft\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+J:\SIGA\GardiSoft\bin\Microsoft.Owin.xml
+J:\SIGA\GardiSoft\bin\Microsoft.Owin.Host.SystemWeb.xml
+J:\SIGA\GardiSoft\bin\Microsoft.Owin.Security.xml
+J:\SIGA\GardiSoft\bin\Microsoft.Owin.Security.Facebook.xml
+J:\SIGA\GardiSoft\bin\Microsoft.Owin.Security.Cookies.xml
+J:\SIGA\GardiSoft\bin\Microsoft.Owin.Security.OAuth.xml
+J:\SIGA\GardiSoft\bin\Microsoft.Owin.Security.Google.xml
+J:\SIGA\GardiSoft\bin\Microsoft.Owin.Security.Twitter.xml
+J:\SIGA\GardiSoft\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+J:\SIGA\GardiSoft\bin\es\System.Web.Helpers.resources.dll
+J:\SIGA\GardiSoft\bin\es\System.Web.Mvc.resources.dll
+J:\SIGA\GardiSoft\bin\es\System.Web.Optimization.resources.dll
+J:\SIGA\GardiSoft\bin\es\System.Web.Razor.resources.dll
+J:\SIGA\GardiSoft\bin\es\System.Web.WebPages.resources.dll
+J:\SIGA\GardiSoft\bin\es\System.Web.WebPages.Deployment.resources.dll
+J:\SIGA\GardiSoft\bin\es\System.Web.WebPages.Razor.resources.dll
+J:\SIGA\GardiSoft\bin\es\EntityFramework.resources.dll
+J:\SIGA\GardiSoft\bin\es\EntityFramework.SqlServer.resources.dll
+J:\SIGA\GardiSoft\bin\es\Microsoft.AspNet.Identity.Core.resources.dll
+J:\SIGA\GardiSoft\bin\es\Microsoft.AspNet.Identity.Owin.resources.dll
+J:\SIGA\GardiSoft\bin\es\Microsoft.AspNet.Identity.EntityFramework.resources.dll
+J:\SIGA\GardiSoft\bin\es\Microsoft.Owin.resources.dll
+J:\SIGA\GardiSoft\bin\es\Microsoft.Owin.Host.SystemWeb.resources.dll
+J:\SIGA\GardiSoft\bin\es\Microsoft.Owin.Security.resources.dll
+J:\SIGA\GardiSoft\bin\es\Microsoft.Owin.Security.Facebook.resources.dll
+J:\SIGA\GardiSoft\bin\es\Microsoft.Owin.Security.Google.resources.dll
+J:\SIGA\GardiSoft\bin\es\Microsoft.Owin.Security.Twitter.resources.dll
+J:\SIGA\GardiSoft\bin\es\Microsoft.Owin.Security.MicrosoftAccount.resources.dll
+J:\SIGA\GardiSoft\obj\Debug\GardiSoft.csprojResolveAssemblyReference.cache
+J:\SIGA\GardiSoft\obj\Debug\GardiSoft.dll
+J:\SIGA\GardiSoft\obj\Debug\GardiSoft.pdb
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\roslyn\csc.exe
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\roslyn\vbc.exe
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\roslyn\VBCSCompiler.exe
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\GardiSoft.dll.config
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\GardiSoft.dll
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\GardiSoft.pdb
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\GardiSoft.dll.CodeAnalysisLog.xml
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\GardiSoft.dll.lastcodeanalysissucceeded
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\Entidades.dll
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\Entidades.pdb
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\Ionic.Zip.xml
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\NPOI.xml
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\NPOI.OOXML.xml
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\NPOI.OpenXml4Net.xml
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\System.Web.Helpers.xml
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\System.Web.Mvc.xml
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\System.Web.Optimization.xml
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\System.Web.Razor.xml
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\System.Web.WebPages.xml
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\System.Web.WebPages.Deployment.xml
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\System.Web.WebPages.Razor.xml
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\Antlr3.Runtime.pdb
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\Newtonsoft.Json.xml
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\EntityFramework.xml
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\EntityFramework.SqlServer.xml
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\Microsoft.AspNet.Identity.Core.xml
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\Microsoft.AspNet.Identity.Owin.xml
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\Microsoft.Owin.xml
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\Microsoft.Owin.Host.SystemWeb.xml
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\Microsoft.Owin.Security.xml
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\Microsoft.Owin.Security.Facebook.xml
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\Microsoft.Owin.Security.Cookies.xml
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\Microsoft.Owin.Security.OAuth.xml
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\Microsoft.Owin.Security.Google.xml
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\Microsoft.Owin.Security.Twitter.xml
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\es\System.Web.Helpers.resources.dll
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\es\System.Web.Mvc.resources.dll
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\es\System.Web.Optimization.resources.dll
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\es\System.Web.Razor.resources.dll
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\es\System.Web.WebPages.resources.dll
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\es\System.Web.WebPages.Deployment.resources.dll
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\es\System.Web.WebPages.Razor.resources.dll
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\es\EntityFramework.resources.dll
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\es\EntityFramework.SqlServer.resources.dll
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\es\Microsoft.AspNet.Identity.Core.resources.dll
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\es\Microsoft.AspNet.Identity.Owin.resources.dll
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\es\Microsoft.AspNet.Identity.EntityFramework.resources.dll
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\es\Microsoft.Owin.resources.dll
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\es\Microsoft.Owin.Host.SystemWeb.resources.dll
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\es\Microsoft.Owin.Security.resources.dll
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\es\Microsoft.Owin.Security.Facebook.resources.dll
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\es\Microsoft.Owin.Security.Google.resources.dll
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\es\Microsoft.Owin.Security.Twitter.resources.dll
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\es\Microsoft.Owin.Security.MicrosoftAccount.resources.dll
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\obj\Debug\GardiSoft.csprojResolveAssemblyReference.cache
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\obj\Debug\GardiSoft.dll
+C:\Users\rsalgado\Desktop\SIGA\GardiSoft\obj\Debug\GardiSoft.pdb
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\roslyn\csc.exe
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\roslyn\vbc.exe
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\roslyn\VBCSCompiler.exe
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\GardiSoft.dll.config
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\GardiSoft.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\GardiSoft.pdb
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\Entidades.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\Highcharts.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\Highcharts.MVC.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\PagedList.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\TkGoogleChartHelper.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\Entidades.pdb
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\Highcharts.pdb
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\Highcharts.MVC.pdb
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\Ionic.Zip.xml
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\NPOI.xml
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\NPOI.OOXML.xml
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\NPOI.OpenXml4Net.xml
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\PagedList.xml
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\System.Web.Helpers.xml
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\System.Web.Mvc.xml
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\System.Web.Optimization.xml
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\System.Web.Razor.xml
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\System.Web.WebPages.xml
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\System.Web.WebPages.Deployment.xml
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\System.Web.WebPages.Razor.xml
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\Antlr3.Runtime.pdb
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\Newtonsoft.Json.xml
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\EntityFramework.xml
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\EntityFramework.SqlServer.xml
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\Microsoft.AspNet.Identity.Core.xml
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\Microsoft.AspNet.Identity.Owin.xml
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\Microsoft.Owin.xml
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\Microsoft.Owin.Host.SystemWeb.xml
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\Microsoft.Owin.Security.xml
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\Microsoft.Owin.Security.Facebook.xml
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\Microsoft.Owin.Security.Cookies.xml
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\Microsoft.Owin.Security.OAuth.xml
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\Microsoft.Owin.Security.Google.xml
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\Microsoft.Owin.Security.Twitter.xml
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\es\System.Web.Helpers.resources.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\es\System.Web.Mvc.resources.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\es\System.Web.Optimization.resources.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\es\System.Web.Razor.resources.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\es\System.Web.WebPages.resources.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\es\System.Web.WebPages.Deployment.resources.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\es\System.Web.WebPages.Razor.resources.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\es\EntityFramework.resources.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\es\EntityFramework.SqlServer.resources.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\es\Microsoft.AspNet.Identity.Core.resources.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\es\Microsoft.AspNet.Identity.Owin.resources.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\es\Microsoft.AspNet.Identity.EntityFramework.resources.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\es\Microsoft.Owin.resources.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\es\Microsoft.Owin.Host.SystemWeb.resources.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\es\Microsoft.Owin.Security.resources.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\es\Microsoft.Owin.Security.Facebook.resources.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\es\Microsoft.Owin.Security.Google.resources.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\es\Microsoft.Owin.Security.Twitter.resources.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\bin\es\Microsoft.Owin.Security.MicrosoftAccount.resources.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\obj\Debug\GardiSoft.csprojResolveAssemblyReference.cache
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\obj\Debug\GardiSoft.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\GardiSoft\obj\Debug\GardiSoft.pdb

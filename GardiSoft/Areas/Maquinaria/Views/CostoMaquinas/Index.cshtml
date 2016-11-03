@@ -1,0 +1,98 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Costo de maquinas</h2>
+
+<div class="well">
+    <div class="form-horizontal">
+        <h4>Seleccione los datos a buscar</h4>
+
+        <hr />
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Bodega</label>
+                <div class="col-sm-10">                   
+                    <input type="text" class="form-control" name="codMaquina" id="codMaquina"  placeholder="Código de bodega" autocomplete="off">
+                   @* <input type="submit" value="Seleccionar Bodega" id="btnBuscarBodega" class="btn btn-success" />*@
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Fecha Inicio</label>
+                <div class="col-sm-10">
+                    <input type="date" class="form-control" id="fechaInicio" placeholder="1900-01-01" autocomplete="off"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Fecha Termino</label>
+                <div class="col-sm-10">
+                    <input type="date" class="form-control" id="fechaTermino" placeholder="1900-01-01" autocomplete="off"  />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10" style="text-align:left">
+                    <input type="submit" value="calcular" id="btnBuscar" class="btn btn-success" />
+                </div>
+            </div>
+
+        </div>
+
+
+
+    </div>
+</div>
+
+<h2>Gráfico</h2>
+<div id="chartContainer">Esperando saber que deseas calcular.</div>
+
+
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+    $(document).ready(function () {
+
+
+        $("#btnBuscar").click(function () {
+            $.ajax({
+                url: '@Url.Action("Calcularcostos", "CostoMaquinas")',
+                datatype: 'json',
+                type: 'POST',
+                async: true,
+                data: { codMaquina: $("#codMaquina").val(), fechaInicio: $("#fechaInicio").val(), fechaTermino: $("#fechaTermino").val() },
+                success: function (data) {
+                  data = eval(data);
+                  console.log(data);
+                  FusionCharts.ready(function () {
+                      var revenueChart = new FusionCharts({
+                          "type": "column2d",
+                          "renderAt": "chartContainer",
+                          "width": "500",
+                          "height": "300",
+                          "dataFormat": "json",
+                          "dataSource": {
+                              "chart": {
+                                  "caption": "Costos máquina " + $("#codMaquina").val(),
+                                  "subCaption": "Por Tipo",
+                                  "xAxisName": "Tipo costo",
+                                  "yAxisName": "Costo en pesos.",
+                                  "theme": "fint"
+                              },
+                              "data":data
+                          }
+                      });
+
+                      revenueChart.render();
+                  })
+
+                }
+            });
+        });
+
+    });
+        
+    </script>
+ }

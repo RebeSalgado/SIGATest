@@ -1,0 +1,297 @@
+﻿@model Entidades.Uma.HistoricoComponentes
+
+@{
+    ViewBag.Title = "VerComponentes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Máquina @ViewBag.Maquina.Codigo</h2>
+
+@Html.Hidden("IdMaquinaPadre", (object)ViewBag.Maquina.Id)
+@if (ViewBag.DebeAsignar)
+{
+    <p class="lead">Se muestran todos los Componentes que han sido asociados a esta máquina</p>
+<div class="well">
+    <div class="form-horizontal">
+        <h4>Agregue o quite componentes</h4>
+        <hr />
+
+        @using (Ajax.BeginForm("AgregaComponente", "Maquina", new AjaxOptions { OnSuccess = "onSuccess" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+             
+                <div class="form-group">
+                    <div class="col-md-10">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Componente</label>
+                            <input type="hidden" class="form-control"  id="IdComponente" name="IdComponente">
+                        <input type="text" class="form-control" disabled id="txtComponente">
+                       @*@Html.DropDownList("IdComponente", null, htmlAttributes: new { @class = "form-control " })
+                        @Html.ValidationMessageFor(model => model.IdComponente, "", new { @class = "text-danger" })*@
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-4 col-md-10">
+                        <input type="button" value="Seleccionar" class="btn btn-success" id="Seleccionar"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-10">
+                        @Html.Label("Tipo Horometro", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                        @Html.DropDownList("Ubicacion", null, htmlAttributes: new { @class = "form-control " })
+                        @Html.ValidationMessageFor(model => model.Ubicacion, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="col-md-offset-4 col-md-10">
+                        <input type="submit" value="Agregar" class="btn btn-success" />
+                    </div>
+                </div>
+
+            </div>
+        }
+
+    </div>
+</div>
+}
+else
+{
+    <p class="lead">Se muestran todos las máquinas en la que  que ha estado este componente</p>
+
+}
+
+@*MODAL SELECCIONAR COMPONENTE*@
+
+<div class="modal fade " id="mdlComponente" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Componente</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal Componentes" id="Componentes">
+                    
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<h2>Asignaciones vigentes</h2>
+<div class="table-responsive" id="listaComponentes">
+    <p class="lead">No existen asociaciones vigentes</p>
+    @*  @Html.Action("VerListaComponentes", "Maquina", new { IdMaquina = @ViewBag.Maquina.Id })*@
+
+</div>
+
+<h2>Asignaciones anteriores</h2>
+<div class="table-responsive" id="listaComponentesAnteriores">
+    <p class="lead">No existen asociaciones Anteriores</p>
+    @* @Html.Action("VerListaComponentesAnteriores", "Maquina", new { IdMaquina = @ViewBag.Maquina.Id })*@
+
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="dlgDesasociar">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Mover un componente</h4>
+            </div>
+            <div class="modal-body">
+                <p>El componente seleccionado se encuentra en <span id="MaquinaPadre"></span> para poder moverlo primero debe quitarlo, ¿desea realizar esta acción?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="CancelarComponente" data-dismiss="modal">No, dejemoslo donde está</button>
+                <button type="button" class="btn btn-primary" id="btnDesasociar">Si, gracias.</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            cargarHistoria();
+            Componentes();
+
+            $(document).on('click','.quitar' ,function () {
+                var id = $(this).attr('idComponente');
+                console.log(id);
+                $.ajax({
+                    url: '@Url.Action("DesaociarComponente", "Maquina")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: false,
+                    data: JSON.stringify({ idComponente: id }),
+                    success: function (data) {
+                        var data = eval(data);
+                        if (data.Resultado == "Guardado") {
+                            $.notificar({ title: 'Desaociado éxito', text: '', type: 'success' });
+                           
+                            cargarHistoria();
+                        }
+                        else {
+                            $.notificar({ title: 'Ocurrio un problema', text: ':(', type: 'danger' });
+                        }
+                    }
+                });
+
+            });
+
+
+            $("#btnDesasociar").click(function () {
+
+
+
+                $.ajax({
+                    url: '@Url.Action("DesaociarComponente", "Maquina")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: false,
+                    data: JSON.stringify({ idComponente: $("#IdComponente").val() }),
+                    success: function (data) {
+                        var data = eval(data);
+                        if (data.Resultado == "Guardado") {
+                            $.notificar({ title: 'Desaociado éxito', text: '', type: 'success' });
+                            $("#dlgDesasociar").modal('hide');
+                            cargarHistoria();
+                        }
+                        else {
+                            $.notificar({ title: 'Ocurrio un problema', text: ':(', type: 'danger' });
+                        }
+                    }
+                });
+
+            });
+
+            $("#IdComponente").change(function () {
+
+
+
+
+            });
+
+        });
+
+        function cargarHistoria() {
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("VerListaComponentes","Maquina")',
+                data: { idMaquina: $("#IdMaquinaPadre").val() },
+                success: function (msg) {
+                    // $("#listaComponentes").html(msg);
+                    var data = eval(msg);
+                    $("#listaComponentes").jsonTabla({ tabla: data });
+                }
+            });
+
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("VerListaComponentesAnteriores","Maquina")',
+                data: { idMaquina: $("#IdMaquinaPadre").val() },
+                success: function (msg) {
+                   // $("#listaComponentesAnteriores").html(msg);
+                    var data = eval(msg);
+                    $("#listaComponentesAnteriores").jsonTabla({ tabla: data });
+                }
+
+            });
+        }
+
+        function onSuccess(data) {
+            data = eval(data);
+            if (data.Resultado == "Guardado") {
+                $.notificar({ title: 'Guardado éxito', text: '', type: 'success' });
+                cargarHistoria();
+            }
+        }
+
+
+        //ABRE MODAL COMPONENTE
+
+        $("#Seleccionar").click(function () {
+
+            $("#mdlComponente").modal('show');
+           
+        });
+
+        //LIMPIA LA CAJA DE TEXTO COPONENTE EN EL CASO DE QUE NO CORRESPONDA
+        $(document).on('click', "#CancelarComponente", function () {
+            $("#txtComponente").val('');
+            $("#IdComponente").val('');
+        });
+
+
+        
+        $(document).on('click', ".ComponenteSeleccionado", function () {
+            $("#IdComponente").val($(this).attr('idMaquina'));
+
+            $.ajax({
+                url: '@Url.Action("EvaluaCambioDeComponente", "Maquina")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: false,
+                data: JSON.stringify({ idComponente: $("#IdComponente").val() }),
+                success: function (data) {
+                    var data = eval(data);
+                    if (data.Padre != "ninguno") {
+
+                        $("#MaquinaPadre").text(data.Padre);
+                        $("#dlgDesasociar").modal('show');
+                    }
+
+                }
+
+            });
+
+            //CARGA EL ID DEL COMPONENTE Y SU NOMBRE.
+            var cant = $(this).closest('tr').find("td:eq(1)").html();
+            $("#txtComponente").val(cant);
+            $("#mdlComponente").modal('hide');
+            idMaquina = $(this).attr('idMaquina');
+
+        });
+
+
+
+        // CARGA LOS COMPONENTES EN EL MDL
+        function Componentes() {
+            $.ajax({
+                url: '@Url.Action("VerListaComponentesmdl", "Maquina")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                // data: JSON.stringify({Id: $("#Id").val(), Nombre: $("#Nombre").val() }),
+                async: true,
+                success: function (data) {
+                    data = eval(data);
+
+                    $("#Componentes").jsonTabla({ tabla: data });
+                }
+            });
+        }
+
+
+
+    </script>
+}

@@ -1,0 +1,62 @@
+﻿@model IEnumerable<Entidades.Sys.Menu>
+
+
+
+  @if (User.Identity.IsAuthenticated == false && ViewBag.Id >0)    {
+<p class="lead">¿No vez nada?, entonces te invitamos a  <a href="@Url.Action("Login","Account",new {Area=""})">Iniciar sesión</a></p>
+    }
+
+@if (Model != null && Model.Count() > 0)
+{
+    <h2>Menú @Model.First().Modulo.Alias</h2>
+
+
+  
+
+    foreach (var item in Model)
+    {
+        <div class="panel-group" role="tablist">
+            <div class="panel " style="background-color:@Model.First().Modulo.Color  !important;color:white">
+                <div class="panel-heading" role="tab" id="collapseListGroupHeading1">
+                    <h4 class="panel-title">
+                        <a class="" role="button" data-toggle="collapse" href="#collapseListGroup1" aria-expanded="true" aria-controls="collapseListGroup1">
+                           @item.Nombre
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseListGroup1" class="panel-collapse collapse in " role="tabpanel" aria-labelledby="collapseListGroupHeading1" aria-expanded="true">
+                    <ul class="list-group" style="list-style:none" >
+                          @if (item.Submenu != null)
+                    {
+                        foreach (var submenu in item.Submenu)
+                        {
+
+
+                            <li> @Html.ActionLink(submenu.Titulo, submenu.NombreAction, submenu.NombreControlador, new { area = item.Modulo.Nombre }, htmlAttributes: new { @Class = "list-group-item" })</li>
+
+                        }
+
+                    }
+                    </ul>
+                    <div class="panel-footer"></div>
+                </div>
+            </div>
+        </div>
+
+        
+    }
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+

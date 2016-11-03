@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Entidades.Rrhh.Capacitaciones.Capacitacion>
+
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+
+            <th>
+                EFC
+            </th>
+
+
+            <th>
+                Fecha
+            </th>
+
+
+            <th>
+                Relator
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.TipoEfc.Nombre)
+                </td>
+
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaInicio)
+                </td>
+
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Relator)
+                </td>
+                <td>
+                    @Html.ActionLink("Ver", "VerLista", new { id = item.Id })
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

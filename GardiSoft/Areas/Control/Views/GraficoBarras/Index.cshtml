@@ -1,0 +1,219 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="col-md-12">
+        <div class="form-inline formulario">
+            <h3>Grafico Meta Indicador</h3>
+            <hr />
+            <div class="form-group">
+                <label for="exampleInputName2">Obra</label>
+                <select type="text" class="form-control input-sm IdIndicador" id="IdIndicador">
+                    <option value="-1">Seleccione</option>
+                </select>
+            </div>
+            <!--  <div class="form-group">
+                  <label for="exampleInputEmail2">Inicio</label>
+                  <input type="date" class="form-control input-sm FechaInicio" id="FechaInicio" placeholder="1900-01-01">
+              </div>
+              <div class="form-group">
+                  <label for="exampleInputEmail2">Termino</label>
+                  <input type="date" class="form-control input-sm FechaFin" id="FechaFin" placeholder="1900-01-01">
+              </div>-->
+            <button type="submit" class="btn btn-success btn-sm Envía" id="Envía">Generar</button>
+
+       
+
+        <div id="container"></div>
+        <div id="sliders">
+            <table>
+                <tr>
+                    <td>Alpha Angle</td>
+                    <td><input id="alpha" type="range" min="0" max="45" value="15" /> <span id="alpha-value" class="value"></span></td>
+                </tr>
+                <tr>
+                    <td>Beta Angle</td>
+                    <td><input id="beta" type="range" min="-45" max="45" value="15" /> <span id="beta-value" class="value"></span></td>
+                </tr>
+                <tr>
+                    <td>Depth</td>
+                    <td><input id="depth" type="range" min="20" max="100" value="50" /> <span id="depth-value" class="value"></span></td>
+                </tr>
+            </table>
+        </div>
+
+  
+ </div>
+    </div>
+<br />
+<hr />
+<div id="link">
+    <h5>@Html.ActionLink("Ir a Gráfico Lineal", "Index", "GraficoLineal")</h5>
+    </div>
+
+    @section Scripts{
+        <style>
+            #container, #sliders {
+                min-width: 310px;
+                max-width: 800px;
+                margin: 0 auto;
+            }
+
+            #container {
+                height: 400px;
+            }
+        </style>
+
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+        <script src="https://code.highcharts.com/modules/exporting.js"></script>
+        <script type="text/javascript">
+
+            $(document).ready(function () {
+
+                $.ajax({
+                    url: '@Url.Action("TraeIndicador", "GraficoBarras")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    //  data: JSON.stringify({ idactividad: $("#idactividad").val() }),
+                    async: true,
+                    success: function (data) {
+                        data = eval(data);
+                        var texto = "";
+
+                        $.each(data, function (i, item) {
+                            texto += "<option value=" + item.Id_Indicador + "> " + item.Nombre + " </option>";
+
+
+                        });
+
+
+                        $("#IdIndicador").html(texto);
+
+
+                    }
+
+
+                });
+
+
+                $("#Envía").click(function () {
+
+                    var IdIndicador = $(this).closest('.formulario').find('.IdIndicador').val();
+                    //var inicio = $(this).closest('.formulario').find('.inicio').val();, inicio: inicio, termino: termino
+                    // var termino = $(this).closest('.formulario').find('.termino').val();
+                    // inicio = (inicio == "") ? '2000-01-01' : inicio;
+                    //termino = (termino == "") ? '3000-01-01' : termino;
+
+
+
+                    $.ajax({
+                        url: '@Url.Action("MetaxReal", "GraficoBarras")',
+                        datatype: 'json',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ IdIndicador: IdIndicador }),
+                        async: true,
+                        success: function (data) {
+                            data = eval(data);
+                            data1 = [];
+                            data2 = [];
+                            data3 = [];
+
+                            for (var i in data) {
+                                var serie = [data[i].Meta];
+                                data1.push(parseInt(serie));
+
+                                //data1.push([serie]);
+                            }
+                            for (var i in data) {
+                                var serie = [data[i].Nreal];
+                                data2.push(parseInt(serie));
+
+                            }
+                            for (var i in data) {
+                                var serie = new Date(data[i].fecha);
+                                data3.push(serie);
+
+
+                            }
+                            alert(data1);
+                            alert(data3);
+
+                            $(function () {
+                                // Set up the chart
+                                var chart = new Highcharts.Chart({
+                                    chart: {
+                                        renderTo: 'container',
+                                        type: 'column',
+                                        options3d: {
+                                            enabled: true,
+                                            alpha: 15,
+                                            beta: 15,
+                                            depth: 50,
+                                            viewDistance: 25
+                                        }
+                                    },
+                                    title: {
+                                        text: 'Meta por Indicador'
+                                    },
+                                    subtitle: {
+                                        text: 'Gráfico 3D'
+                                    },
+                                    xAxis: {
+                                        type: 'datetime',
+                                        categories: data3,
+                                        labels: {
+                                            format: '{value: %b/%Y}',
+
+                                        }
+
+                                    },
+
+                                    plotOptions: {
+                                        column: {
+                                            depth: 25
+                                        },
+                                        series: {
+                                            shadow: true
+                                        },
+
+                                    },
+                                    series: [{
+                                        name: 'Meta',
+                                        color: 'green',
+                                        data: data1
+                                    }, {
+                                        name: 'Real',
+                                        color: 'orange',
+                                        data: data2,
+
+                                    }]
+                                });
+
+                                function showValues() {
+                                    $('#alpha-value').html(chart.options.chart.options3d.alpha);
+                                    $('#beta-value').html(chart.options.chart.options3d.beta);
+                                    $('#depth-value').html(chart.options.chart.options3d.depth);
+                                }
+
+                                // Activate the sliders
+                                $('#sliders input').on('input change', function () {
+                                    chart.options.chart.options3d[this.id] = this.value;
+                                    showValues();
+                                    chart.redraw(false);
+                                });
+
+                                showValues();
+                            });
+
+                        }
+                    });
+
+                });
+            });
+        </script>
+
+    }

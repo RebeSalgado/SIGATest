@@ -1,0 +1,152 @@
+﻿
+@{
+    ViewBag.Title = "VerAvanceDNC";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Informe de avance de DNC</h2>
+
+<div class="well">
+
+    <h4>Seleccione el año para el que desea ver el avance</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-5">
+            @using (Ajax.BeginForm("VerAvanceDNC", "CapacitacionesDnc", new AjaxOptions { OnSuccess = "onSuccess" }))
+            {
+                @Html.AntiForgeryToken()
+
+
+
+
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Fecha Inicio</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="anio" id="anio" placeholder="año de la  DNC" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" id="btnVer" class="btn btn-success">Buscar</button>
+                        </div>
+                    </div>
+
+                </div>
+
+            }
+        </div>
+
+        @using (Ajax.BeginForm("CambiarFechaCierre", "CapacitacionesDnc", new AjaxOptions { OnSuccess = "onSuccessCierre" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="col-md-4">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Fecha Cierre</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="fechaCierre" id="fechaCierre" placeholder="" autocomplete="off">
+                            @Html.Hidden("idCierre")
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" id="btnVer" class="btn btn-primary">Cambiar</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        }
+
+        <div class="col-md-3">
+            
+            <button type="button" id="btnplanificacion" class="btn btn-primary">Obtener planificación</button>
+            <h4>Decargue un excel con toda la información  que contiene la cobertura sence calculada</h4>
+        </div>
+    </div>
+</div>
+
+<div id="avance">
+    <p class="lead">Aquí podrá ver a las jefaturas y la cantidad de trabajadores que han inscrito</p>
+
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+
+            $("#fechaCierre").calendario();
+
+            $("#btnplanificacion").click(function () {
+
+
+                $.ajax({
+                    url: '@Url.Action("VerPlanificacion", "CapacitacionesDnc")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    //  data: JSON.stringify({ rut: objeto}), // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+                        var ruta = '@Url.Content("/ArchivosExcel/")' + data;
+                        location.href = ruta;
+
+
+                    }
+                });
+
+            });
+
+        });
+
+      
+
+        function onSuccess(data) {
+            $("#avance").html("<p class='lead'>Sin resultado para mostrar</p>")
+
+            var r = eval(data);
+
+            $("#avance").jsonTabla({ tabla: r });
+            verEstado();
+        }
+
+        function verEstado() {
+
+
+            $.ajax({
+                url: '@Url.Action("VerEstadoDnc", "CapacitacionesDnc")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ anio: $("#anio").val() }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+
+                    var r = eval(data);
+                    $("#fechaCierre").val(r.FechaCierre.toDate());
+                    $("#idCierre").val(r.Id);
+                }
+            });
+        }
+
+        function onSuccessCierre(data) {
+            var r = eval(data);
+            if (r.Resultado == "Guardado") {
+                $.notificar({ text: 'Guardado', title: 'Exito', type: 'success' });
+            }
+            else {
+                $.notificar({ text: 'Error', title: 'Exito', type: 'danger' });
+            }
+        }
+
+
+
+    </script>
+}
+

@@ -1,0 +1,197 @@
+﻿@model Entidades.Sys.ControlDeCambios
+
+@{
+    ViewBag.Title = "ControlDeVersion";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+<h2>Control de Cambios SIGA</h2>
+
+<div class="well">
+    <div class="form-horizontal">
+        <h4>Sociabilice los avances, los usuarios lo agradecerán</h4>
+
+        @using (Ajax.BeginForm("GuardarControlDeVersion", "Soporte", new AjaxOptions { OnSuccess = "onSuccess" }))
+        {
+            @Html.AntiForgeryToken()
+            <hr />
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">Fecha</label>
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(model => model.Fecha , new { @class = "form-control", @AutoComplete="off" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IdAplicacion, "Aplicacion", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("IdAplicacion", null, htmlAttributes: new { @class = "form-control", @AutoComplete = "off" })
+                        @Html.ValidationMessageFor(model => model.IdAplicacion, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IdTipoSoporte, "Tipo ", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("IdTipoSoporte", null, htmlAttributes: new { @class = "form-control", @AutoComplete = "off" })
+                        @Html.ValidationMessageFor(model => model.IdTipoSoporte, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">Version</label>
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(model => model.Version, new { @class = "form-control", @AutoComplete = "off" })
+                      
+                      
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">Cambio realizado</label>
+                    <div class="col-sm-10">
+                        @Html.TextAreaFor(model => model.CambioRealizado, new { @class = "form-control" })
+                       
+                    </div>
+                </div>
+                
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" id="btnVer" class="btn btn-success">Guardar</button>
+                    </div>
+                </div>
+            </div>
+
+
+        }
+
+        </div>
+    </div>
+
+<div class="modal fade" id="dlgArchivo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Solicitar Capacitación</h4>
+            </div>
+            <div class="modal-body">
+                @using (Ajax.BeginForm("GuardarDocumento", "Soporte", new AjaxOptions() { HttpMethod = "POST" }, new { enctype = "multipart/form-data" }))
+                {
+
+
+                    <div class="form-horizontal">
+                      
+                        <input type="hidden" name="idSoporte" id="idSoporte">
+                        <div class="form-group">
+                            <h4>Adjunte el registro de la asistencia para finalizar la capacitación</h4>
+                            <div class="col-md-2"></div>
+                            <div class="col-md-10">
+                                <input type="file" name="file" id="file">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10" style="text-align:left">
+                                <input type="submit" value="Guardar Archivo" class="btn btn-primary" />
+                            </div>
+                        </div>
+
+                    </div>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btnAvisar">Si, Gracias</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="cambios">
+
+  @Html.Action("VerCambios")
+
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $("#dlgArchivo").modal('show');
+
+
+            $("#IdAplicacion").change(function () {
+
+                    verVersion();
+
+            });
+
+        $("#Fecha").calendario();
+
+        cargarCambios();
+        verVersion();
+
+       
+
+    });
+
+        function onSuccess(data)
+        {
+            var data = eval(data);
+            if (data.Resultado == "Guardado") {
+                $.notificar({ text: 'Guardado', title: 'Exito', type: 'success' });
+                cargarCambios();
+            }
+            else
+            {
+                $.notificar({ text: 'Error', title: 'Error', type: 'danger' });
+            }
+        }
+
+
+        function cargarCambios()
+        {
+
+                       
+
+            $.ajax({
+                url: '@Url.Action("VerCambios", "Soporte")',
+                type: 'POST',
+                dataType: 'html',
+                async: true,
+                //  data: { id: $("#id").val() }, // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    $("#cambios").html(data);
+                    $("#tblCambios").tabla();
+                }
+            });
+        }
+
+        function verVersion()
+        {
+            $.ajax({
+                url: '@Url.Action("VerUltimaVersion", "Soporte")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ IdAplicacion: $("#IdAplicacion").val() }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+
+                    $("#Version").val(data);
+
+                }
+            });
+        }
+
+    </script>
+
+
+
+ }

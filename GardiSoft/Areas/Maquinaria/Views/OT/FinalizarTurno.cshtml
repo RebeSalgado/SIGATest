@@ -1,0 +1,741 @@
+﻿
+@{
+    ViewBag.Title = "FinalizarTurno";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Finalizar Turno </h2>
+@*<input type="text" id="txtEdad" />
+<input type="button" value="Ver Ejemplo" class="btn btn-primary" id="btnEjemplo" />
+
+<select id="ubi"></select>
+<p class="lead" id="nombre"></p>
+<p class="lead" id="apellido"></p>*@
+
+<div class="well">
+    <div class="form-horizontal">
+        <h4>Aquí verá todas las OTs donde uds ha trabajado</h4>
+        <div class="form-inline">
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Ubicación</label>
+                <div class="col-md-6">
+                    @Html.DropDownList("IdUbicacion", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10" style="text-align:left">
+                    <input type="button" value="Ver las Ots" id="btnGenerarInforme" class="btn btn-success" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<p style="text-align:right">
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" id="todas"> Ver todas las Ots pendientes
+        </label>
+    </div>
+
+</p>
+<div id="ots"></div>
+
+<div class="modal fade " id="mdlCerrarOt" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-admin" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p style="text-align:right">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>
+                </p>
+                <h4 class="modal-title tutiloCierre" id="myModalLabel">Especifique la siguiente información de cierre de turno</h4>
+            </div>
+            <div class="modal-body">
+                <div id="paso1">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Fecha Aviso Operaciones</label>
+                            <div class="col-sm-10">
+                                <input type="date" class="form-control" id="txtFechaAvisoOperaciones" placeholder="Fecha" autocomplete="off">
+                                <input type="time" class="form-control" id="txtHoraAvisoOperaciones" placeholder="Fecha" autocomplete="off">
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Fecha Intervención</label>
+                            <div class="col-sm-10">
+                                <input type="date" class="form-control" id="txtFechaIntervencion" placeholder="Fecha" autocomplete="off">
+                                <input type="time" class="form-control" id="txtHoraIntervencion" placeholder="Hora" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Origen de Falla</label>
+                            <div class="col-sm-10">
+                                @Html.DropDownList("IdOrigenDefalla", null, htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Tipo Falla</label>
+                            <div class="col-sm-10">
+                                <select id="IdTipoDeFalla" class="form-control"></select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Observaciones de cierre</label>
+                            <div class="col-sm-10">
+                                <textarea id="observacionDeCierre" rows="4" style="width:50%;max-width:100%"></textarea>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div id="paso2" style="display:none">
+                    <p style="text-align:right">
+                    <p class="lead">Utilice el botón "Agregar horas de trabajo" </p>
+                    <span type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">
+                        Agregar horas de trabajo
+                    </span>
+                    </p>
+                    <div id="listaTrabajadoresSeleccionados">
+                    </div>
+                </div>
+                <div id="paso3" style="display:none" class="col-lg-offset-3">
+                    <p><h2>¿Quedo la máquina operativa despues de esta OT?</h2></p>
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Se avisará a:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="txtEmailComprobante" placeholder="ej: uncorreo@dominio.com">
+                            </div>
+
+                        </div>
+                    </form>
+
+                </div>
+
+                <div id="paso4" style="display:none">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Hora de finalización de trabajo</label>
+                            <div class="col-sm-10">
+                                <input type="date" class="form-control" id="txtFechaFinalizacionDeTrabajo" placeholder="Fecha" autocomplete="off">
+                                <input type="time" class="form-control" id="txtHoraFinalizacionDeTrabajo" placeholder="Fecha" autocomplete="off">
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+                <div id="paso4Alternativo" style="display:none">
+                    <p class="lead">¿Que actividades logró terminar en su turno?</p>
+
+                    <div id="listaActividadesCorrectivas">
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div id="paso3Botones" style="display:none">
+                    <button type="button" class="btn btn-default stepsBack">Atras</button>
+                    <button type="button" class="btn btn-danger btnNo">NO</button>
+                    <button type="button" class="btn btn-success btnSi">SI</button>
+                </div>
+                <div id="pasosWizard">
+                    <button type="button" class="btn btn-default stepsBack">Atras</button>
+                    <button type="button" class="btn btn-success steps paso1">Siguiente</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Seleccione un trabajador</h4>
+            </div>
+            <div class="modal-body">
+                <div id="listTrabajadores">
+                    <p class="lead">Espere, los trabajadores ya vienen...</p>
+                </div>
+
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="mdlHoras" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">tiempo que trabajó</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Hora Inicio</label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control" id="txtFechaInicio" placeholder="Fecha" autocomplete="off">
+                            <input type="time" class="form-control" id="txtInicio" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Hora Termino</label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control" id="txtFechaTermino" placeholder="Fecha" autocomplete="off">
+                            <input type="time" class="form-control" id="txtTermino" autocomplete="off">
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnAgregarRRHH" class="btn btn-primary">Confirmar</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="mdlRecordatorioOt" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">tiempo que trabajó</h4>
+            </div>
+            <div class="modal-body">
+                <p class="lead">Recuerde anotar en la pizarra que la OT: <span id="txtRecordatorioOt"></span> quedó sin terminar</p>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Ok, gracias</button>
+                @*<button type="button" id="btnAgregarRRHH" class="btn btn-primary">Confirmar</button>*@
+
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts
+{
+
+    @Scripts.Render("~/bundles/switch");
+
+    <script type="text/javascript">
+        var $botonFinalizar;
+        var idManoDeObra;
+        var valor;
+
+        $(document).ready(function () {
+
+
+            //$(document).on('click', '#btnEjemplo', function () {
+
+
+                @*$.ajax({
+                    url: '@Url.Action("ejemploVero", "OT")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+
+                    data: JSON.stringify({ edad: $("#txtEdad").val() }),
+                    success: function (data) {
+                        data = eval(data);
+                        $("#nombre").html(data.Nombre);
+                        $("#apellido").html(data.Apellido);
+                    }
+                });
+
+                $.ajax({
+                    url: '@Url.Action("VerUbicaciones", "OT")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+
+                    data: JSON.stringify(),
+                    success: function (data) {
+                        data = eval(data);
+                        var texto = "";
+                        $.each(data, function (i, item) {
+                            texto = texto + "<option value='" + item.Id + "'>" + item.RutaCompleta + "</option>";
+                        });
+                        $("#ubi").html(texto);
+                    }
+                });*@
+
+            //});
+            
+            
+
+            verOtFinalizarTurno();
+            cargarTrabajadores();
+
+            $(document).on('click', '#btnGenerarInforme', function () {
+
+                verOtFinalizarTurno();
+            });
+
+            $(document).on('click', '.finalizarAlternativo', function () {
+                verOtFinalizarTurno();
+                $("#mdlCerrarOt").modal('hide');
+                $("#txtRecordatorioOt").html($botonFinalizar.attr('idot'));
+                $("#mdlRecordatorioOt").modal('show');
+
+            });
+
+            $(document).on('click', '.finalizar', function () {
+
+                cerrarActividades();
+                GuardarHoraFinalizacionIntervencion();
+                cerrarOt();
+                enviarComprobante();
+                verOtFinalizarTurno();
+
+                $("#mdlCerrarOt").modal('hide');
+
+            });
+
+            $(document).on('click', '.btnNo', function () {
+                GuardarQuedoOperativa(false);
+                paso4Alternativo();
+
+            });
+
+            $(document).on('click', '.btnSi', function () {
+                GuardarQuedoOperativa(true);
+                paso4();
+            });
+
+            $(document).on('click', '.paso2', function () {
+                paso3();
+            });
+
+            $(document).on('click', '.paso1', function () {
+
+                var formularioCompleto = true;
+                if ($("#txtFechaAvisoOperaciones").val() == "" || $("#txtHoraAvisoOperaciones").val() == "" || $("#txtFechaIntervencion").val() == "" || $("#txtHoraIntervencion").val() == "") {
+                    formularioCompleto = false;
+                    $.notificar({ text: 'Complete la información para continuar', title: 'Error', type: 'danger' });
+                    return;
+                }
+                if ($("#observacionDeCierre").val() == "") {
+                    formularioCompleto = false;
+                    $.notificar({ text: 'Complete la observación para continuar', title: 'Error', type: 'danger' });
+                    return;
+                }
+             
+                    paso2();
+                    guardarPaso1()
+               
+
+
+
+            });
+
+            $(document).on('click', '.stepsBack', function () {
+                if ($(".steps").hasClass('paso1')) {
+                    $("#mdlCerrarOt").modal('hide');
+                }
+                if ($(".steps").hasClass('paso2')) {
+                    paso1();
+                }
+                if ($(".steps").hasClass('paso3')) {
+                    paso2();
+                }
+                if ($(".steps").hasClass('paso4')) {
+                    paso3();
+                }
+                if ($(".steps").hasClass('finalizarAlternativo') || $(".steps").hasClass('finalizar')) {
+                    paso3();
+                }
+
+            });
+
+
+
+            $(document).on('click', '.finalizarTurnoOt', function () {
+
+                $botonFinalizar = $(this);
+                var IdMaquina = $(this).attr('IdMaquina');
+
+                $("#txtFechaAvisoOperaciones").val($botonFinalizar.attr('FechaAvisoOperaciones'));
+                $("#txtHoraAvisoOperaciones").val($botonFinalizar.attr('horaavisooperaciones'));
+                $("#txtFechaIntervencion").val($botonFinalizar.attr('fechaintervencion'));
+                $("#txtHoraIntervencion").val($botonFinalizar.attr('Horaintervencion'));
+                $("#txtHoraIntervencion").val($botonFinalizar.attr('Horaintervencion'));
+                $("#txtFechaFinalizacionDeTrabajo").val($botonFinalizar.attr('fechafinalizaciondetrabajo'));
+                $("#txtHoraFinalizacionDeTrabajo").val($botonFinalizar.attr('horafinalizaciondetrabajo'));
+
+                cargarTrabajadoresSeleccionados();
+                paso1();
+                $.ajax({
+                    url: '@Url.Action("VerTipoDeFalla", "OT")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    data: JSON.stringify({ IdMAquina: IdMaquina }),
+                    success: function (data) {
+                        data = eval(data);
+                        var texto = "";
+                        $.each(data, function (i, item) {
+                            texto += "<option value='" + item.Id + "'>" + item.DescripcionFalla + "</option>";
+                        });
+                        $("#IdTipoDeFalla").html(texto);
+
+                        $("#mdlCerrarOt").modal('show');
+                    }
+                });
+
+            });
+
+            //recurso Humano
+
+            $(document).on('click', ".agregar", function () {
+                idManoDeObra = $(this).attr('id');
+                valor = $(this).attr('valor');
+                $("#mdlHoras").modal('show');
+            });
+
+
+            $(document).on('change', '#todas', function () {
+                verOtFinalizarTurno()
+            });
+
+            $(document).on('click', '#btnAgregarRRHH', function () {
+                $.ajax({
+                    url: '@Url.Action("AgregarManoDeObra", "OT")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    data: JSON.stringify({ idManoDeObra: idManoDeObra, fechaInicio: $("#txtFechaInicio").val() + ' ' + $("#txtInicio").val(), fechaTermino: $("#txtFechaTermino").val() + ' ' + $("#txtTermino").val(), valor: valor, idOt: $botonFinalizar.attr('idot') }), // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+                        if (data.Resultado == "Cerrada") {
+                            $.notificar({ text: 'La ot se encuentra cerrada', type: 'danger' });
+                        }
+                        else {
+                            $.notificar({ text: 'Agregado al final de la lista', title: 'Listo', type: 'success' });
+                        }
+
+                        $("#mdlHoras").modal('hide');
+                        cargarTrabajadoresSeleccionados();
+
+                    }
+                });
+            });
+
+            function cargarTrabajadores() {
+                $.ajax({
+                    url: '@Url.Action("VerTrabajadores", "OT")', //carga todos los trabajadores
+                    datatype: 'json',
+                    type: 'POST',
+                    async: true,
+                    data: { id: 0 }, // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+
+                        var r = eval(data);
+
+                        $("#listTrabajadores").jsonTabla({ tabla: r, lengthMenu: [[5, 10, 25], [5, 10, 25]] });
+
+                    }
+                });
+            }
+
+            function cargarTrabajadoresSeleccionados() {
+                $.ajax({
+                    url: '@Url.Action("VerTrabajadoresSolicitados", "OT")',
+                    datatype: 'json',
+                    type: 'POST',
+                    async: true,
+                    data: { id: $botonFinalizar.attr('idot') }, // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+                        var r = eval(data);
+                        $("#listaTrabajadoresSeleccionados").jsonTabla({ tabla: r, lengthMenu: [[2, 10, 25], [2, 10, 25]] });
+                        $('#listaTrabajadoresSeleccionados .dt-buttons').hide();
+                        $('#listaTrabajadoresSeleccionados .dataTables_length').hide();
+                        $('#listaTrabajadoresSeleccionados .dataTables_filter').hide();
+                    }
+                });
+            }
+
+            //fin recurso Humano
+
+        });
+
+        function verOtFinalizarTurno() {
+
+            var verTodo = 0;
+            console.log($("#todas").prop('checked'));
+            if ($("#todas").prop('checked')) {
+                verTodo = 1;
+            }
+
+            $.ajax({
+                url: '@Url.Action("verOtFinalizarTurno", "Ot")',
+                datatype: 'json',
+                type: 'POST',
+                data: JSON.stringify({ verTodo: verTodo, idubicacion: $("#IdUbicacion").val() }),
+                contentType: 'application/json',
+                async: false,
+                success: function (data) {
+                    data = eval(data);
+                    $("#ots").jsonTabla({ tabla: data });
+                }
+            });
+        }
+
+
+        function paso1() {
+            $("#paso1").show();
+            $("#paso2").hide();
+            $("#paso3").hide();
+            $("#paso4").hide();
+            $("#paso4Alternativo").hide();
+            $(".steps").removeClass('paso2');
+            $(".steps").removeClass('paso3');
+            $(".steps").removeClass('paso4');
+            $(".steps").removeClass('finalizar');
+            $(".steps").removeClass('finalizarAlternativo');
+            $(".steps").addClass('paso1');
+            $(".steps").html('Siguiente');
+            $("#paso3Botones").hide();
+            $("#pasosWizard").show();
+
+
+            if ($("#txtFechaInicio").val() == "") {
+                $("#txtFechaInicio").val($("#txtFechaIntervencion").val());
+                $("#txtFechaTermino").val($("#txtFechaIntervencion").val());
+                $("#txtInicio").val($("#txtHoraAvisoOperaciones").val());//txtHoraAvisoOperaciones
+
+            }
+
+
+        }
+
+        function guardarPaso1() {
+            $.ajax({
+                url: '@Url.Action("CerrarOtOperaciones", "OT")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ horaAvisoOperaciones: $("#txtFechaAvisoOperaciones").val() + ' ' + $("#txtHoraAvisoOperaciones").val(), horaIntervencionMaquina: $("#txtFechaIntervencion").val() + ' ' + $("#txtHoraIntervencion").val(), minutosDeIntervencion: $("#txtTiempoIntervencion").val(), quedoOperativa: $("#chkOperativa").prop('checked'), observaciones: $("#observacionDeCierre").val(), Id: $botonFinalizar.attr('idot'), IdOrigen: $("#IdOrigenDefalla").val(), IdFalla: $("#IdTipoDeFalla").val() }),
+                success: function (data) {
+                    data = eval(data);
+
+                }
+            });
+        }
+
+        function paso2() {
+            $("#paso1").hide();
+            $("#paso2").show();
+            $("#paso3").hide();
+            $("#paso3Botones").hide();
+            $("#pasosWizard").show();
+            $(".steps").removeClass('paso1');
+            $(".steps").removeClass('paso3');
+            $(".steps").addClass('paso2');
+
+
+
+            //
+
+        }
+
+        function paso3() {
+            $("#paso2").hide();
+            $("#paso3Botones").show();
+            $("#pasosWizard").hide();
+            $("#paso3").show();
+            $("#paso4").hide();
+            $("#paso4Alternativo").hide();
+            $(".steps").removeClass('paso2');
+            $(".steps").removeClass('finalizar');
+            $(".steps").removeClass('finalizarAlternativo');
+            $(".steps").addClass('paso3');
+            $(".steps").html('Siguiente');
+
+            if ($("#txtFechaFinalizacionDeTrabajo").val() == "") {
+                $("#txtFechaFinalizacionDeTrabajo").val($("#txtFechaTermino").val());
+                $("#txtHoraFinalizacionDeTrabajo").val($("#txtTermino").val());
+            }
+        }
+
+        function paso4() {
+            $("#paso3Botones").hide();
+            $("#pasosWizard").show();
+            $("#paso3").hide();
+            $("#paso4").show();
+            $(".steps").removeClass('paso2');
+            $(".steps").addClass('finalizar');
+            $(".steps").html('Finalizar');
+        }
+
+        function paso4Alternativo() {
+            $("#paso3Botones").hide();
+            $("#pasosWizard").show();
+            $("#paso3").hide();
+            $("#paso4Alternativo").show();
+            $(".steps").removeClass('paso2');
+            $(".steps").addClass('finalizarAlternativo');
+            $(".steps").html('Finalizar');
+            cargarActividadesCorrectivas();
+        }
+
+        function GuardarHoraFinalizacionIntervencion() {
+            $.ajax({
+                url: '@Url.Action("GuardarHoraFinalizacionIntervencion", "OT")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ id: $botonFinalizar.attr('idot'), fecha: $("#txtFechaFinalizacionDeTrabajo").val() + ' ' + $("#txtHoraFinalizacionDeTrabajo").val() }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    //  $.notificar({ text: 'OT cerrada', type: 'success' });
+                },
+            });
+        }
+
+        function cerrarActividades() {
+
+            $.ajax({
+                url: '@Url.Action("CerrarActividadesOT", "OT")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ id: $botonFinalizar.attr('idot') }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    //$.notificar({ text: 'OT cerrada', type: 'success' });
+                },
+            });
+        }
+
+        function GuardarQuedoOperativa(operativa) {
+            $.ajax({
+                url: '@Url.Action("GuardarQuedoOperativa", "OT")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ id: $botonFinalizar.attr('idot'), operativa: operativa }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+
+                    //$.notificar({ text: 'OT cerrada', type: 'success' });
+                },
+            });
+        }
+
+        function cerrarOt() {
+            $.ajax({
+                url: '@Url.Action("CerrarOT", "OT")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: false,
+                data: JSON.stringify({ id: $botonFinalizar.attr('idot') }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    $.notificar({ text: 'TODO listo', type: 'success' });
+                }
+            });
+        }
+
+
+        function enviarComprobante() {
+
+            if ($("#txtEmailComprobante").val() != "") {
+                $.ajax({
+                    url: '@Url.Action("enviarComprobante", "OT")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: false,
+                    data: JSON.stringify({ idot: $botonFinalizar.attr('idot'), usuarios: $("#txtEmailComprobante").val() }), // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+                        $.notificar({ text: 'Avisamos a operaciones!', type: 'success' });
+                    }
+                });
+            }
+        }
+
+        function cargarActividadesCorrectivas() {
+
+            $.ajax({
+                url: '@Url.Action("VerActividadesCorrectivasOT", "OT")', //muestra todas las actividades
+                datatype: 'json',
+                type: 'POST',
+                async: false,
+                data: { id: $botonFinalizar.attr('idot') }, // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+
+                    var r = eval(data);
+
+                    $("#listaActividadesCorrectivas").jsonTabla({ tabla: r, lengthMenu: [[-1, 10, 25], ["Todo", 10, 25]] });
+
+                    //oculta la exportacion a excel y otros elementos de la tabla
+                    $('#listaActividadesCorrectivas .dt-buttons').hide();
+                    $('#listaActividadesCorrectivas .dataTables_length').hide();
+                    $('#listaActividadesCorrectivas .dataTables_filter').hide();
+
+
+
+                    $(".bootstrap-switch-default").bootstrapSwitch({ //carga los switch
+                        onText: 'Si',
+                        offText: 'No',
+                    });
+
+                    //al cambiar un switch actualiza la información
+                    $('.bootstrap-switch-default').on('switchChange.bootstrapSwitch', function (event, state) {
+                        var chk = $(this);
+
+                        $.ajax({
+                            url: '@Url.Action("ActualizarAvanceOt", "OT")',
+                            datatype: 'json',
+                            type: 'POST',
+                            async: true,
+                            data: { id: $(this).attr('id'), estado: (state ? 100 : 0), idTipo: $botonFinalizar.attr('idTipoOt') }, // o sin stringify para datos primitivos  {rut : item.rut },
+                            success: function (data2) {
+
+
+                                if (data2.Resultado == "Cerrada") {
+                                    $.notificar({ text: 'La ot se encuentra cerrada', type: 'danger' });
+                                    chk.bootstrapSwitch('state', !state, !state);
+
+                                }
+                                else {
+                                    data2 = eval(data2);
+                                    //avanza o retrocede la barra de progreso
+                                    $(".progress-bar").html(data2[0].porcentajeFinalizado + '%');
+                                    $(".progress-bar").css('width', data2[0].porcentajeFinalizado + '%');
+
+                                }
+
+                            }
+                        });
+
+
+                    });
+
+                }
+            });
+        }
+
+    </script>
+
+}
+

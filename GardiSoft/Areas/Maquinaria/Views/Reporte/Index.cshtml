@@ -1,0 +1,69 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>REPORTE</h2>
+
+<div class="well">
+    <div class="form-horizontal">
+        <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="SeleccionFecha">Desde la Fecha </label>
+                    <div class="col-md-10">
+                        <input name="FechaInicio" class="form-control text-box single-line" id="FechaInicio" type="date" value=getdate() data-val-required="El campo FechaInicio es obligatorio." data-val="true" data-val-date="El campo FechaInicio debe ser una fecha." autocomplete="off">
+                        <span class="field-validation-valid text-danger" data-valmsg-replace="true" data-valmsg-for="FechaInicio"></span>
+                    </div>
+                </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2" for="SeleccionFecha">Hasta la Fecha </label>
+                <div class="col-md-10">
+                    <input name="FechaTermino" class="form-control text-box single-line" id="FechaTermino" type="date" value=getdate() data-val-required="El campo FechaTermino es obligatorio." data-val="true" data-val-date="El campo FechaTermino debe ser una fecha." autocomplete="off">
+                    <span class="field-validation-valid text-danger" data-valmsg-replace="true" data-valmsg-for="FechaTermino"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Ubicación</label>
+                <div class="col-md-6">
+                    @Html.DropDownList("IdUbicacion", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+
+            </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-0 col-md-10" style="text-align:left">
+                            <input type="submit" value="Buscar" id="btnBuscar" class="btn btn-success" />
+                        </div>
+                    </div>
+            </div>
+        </div>
+ </div>
+
+<div id="VerReporte"> </div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $("#btnBuscar").click(function () {
+
+                $.ajax({
+                    url: '@Url.Action("VerReporte", "Reporte")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    data: JSON.stringify({ fechaInicio: $("#FechaInicio").val(), fechaTermino: $("#FechaTermino").val(), IdUbicacion: $("#IdUbicacion").val() }), // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+                        data = eval(data);
+
+                        $("#VerReporte").jsonTabla({ tabla: data });
+                    }
+                });
+            })
+        })
+    </script>
+}

@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Entidades.Rrhh.Capacitaciones.CursoTrabajadores>
+
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            
+            <th>
+                @Html.DisplayNameFor(model => model.RutTrabajador)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NombreTrabajador)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Realizada )
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+
+            <tr idAsistio="@item.Id">
+              
+                <td>
+                    @Html.DisplayFor(modelItem => item.RutTrabajador)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NombreTrabajador)
+                </td>
+                <td>
+                    @Html.CheckBoxFor(modelItem => item.Realizada, new { @class ="asistio" } )
+                </td>
+                <td>
+                   
+                  
+                    @Html.ActionLink("Quitar", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+
+        }
+    </tbody>
+
+</table>

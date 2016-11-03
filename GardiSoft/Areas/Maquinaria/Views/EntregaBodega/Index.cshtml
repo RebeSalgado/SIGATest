@@ -1,0 +1,610 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Entrega de productos</h2>
+
+<div class="well">
+    <div class="form-horizontal">
+        <h4>Busque los respuestos para su OT</h4>
+
+        <hr />
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Bodega</label>
+                <div class="col-sm-10">
+                    @* <input type="text" class="form-control" name="idBodega" id="idBodega" placeholder="Código de bodega" autocomplete="off">*@
+                    <input type="text" class="form-control" name="idBodega" id="txtidBodega" readonly placeholder="Código de bodega" autocomplete="off">
+                    <input type="submit" value="Seleccionar Bodega" id="btnBuscarBodega" class="btn btn-success" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Numero de OT</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="idOt" placeholder="Número de OT" autocomplete="off" value="@ViewBag.Id">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10" style="text-align:left">
+                    <input type="submit" value="Buscar" id="btnBuscar" class="btn btn-success" />
+                </div>
+            </div>
+
+        </div>        
+    </div>
+</div>
+
+
+
+<h2>Entrega de materiales</h2>
+<h3>Maquina: <span id="cconsumo"></span></h3>
+<h3>Centro Resposabilidad: <span id="cresp"> </span></h3>
+
+<div class="panel panel-default" id="ValesRealizados" style="display:none">
+    <div class="panel-heading">Vales realizados en esta OT</div>
+    <div class="panel-body">
+       <div id="valesAnteriores"></div>
+    </div>
+</div>
+
+<p style="text-align:right">
+    <input type="button" value="Ver Vales" id="btnVerEntregas" class="btn btn-warning" />
+    <input type="button" value="Entregar" id="btnEntregar2" class="btn btn-primary" />
+   
+
+</p>
+<div id="entregaProductos">
+
+
+
+</div>
+
+
+<div class="modal fade " id="mdlAlternativos" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p style="text-align:right">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>
+                </p>
+                <h4 class="modal-title" id="myModalLabel">Productos equivalentes</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+
+
+                    <div id="verAlternativos"></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade " id="mdlVale" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Vale de consumo</h4>
+            </div>
+            <div class="modal-body">
+                <div id="printable">
+                    <table class="table table-bordered">
+                        <tr>
+                            <td><img src="~/Imagenes/logo2.png" width="128" style="padding-top:5px;" /></td>
+
+
+                            <td style="text-align:center">
+                                <p>SISTEMA DE GESTION INTEGRADO</p><p>REGISTRO</p><p>VALE DE CONSUMO</p>
+                            </td>
+
+                            <td>
+                                <p>codigo: SGIG-R-AF-008</p>
+                                <p>REV 1 | Fecha: 28-04-2012</p>
+                            </td>
+                        </tr>
+                    </table>
+                    <table class="table table-bordered">
+                        <tr><td>Cargo usado en <span id="fechaVale">01-01-2016</span></td><td><p style="text-align: right;"><b>N° Consumo:</b> <span id="numeroVale">10050</span></p></td></tr>
+                    </table>
+                    <table class="table table-bordered">
+                        <tr>
+                            <td>OT: <span id="idOtVale"></span></td>
+                            <td>
+                                <p style="text-align: right;margin-bottom:15px;"><b>Centro:</b><span id="centro">Centro Consumo</span></p>
+                            </td>
+                        </tr>
+                    </table>
+
+
+
+                    <table class="vale table">
+                        <thead>
+                            <tr><td>Solicitado</td><td>Entregado</td><td>Unidad</td><td>Codigo</td><td>Material</td></tr>
+                        </thead>
+                        <tbody id="bodyVale">
+                            <tr>
+                                <td>guanto combinado corto p6 rebo</td>
+                                <td class="valeCantidad">2</td>
+                            </tr>
+                            <tr>
+                                <td>guanto combinado corto p6 rebo</td>
+                                <td class="valeCantidad">2</td>
+                            </tr>
+                            <tr>
+                                <td>guanto combinado corto p6 rebo</td>
+                                <td class="valeCantidad">2</td>
+                            </tr>
+                            <tr>
+                                <td>guanto combinado corto p6 rebo</td>
+                                <td class="valeCantidad">2</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-bordered">
+                        <tr><td>Recibido:__________________</td><td>Cargo:__________________</td><td>Firma:__________________</td></tr>
+                    </table>
+
+
+                </div>
+                @*<div id="printable">
+                        <img src="~/Imagenes/logo2.png" width="128" style="padding-top:5px;" />
+                        <p style="text-align:right"><b>Fecha:</b> <span id="fechaVale">01-01-2016</span></p>
+                        <p style="text-align: right;"><b>N° Consumo:</b> <span id="numeroVale">10050</span></p>
+                        <p style="text-align: right;margin-bottom:15px;"><b>Centro:</b><span id="centro">Centro Consumo</span></p>
+
+
+                        <table class="vale table">
+                            <tbody id="bodyVale">
+                                <tr>
+                                    <td>guanto combinado corto p6 rebo</td>
+                                    <td class="valeCantidad">2</td>
+                                </tr>
+                                <tr>
+                                    <td>guanto combinado corto p6 rebo</td>
+                                    <td class="valeCantidad">2</td>
+                                </tr>
+                                <tr>
+                                    <td>guanto combinado corto p6 rebo</td>
+                                    <td class="valeCantidad">2</td>
+                                </tr>
+                                <tr>
+                                    <td>guanto combinado corto p6 rebo</td>
+                                    <td class="valeCantidad">2</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+
+                    </div>*@
+
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-primary btnImprimir " data-dismiss="modal">Imprimir</button>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade " id="dlgCentroResponsabilidad" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Plan</h4>
+            </div>
+            <div class="modal-body">
+                @*<form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="NombrePlan" class="col-sm-2 control-label">Nombre Plan</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="txtNuevoNombre" placeholder="Nuevo Nombre" autocomplete="off">
+                            </div>
+                        </div>
+                    </form>*@
+                <p id="mensajeCentroResp"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Entendido</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="mdlBodegas" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Bodegas</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <p>Seleccione Bodega</p>
+                    <div id="VerSeleccionarBodega"> </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="mdlEntregas" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Entregará los siguientes repuestos</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div id="resumenEntrega"></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <input type="button" value="Entregar" id="btnEntregar" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="mdlMsjFin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Fin 700 Dijo:</h4>
+            </div>
+            <div class="modal-body">
+             
+                <div id="msjFinContenido"></div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Entendido</button>
+              
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+@Scripts.Render("~/bundles/imprimir")
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $(document).on('click', '.btnImprimiranteriores', function () {
+                var $boton = $(this);
+                $.ajax({
+                    url: '@Url.Action("VerConsumoVale", "EntregaBodega")',
+                    datatype: 'json',
+                    type: 'POST',
+                    async: false,
+                    data: { numeroPedido: $boton.attr('idnumerovale') }, // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+                        var r = eval(data);
+                        var valeConsumo = "";
+                        $.each(r, function (i,item) {
+                            valeConsumo += "<tr><td> </td><td>" + item.cantidad + "</td><td>" + item.Unidad + "</td><td>" + item.Codigo + "</td><td>" + item.descripcionProducto + "<td><tr>";
+                        });                        
+                        $("#centro").text($("#cconsumo").text());
+                        $("#numeroVale").text($boton.attr('idnumerovale'));
+                        $("#fechaVale").text($boton.closest('tr').find('td:eq(1)').html());
+                        $("#bodyVale").html(valeConsumo);
+                        $.print("#printable");
+                    }
+                });
+            });
+           
+            $("#btnVerEntregas").click(function () {
+
+                verVales();
+                $("#ValesRealizados").toggle(500);
+
+            });
+
+            var alternativoFilaSeleccionada;
+
+            $(document).on('click', '.seleccionarAlternativo', function () {
+
+                var idfin700 = $(this).attr('idfin700');
+                var idinterno = $(this).attr('idinterno');
+                var productoNombre = $(this).closest('tr').find('td:eq(0)').html();
+                var productoDescripcion = $(this).closest('tr').find('td:eq(1)').html();
+                var stock = $(this).closest('tr').find('td:eq(2)').html();
+
+                $(alternativoFilaSeleccionada).find('td').find('p:eq(0)').html(productoNombre);
+                $(alternativoFilaSeleccionada).find('td').find('p:eq(1)').html(productoDescripcion);
+                $(alternativoFilaSeleccionada).find('td').find('p:eq(0)').attr('idalternativo', idfin700);
+                $(alternativoFilaSeleccionada).find('td').find('p:eq(0)').attr('idproducto', idinterno);
+                $(alternativoFilaSeleccionada).find('td:eq(3)').html(stock);
+
+                $("#mdlAlternativos").modal('hide');
+
+            });
+
+
+            $("#btnEntregar2").click(function () {
+
+                var entregas = [];
+
+                $(".entrega").each(function (i, item) {
+
+                    if ($(item).val() > 0) {
+
+                        var entrega = {};
+                        entrega.Repuesto = $(item).closest('tr').find('td:eq(0)').find('p:eq(0)').text();
+                        entrega.Cantidad = $(item).val();
+                        entregas.push(entrega);
+
+                    }
+
+
+                });
+            
+                if (entregas.length > 0) {
+                    $("#resumenEntrega").jsonTabla({ tabla: entregas, lengthMenu: [[-1, 10, 25], ["Todos", 10, 25]] });
+                 
+
+                }
+
+                $("#resumenEntrega .dataTables_filter").hide();
+                $("#resumenEntrega .dataTables_length").hide();
+                $("#resumenEntrega .dataTables_info").hide();
+                $("#resumenEntrega .dataTables_paginate").hide();
+                $("#resumenEntrega .dt-buttons").hide();
+                $("#mdlEntregas").modal('show');
+
+
+            });
+
+            $(document).on("keyup", ".entrega", function () {
+
+                var solicitado = parseInt($(this).closest('tr').find('td:eq(1)').html());
+                var entregado = parseInt($(this).closest('tr').find('td:eq(2)').html());
+                var stock = parseInt($(this).closest('tr').find('td:eq(3)').html());
+
+                if (parseInt($(this).val()) > (solicitado - entregado) || parseInt($(this).val()) > stock) {
+
+                    $(this).val(((solicitado - entregado) < stock) ? (solicitado - entregado) : stock);
+                }
+
+
+
+            });
+
+
+            $(document).on('click', '.alternativo', function () {
+
+                var codigoProducto = $(this).closest('tr').find('td:eq(0)').find('p:eq(0)').html();
+                alternativoFilaSeleccionada = $(this).closest('tr');
+
+                $.ajax({
+                    url: '@Url.Action("VerAlternativos", "EntregaBodega")',
+                    datatype: 'json',
+                    type: 'POST',
+                    async: false,
+                    data: { codigo: codigoProducto, idBodega: $("#txtidBodega").attr('idbodega') }, // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+
+                        var r = eval(data);
+
+
+                        $("#verAlternativos").jsonTabla({ tabla: r });
+                        $("#mdlAlternativos").modal('show');
+
+                    }
+                });
+
+            });
+
+
+            $("#btnEntregar").click(function () {
+                var valeConsumo = "";
+                var productos = [];
+
+                $("#btnEntregar").prop('disabled', true);
+
+
+                $("#entregaProductos tr").each(function (i, item) {
+
+
+                    var $cantidad = $(this).find('input');
+                    if ($cantidad.val() > 0) {
+                        var producto = {};
+                        producto.Unidad = $(item).find('.producto').attr('idunidad');
+                        producto.id = $(item).find('.producto').attr('idproducto');
+                        producto.idDetalle = $(item).find('.producto').attr('iddetalle');
+                        producto.idAlternativo = $(item).find('.producto').attr('idalternativo');
+                        producto.idProductoInterno = $(item).find('.producto').attr('idProductoInterno');
+                        producto.cantidad = $cantidad.val();
+                        productos.push(producto);
+
+                        //el vale
+                        valeConsumo += "<tr><td>" + $(item).find('td:eq(1)').html() + "</td><td>" + $(item).find('.entrega').val() + "</td><td>" + $(item).find('td:eq(4)').html() + "</td><td>" + $(item).find('td:eq(0)').find('p:eq(0)').html() + "</td><td>" + $(item).find('td:eq(0)').find('p:eq(1)').html() + "<td><tr>";
+
+                    }
+
+                });
+
+
+                $.ajax({
+                    url: '@Url.Action("GuardarConsumoFin700", "EntregaBodega")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: false,
+                    data: JSON.stringify({ idBodega: $("#txtidBodega").attr('idbodega'), pcreId: $("#cresp").attr('pcreid'), cconsumoId: $("#cconsumo").attr('cconsumoid'), productos: productos, idOt: $("#idOt").val() }),
+                    success: function (data) {
+
+                        data = eval(data);
+                                        
+                        if (data.Numero != "0") {
+
+                            $("#bodyVale").html(valeConsumo);
+                            $("#centro").text($("#cconsumo").text() + '(' + data.CconsumoId + ')');
+                            $("#numeroVale").text(data.Numero);
+                            $("#fechaVale").text(data.Fecha);
+                          
+                            $.print("#printable");
+                            $("#mdlEntregas").modal('hide');
+                            $("#btnEntregar").prop('disabled', false);
+                            cargarProductosEntregar();
+                        }
+                        else
+                        {
+                            $.notificar({ text: 'NO es posible hacer el despacho ', title: 'Fin700 no nos deja', type: 'danger' });
+                            $("#msjFinContenido").html('<p>' + data.MensajeFin + '</p>');
+                            $("#mdlMsjFin").modal('show');
+                        }
+                       
+
+                    }
+                });
+
+            });
+
+
+            $(document).on('click', '#btnBuscar', function () {
+
+                $("#cconsumo").text('');
+                $("#cresp").text('');
+                $("#cconsumo").attr('cconsumoId', '');
+                $("#cresp").attr('pcreId', '');
+                $("#idOtVale").text($("#idOt").val());
+                $.ajax({
+                    url: '@Url.Action("VerInformacionEntrega", "entregaBodega")',
+                    datatype: 'json',
+                    type: 'POST',
+                    async: true,
+                    data: { idOt: $("#idOt").val() }, // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+                        var data = eval(data)
+
+
+
+                        if (data.IdCConsumo != null && data.IdCResp != null) {
+                            $("#cconsumo").text(data.CconsumoDesc);
+                            $("#cresp").text(data.CRespDes);
+                            $("#cconsumo").attr('cconsumoId', data.IdCConsumo);
+                            $("#cresp").attr('pcreId', data.IdCResp);
+                            $("#btnEntregar").prop('disabled', false);
+                        }
+                        else {
+                            if (data.codigo == null) {
+                                $("#mensajeCentroResp").text('No se puede hacer un despacho porque el componente no tiene una maquina padre');
+                            }
+                            else {
+                                $("#mensajeCentroResp").text('No se puede hacer un despacho porque no pude encontrar una centro de responsabilidad para el codigo: ' + data[0].codigo);
+                            }
+                            $("#btnEntregar").prop('disabled', true);
+                            $("#dlgCentroResponsabilidad").modal('show');
+                        }
+
+
+                    }
+                });
+
+
+
+
+                cargarProductosEntregar();
+
+
+            });
+
+
+            $("#btnBuscarBodega").click(function () {
+                $("#mdlBodegas").modal('show');
+
+                $.ajax({
+                    url: '@Url.Action("PermisoUsuario", "PermisosBodega")',
+                    datatype: 'json',
+                    type: 'POST',
+                    async: true,
+                    //data: { Busqueda: $("#txtProductoBuscar").val(), bodegaId: $("#idBodega").val() }, // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+
+                        var r = eval(data);
+                        $("#VerSeleccionarBodega").jsonTabla({ tabla: r, lengthMenu: [[5, 10, 25], [5, 10, 25]] });
+
+                    }
+                });
+
+            });
+
+
+
+            $(document).on('click', '.Seleccionar', function () {
+
+                idBodega = $(this).attr('idbodega');
+                $("#txtidBodega").attr('idbodega', idBodega);
+                var Bod = $(this).closest('tr').find("td:eq(0)").html();
+                $("#txtidBodega").val(Bod);
+                $("#mdlBodegas").modal('hide');
+
+            });
+
+
+        });
+        
+        function cargarProductosEntregar() {
+            $.ajax({
+                url: '@Url.Action("VerEntregasOt", "entregaBodega")',
+                datatype: 'json',
+                type: 'POST',
+                async: false,
+                data: { idOt: $("#idOt").val(), idBodega: $("#txtidBodega").attr('idbodega') }, // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+
+                    var r = eval(data);
+
+                    $("#entregaProductos").jsonTabla({ tabla: r, lengthMenu: [[-1, 10, 25], ["Todos", 10, 25]] });
+
+                }
+            });
+        }
+
+        function verVales()
+        {
+            $.ajax({
+                url: '@Url.Action("verVales", "entregaBodega")',
+                datatype: 'json',
+                type: 'POST',
+                async: false,
+                data: { idOt: $("#idOt").val() },
+                success: function (data) {
+                    var r = eval(data);
+                    $("#valesAnteriores").jsonTabla({ tabla: r, lengthMenu: [[-1, 10, 25], ["Todos", 10, 25]] });
+
+
+                }
+            });
+        }
+
+    </script>
+}

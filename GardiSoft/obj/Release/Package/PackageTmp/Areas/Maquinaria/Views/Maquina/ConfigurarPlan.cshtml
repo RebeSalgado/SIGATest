@@ -1,0 +1,281 @@
+﻿
+@{
+    ViewBag.Title = "ConfigurarPlan";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Configurar Plan para @ViewBag.Codigo</h2>
+
+<div class="well">
+    <div class="form-horizontal">
+        <h4>Utilice el formulario para regularizar las mantenciones</h4>
+        <h5>Este proceso sólo se hace la primera vez para cada máquina</h5>
+        @Html.Hidden("idPlan", (object)ViewBag.IdPlan)
+        @Html.Hidden("idMaquina", (object)ViewBag.IdMaquina)
+
+        @Html.AntiForgeryToken()
+        <hr />
+
+
+        <div id="configuracionPlan"></div>
+        <p class="lead" id="LecturaBase">La lectura actual es: (Base) @ViewBag.LecturaBase  + (Actual)@ViewBag.LecturaActual  = @ViewBag.LecturaTotal </p>
+        <p class="lead" id="promedioDeAvance">
+            @if (ViewBag.Promedio == 0)
+            {
+
+                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> <span>Las máquinas con promedio de avance cero NO pueden participar del mantenimiento preventivo</span>
+
+            }
+            else
+            {
+            <span>Promedio de Avance diario: @ViewBag.Promedio</span>
+
+
+
+            }
+        </p>
+            <button id="btnHorometro" type="button" class="btn btn-success">Cambiar Lectura Base</button>
+            <button id="btnPromedioDeAvance" type="button" class="btn btn-success">Cambiar Promedio de avance</button>
+            <button id="btnGuardaPlan" type="button" class="btn btn-success">Guardar</button>
+
+
+
+
+        </div>
+    </div>
+
+    <h2>Detalle del plan de @ViewBag.Codigo</h2>
+    <div id="listaPlan">
+
+
+    </div>
+
+
+
+    @*--MODAL HOROMETRO --*@
+
+    <div class="modal fade " id="mdlHorometro" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Horometro</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="Horometro" class="col-sm-2 control-label">Horometro</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="txtHorometro" placeholder="" autocomplete="off">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success " id="btnguardarHorometro" data-dismiss="modal">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade " id="mdlCambiarPromedio" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Horometro</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="Horometro" class="col-sm-2 control-label">Horometro</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="txtPromedio" placeholder="" autocomplete="off">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success " id="btnguardarPromedio" data-dismiss="modal">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section Scripts
+{
+        <script type="text/javascript">
+
+            $(document).ready(function () {
+
+
+                $("#btnPromedioDeAvance").click(function(){
+
+                    $("#txtPromedio").val(@ViewBag.Promedio);
+                    $("#mdlCambiarPromedio").modal('show');
+
+                });
+
+                $("#btnguardarPromedio").click(function(){
+
+                    $.ajax({
+                        url: '@Url.Action("CambiarPromedio", "Maquina")',
+                        datatype: 'json',
+                        type: 'POST',
+                        async: true,
+                        data: { promedio:  $("#txtPromedio").val(),idMaquina : @ViewBag.IdMaquina }, // o sin stringify para datos primitivos  {rut : item.rut },
+                        success: function (data) {
+                            if(data.Resultado = "Guardado")
+                            {
+                                $("#promedioDeAvance").html('Promedio de Avance diario : ' + $("#txtPromedio").val());
+                                if($("#txtPromedio").val()== "0")
+                                {
+                                    $("#promedioDeAvance").html('<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> <span>Las máquinas con promedio de avance cero NO pueden participar del mantenimiento preventivo</span>');
+                                }
+                                $.notificar({ text: 'Guardado', title: 'Exito', type: 'success' });
+
+                            }
+                            else
+                            {
+                                $.notificar({ text: 'No pudimos cambiar el promedio', title: 'Un problemita..', type: 'danger' });
+                            }
+                        }
+
+                    });
+
+                });
+
+
+                $.ajax({
+                    url: '@Url.Action("VerPlanConfiguracion", "Maquina")',
+                    datatype: 'json',
+                    type: 'POST',
+                    async: true,
+                    data: { idPlan: $("#idPlan").val() }, // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+
+                        var r = eval(data);
+
+                        $("#listaPlan").jsonTabla({ tabla: r });
+
+                    }
+                });
+
+
+                $.ajax({
+                    url: '@Url.Action("VerIntervalosPlan", "Maquina")',
+                    datatype: 'json',
+                    type: 'POST',
+                    async: true,
+                    data: { idPlan: $("#idPlan").val() }, // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+
+                        var e = eval(data);
+
+                        var texto = "<table class='table table-hover'><thead><tr><th>Frecuencia</th><th>Valor</th></tr></thead><tbody id='tblConfiguracion'>";
+
+                        $.each(e, function (i, item) {
+                            texto += "<tr><td>" + item.Frecuencia.Frecuencia + "</td><td><input type='text' class='form-control valida' placeholder='Último horometro mantención'/></td></tr>";
+
+
+                        });
+
+                        texto += "</tbody></table>"
+
+                        $("#configuracionPlan").html(texto);
+
+                    }
+                });
+
+
+                $("#btnGuardaPlan").on('click', function () {
+
+                    $("#btnGuardaPlan").prop('disabled', true);
+
+                    var configuraciones = [];
+                    $("#tblConfiguracion tr").each(function (i, item) {
+
+                        var configuracion = {};
+                        var frecuencia = $(item).find("td:eq(0)").html();
+                        var ultimaMantencion = $(item).find("input:first").val();
+                        configuracion.Frecuencia = frecuencia;
+                        configuracion.ultimaMantencion = ultimaMantencion;
+                        configuraciones.push(configuracion);
+                    });
+
+                    var validado = true;
+                    $('.valida').each(function (i, item) {
+                        if ($(item).val() == '') {
+                            validado = false;
+
+                        }
+                    });
+
+                    if (validado == false) {
+                        $.notificar({ text: 'Debe llenar los campos', title: 'Error', type: 'danger' });
+
+                    }
+                    else {
+
+                        var plan = {};
+                        plan.IdPlan = $("#idPlan").val();
+                        plan.idMaquina = $("#idMaquina").val();
+                        plan.Configuraciones = configuraciones;
+
+                        $.ajax({
+                            url: '@Url.Action("GuardaIntervaloPlan", "Maquina")',
+                            datatype: 'json',
+                            type: 'POST',
+                            async: true,
+                            data: JSON.stringify(plan), // o sin stringify para datos primitivos  {rut : item.rut },
+                            success: function (data) {
+                                $.notificar({ text: 'Guardado', title: 'Exito', type: 'success' });
+                                $("#btnGuardaPlan").prop('disabled', false);
+
+
+                            }
+                        });
+                    }
+
+
+                });
+
+
+            });
+
+
+            $("#btnHorometro").on('click', function () {
+                $("#txtHorometro").val(@ViewBag.LecturaBase);
+                $("#mdlHorometro").modal('show');
+            });
+
+
+            $("#btnguardarHorometro").on('click', function () {
+
+                $.ajax({
+                    url: '@Url.Action("CambiarHorometro", "Maquina")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    data: JSON.stringify({ idmaquina: $("#idMaquina").val(), Horometro: $("#txtHorometro").val() }), // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+                        data = eval(data);
+                        if (data.Resultado == "Guardado") {
+                            $.notificar({ text: 'Guardado', title: 'Exito', type: 'success' });
+                            $("#LecturaBase").html('<p> La lectura actual es: (Base)' + data.Base + '+ (Actual)' + data.Actual + '= ' + data.LecturaTotal + '</p>');
+
+                            $("#txtHorometro").val('');
+                        }
+                        else {
+                            $.notificar({ text: 'no se pudo guardar', title: 'ups', type: 'danger' });
+                        }
+                        //$("#VerReporte").jsonTabla({ tabla: data });
+                    }
+                });
+
+            });
+        </script>
+    }

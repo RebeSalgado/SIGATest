@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Administrar Maquinas</h2>
+
+
+<div class="CargarMaquinas" id="CargarMaquinas"> Maquinas</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+    $(document).ready(function () {
+        CargarMaquinas();
+    });
+
+
+    function CargarMaquinas() {
+        $.ajax({
+            url: '@Url.Action("AdministrarMaquinas", "Maquina")',
+            datatype: 'json',
+            type: 'POST',
+            contentType: 'application/json',
+            async: true,
+            success: function (data) {
+                data = eval(data);
+
+                $("#CargarMaquinas").jsonTabla({ tabla: data });
+            }
+        });
+    }
+
+
+        $(document).on('click', ".componente", function () {
+            idmaquina = $(this).attr('idmaquina');
+            idplan = $(this).attr('idplan')
+            location.href = '@Url.Action("VerComponentes", "Maquina")' + '?idplan=' + idplan + '&idmaquina=' + idmaquina;
+        });
+
+        $(document).on('click', ".plan", function () {
+            idmaquina = $(this).attr('idmaquina');
+            idplan = $(this).attr('idplan')
+            location.href = '@Url.Action("ConfigurarPlan", "Maquina")' + '?idplan=' + idplan + '&idmaquina=' + idmaquina;
+        });
+
+
+        $(document).on('click', ".ubicacion", function () {
+            idMaquina = $(this).attr('idMaquina');
+            location.href = '@Url.Action("CambiarUbicacion", "Maquina")'  + '?idMaquina=' + idMaquina;
+        });
+
+
+    </script>
+}

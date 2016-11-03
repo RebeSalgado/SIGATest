@@ -1,0 +1,125 @@
+﻿@{
+    ViewBag.Title = "VerNovedadesParaTi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+
+<div class="row well-lg">
+    <div class="col-md-9">
+        <h3>Novedades de la versión</h3>
+        <br />
+
+        <div class="col-md-2">
+            <p></p>
+            <p>
+                @if (ViewBag.Pdf != "#")
+                {
+                <a href="http://siga.gardilcic.cl/archivosUpload/soporte/@ViewBag.Pdf" target="_blank">
+                    <i class="fa fa-file-pdf-o fa-4x" aria-hidden="true"></i>
+                </a>
+                }
+                else
+                {
+                <a href="@ViewBag.Pdf" target="_blank">
+                    <i class="fa fa-file-pdf-o fa-4x" aria-hidden="true" style="color:#bfbcbc"></i>
+                </a>
+                }
+            </p>
+            <p>
+                @if (ViewBag.Pdf != "#")
+                {
+                <a href="http://siga.gardilcic.cl/archivosUpload/soporte/@ViewBag.Pdf" target="_blank">
+                    Ver el Manual
+                </a>
+                }
+                else
+                {
+            <p>
+                Sin Documento
+            </p>
+            }
+
+
+        </div>
+        <div class="col-md-7" style="border-left-width:2px;border-left-style:solid;">
+            <p>Software: @ViewBag.Software</p>
+            <p>Versión: @ViewBag.Version</p>
+            <p>Resumen:</p>
+            <p>@ViewBag.Descripcion</p>
+        </div>
+
+    </div>
+    <div class="col-md-3">
+        <img src="~/Content/Imagenes/mineroEncuesta.png" />
+    </div>
+
+</div>
+
+<p style="text-align:right">
+    <button type="button" class="btn btn-primary" id="btnVerAnteriores" onclick="$('#cambiosAnteriores').toggle(500)">Ver cambios anteriores</button>
+</p>
+
+<div id="cambiosAnteriores" style="display:none">
+
+    <h1>Lista completa de cambios</h1>
+    <div id="cambios">
+
+    </div>
+</div>
+
+
+    @section Scripts
+{
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+
+
+
+
+
+        $.ajax({
+            url: '@Url.Action("sp_uma_mantenimiento_grafico_CantidadOtPorTipo", "Reporte")',
+            datatype: 'json',
+            type: 'POST',
+            contentType: 'application/json',
+            //  data: JSON.stringify({ idactividad: $("#idactividad").val() }),
+            async: true,
+            success: function (data) {
+                data = eval(data);
+
+                FusionCharts.ready(function () {
+                    var revenueChart = new FusionCharts({
+                        "type": "column2d",
+                        "renderAt": "chartContainer",
+                        "width": "500",
+                        "height": "300",
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": {
+                                "caption": "Monthly revenue for last year",
+                                "subCaption": "Harry's SuperMart",
+                                "xAxisName": "Month",
+                                "yAxisName": "Revenues (In USD)",
+                                "theme": "fint"
+                            },
+                            "data":data
+                        }
+                    });
+
+                    revenueChart.render();
+                })
+               
+            }
+        });
+
+
+     
+
+    });
+</script>
+    }

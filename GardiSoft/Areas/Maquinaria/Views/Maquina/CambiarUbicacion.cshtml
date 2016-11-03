@@ -1,0 +1,84 @@
+﻿
+@{
+    ViewBag.Title = "CambiarUbicacion";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<input type="hidden" id="idMaquina" value="@ViewBag.IdMaquina" />
+
+<h2>Cambiar Ubicacion Maquina</h2>
+
+<div class="well">
+    <div class="form-horizontal">
+        <h4>Seleccione una nueva ubicación</h4>
+
+        @Html.AntiForgeryToken()
+        <hr />
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Nueva Ubicación</label>
+                <div class="col-md-6">
+                   @* @Html.DropDownList("IdUbicacion", null, htmlAttributes: new { @class = "form-control"})*@
+                    <select id="IdUbicacion" class="form-control">
+                        @foreach(var item in ViewBag.IdUbicacion)
+                        {
+                            <option value="@item.Id" creId="@item.creId" creNombre="@item.creNombre ">@item.RutaCompleta</option>
+                        }
+
+                    </select>
+                </div>
+                <div class="col-md-12"><p class="lead" id="cresp"></p></div>
+              
+                <input type="button" value="Guardar Ubicacion" id="btnNuevaUbicacion" class="btn btn-success" />
+               
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+    @section Scripts{
+
+        <script type="text/javascript">
+
+            $(document).ready(function () {
+               
+                $("#IdUbicacion").change(function () {
+                    
+                    $("#cresp").html("Centro de responsabilidad cambiará a: " + ($("#IdUbicacion option:selected").attr('crenombre')));
+
+                });
+
+                $(document).on('click', "#btnNuevaUbicacion", function () {
+                    $.ajax({
+                        url: '@Url.Action("CambiarUbicacionMaquina", "Maquina")',
+                        datatype: 'json',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        async: true,
+                        data: JSON.stringify({ IdMaquina: $("#idMaquina").val(), idUbicacion: $("#IdUbicacion").val(), creId:   $("#IdUbicacion option:selected").attr('creId') }), // o sin stringify para datos primitivos  {rut : item.rut },
+                        success: function (data) {
+                            data = eval(data);
+                            if (data.Resultado == "Guardado") {
+                                $.notificar({ text: 'No se puede cambiar la ubicacion de esta maquina.', title: 'Todo listo', type: 'danger' });
+                            }
+                            else {
+                                $.notificar({ text: 'La ubicación de la maquina fue cambiada correctamente.', title: 'Todo listo', type: 'success' });
+                               
+                            }
+
+
+                        }
+                    });
+
+                });
+
+            });
+
+
+
+
+        </script>
+    }

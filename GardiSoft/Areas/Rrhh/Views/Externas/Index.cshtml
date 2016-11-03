@@ -1,0 +1,277 @@
+﻿@model Entidades.Rrhh.Capacitaciones.Externa
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .solicitar {
+        cursor: pointer;
+    }
+</style>
+
+<h2>Mis Solicitudes de capacitación externas</h2>
+
+<div class="well">
+    <div class="form-horizontal">
+        <h4>Utilice el formulario para solicitar una nueva capacitación</h4>
+
+        @using (Ajax.BeginForm("Create", "Externas", new AjaxOptions { OnSuccess = "onSuccess" }))
+        {
+            @Html.AntiForgeryToken()
+            <hr />
+            <div class="form-group">
+                @Html.LabelFor(model => model.IdSubproyecto, "Subproyecto", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("IdSubproyecto", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.IdSubproyecto, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.Otec, "Otec", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Otec, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Otec, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.NombreCurso, "Nombre Curso", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.NombreCurso, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.NombreCurso, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.CantidadHoras, "Horas del curso", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CantidadHoras, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CantidadHoras, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.FechaInicio, "Fecha Inicio", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.FechaInicio, new { htmlAttributes = new { @class = "form-control", @Autocomplete = "off" } })
+                  @*  @Html.ValidationMessageFor(model => model.FechaInicio, "", new { @class = "text-danger" })*@
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.IdCategoria, "Categoria", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("IdCategoria", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.IdCategoria, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ContactoOtec, "Contacto Otec.", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ContactoOtec, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ContactoOtec, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10" style="text-align:right">
+                    <input type="submit" value="Crear" class="btn btn-success" />
+                </div>
+            </div>
+
+
+        }
+    </div>
+</div>
+
+
+<div id="listaExternas">
+
+
+</div>
+
+
+<div class="modal fade" id="dlgAvisar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Solicitar Capacitación</h4>
+            </div>
+            <div class="modal-body">
+                Enviará su solicitud a RRHH ¿desea continuar?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btnAvisar">Si, Gracias</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+    <script type="text/javascript">
+        var idAvisar = 0;
+
+        $(document).ready(function () {
+
+
+            $("#FechaInicio").calendario();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("VerListaCapacitaciones","Externas")',
+                success: function (msg) {
+                    $("#listaExternas").html(msg);
+                }
+            });
+
+
+            $(document).on('click', '.solicitar', function () {
+
+                idAvisar = $(this).attr('id');
+                $("#dlgAvisar").modal('show');
+
+            });
+
+
+            $("#btnAvisar").click(function () {
+
+                $.ajax({
+                    url: '@Url.Action("AvisarARrhh", "Externas")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    data: JSON.stringify({ id: idAvisar }), // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("VerListaCapacitaciones","Externas")',
+                            success: function (msg) {
+                                $("#listaExternas").html(msg);
+                            }
+                        });
+
+                        $("#dlgAvisar").modal('hide');
+                        $.notificar({ text: 'solicitud enviada', title: 'Exito', type: 'success' });
+
+                    }
+                });
+
+
+            })
+
+
+
+
+
+
+
+
+        });
+
+
+        function onSuccess(data) {
+            console.log(data);
+            if (data.Resultado == "Guardado") {
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("VerListaCapacitaciones","Externas")',
+                    success: function (msg) {
+                        $("#listaExternas").html(msg);
+                    }
+                });
+
+
+
+                $.notificar({ text: 'Guardado', title: 'Exito', type: 'success' });
+            }
+            else {
+                $.notificar({ text: 'No se pudó guardar', title: 'Exito', type: 'success' });
+            }
+
+
+            $("#Otec").val('');
+            $("#NombreCurso").val('');
+            $("#CantidadHoras").val('');
+            $("#FechaInicio").val('');
+            $("#ContactoOtec").val('');
+
+        }
+
+
+    </script>
+
+}
+
+
+
+@*<table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Categoria.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SubProyecto.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Otec)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NombreCurso)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CantidadHoras)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaInicio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ContactoOtec)
+            </th>
+            <th></th>
+        </tr>
+
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Categoria.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubProyecto.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Otec)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NombreCurso)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CantidadHoras)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaInicio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ContactoOtec)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            </td>
+        </tr>
+    }
+
+    </table>*@

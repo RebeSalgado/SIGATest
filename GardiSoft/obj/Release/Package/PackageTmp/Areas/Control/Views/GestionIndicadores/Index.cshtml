@@ -1,0 +1,467 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Gestión de indicadores</h2>
+
+<!--"Fgestion1"  Formulario para completar datos proyecto -->
+    <div class="well row" id="fg1">
+
+        <h4>
+            1. Ingrese datos.
+        </h4>
+        <hr />
+        <div class="form-horizontal">
+
+            <div class="form-group">
+                <label for="inputEmail3" class="col-md-5 control-label">Area</label>
+                <div class="col-md-3">
+                    <input type="text" id="txtArea" class="form-control">
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="inputEmail3" class="col-md-5 control-label">Nivel</label>
+                <div class="col-md-3">
+                    <input typeof="text" id="txtNivel" class="form-control">
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="inputEmail3" class="col-md-5  control-label">Turno</label>
+                <div class="col-md-3">
+                    <input type="text" id="txtTurno" class="form-control">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputEmail3" class="col-md-5  control-label">Usuario</label>
+                <div class="col-md-3">
+                    <input type="text" id="txtUsuario" class="form-control">
+                </div>
+            </div>
+
+
+            <p style="text-align:right">
+                <input type="submit" value="Siguiente" id="btnGuardar" class="btn btn-success" onclick="$('#agregar').toggle(500)" />
+            </p>
+            
+
+           
+        </div>
+    </div>
+
+
+<!--  "Fg2"Formulario desplegable para completar datos proyecto -->
+
+
+    <div class="well row" id="agregar" style="display:none">
+
+        <h4>
+            2. Ingrese los datos del proyecto.
+        </h4>
+        <hr />
+        <div class="form-horizontal ">
+
+            <div class="well row">
+
+            <h4>Proyecto</h4>
+                <hr />
+            <div class="form-group">
+                <label for="inputEmail3" class="col-md-5 control-label">Ingrese Nombre Proyecto</label>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" id="txtProyecto">
+                </div>
+            </div>
+
+            </div>
+
+            <div class="well row">
+
+                <h4>Area</h4>
+                <hr />
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-md-5 control-label">Seleccione el Area</label>
+                    <div class="col-md-5">
+                        <select id="ddlArea" class="form-control" name="ddlArea"></select>
+                    </div>
+                    <br />
+                    <br />
+                </div>
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-md-5 control-label">Numero Area</label>
+                        <div class="col-md-5">
+                            <div id="divResultarea"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-md-5 control-label">Ingrese Numero Area: </label>
+                        <div class="col-md-5">
+                            <input id="divArea" type="number">
+                        </div>
+                    </div>
+                    
+            </div>
+
+            <div class="well row">
+
+                <h4>Nivel</h4>
+                <hr />
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-md-5 control-label">Nivel</label>
+                    <div class="col-md-3">
+                        <select id="ddlNivel" class="form-control" name="ddlNivel"></select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-md-5 control-label">Numero Nivel</label>
+                    <div class="col-md-5">
+                        <div id="divResultNivel"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-md-5 control-label">Ingrese Numero Nivel: </label>
+                    <div class="col-md-5">
+                        <input id="divNivel" type="number">
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="well row">
+
+                <h4>Turno</h4>
+                <hr />
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-md-5 control-label">Turno</label>
+                    <div class="col-md-3">
+                        <select id="ddlTurno" class="form-control" name="ddlTurno"></select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-md-5 control-label">Numero Turno</label>
+                    <div class="col-md-5">
+                        <div id="divResultTurno"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-md-5 control-label">Ingrese Numero Turno: </label>
+                    <div class="col-md-5">
+                        <input id="divTurno" type="number">
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="well row">
+
+                <h4>Indicador</h4>
+                <hr />
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-md-5 control-label">Indicador</label>
+                    <div class="col-md-3">
+                        <select id="ddlIndicador" class="form-control" name="ddlIndicador"></select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-md-5 control-label">Numero Indicador</label>
+                    <div class="col-md-5">
+                        <div id="divResultIndicador"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-md-5 control-label">Ingrese Numero Indicador: </label>
+                    <div class="col-md-5">
+                        <input id="divIndicador" type="number">
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="well row">
+
+                <h4>Usuario</h4>
+                <hr />
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-md-5 control-label">Usuario</label>
+                    <div class="col-md-3">
+                        <select id="ddlUsuario" class="form-control" name="ddlUsuario"></select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-md-5 control-label">Numero Usuario</label>
+                    <div class="col-md-5">
+                        <div id="divResultUsuario"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-md-5 control-label">Ingrese Numero Usuario: </label>
+                    <div class="col-md-5">
+                        <input id="divUsuario" type="number">
+                    </div>
+                </div>
+            </div>
+
+
+                <div class="form-group" style="text-align:right">
+                    <div class="col-md-offset-10 col-md-10" style="text-align:left">
+                        <input type="submit" value="Guardar" id="btnGuardar2" class="btn btn-success">
+                    </div>
+                </div>
+
+
+
+            </div>
+
+            </div>
+
+    </div>
+
+@section Scripts
+
+{
+
+@Scripts.Render("~/bundles/handsomeTable")
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            /*______INICIO BOTONES_____*/
+            /*Funcion para guardar los datos del primer formulario "Fgestion1"*/
+            $("#btnGuardar").click(function () {
+
+                $.ajax({
+                    url: '@Url.Action("GuardarDatosGestion", "GestionIndicadores")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    data: JSON.stringify({
+                        nombre_area: $("#txtArea").val(), nombre_nivel: $("#txtNivel").val(), nombre_turno: $("#txtTurno").val(), nombre_usuario:
+                                     $("#txtUsuario").val() }),
+                    success: function (data) {
+                        data = eval(data);
+
+                        if (data.Resultado == "Guardado") {
+                            $.notificar({ text: 'Guardado', title: 'Exito', type: 'success' });
+
+                        }else {
+                            $.notificar({ text: 'no se pudo guardar', title: 'ups', type: 'danger' });
+                        }
+                        OcultarBoton();
+                        Ocultarfg1();
+                   
+
+                    }
+
+                });
+
+              
+                
+                
+               
+               
+
+                
+
+                    
+                    $("#ddlArea").change(function () {
+                        var selectedOption1 = $("#ddlArea option:selected");
+                        $("#divResultarea").html(selectedOption1.val())
+                    });
+                    $("#ddlNivel").change(function () {
+                        var selectedOption2 = $("#ddlNivel option:selected");
+                        $("#divResultNivel").html(selectedOption2.val())
+                    });
+                    $("#ddlTurno").change(function () {
+                        var selectedOption3 = $("#ddlTurno option:selected");
+                        $("#divResultTurno").html(selectedOption3.val())
+
+                    });
+                    $("#ddlIndicador").change(function () {
+                        var selectedOption4 = $("#ddlIndicador option:selected");
+                        $("#divResultIndicador").html(selectedOption4.val())
+                    });
+                    $("#ddlUsuario").change(function () {
+                        var selectedOption5 = $("#ddlUsuario option:selected");
+                        $("#divResultUsuario").html(selectedOption5.val())
+                    });
+
+         
+
+                    /*Guarda los datos del fgestion2*/
+                $("#btnGuardar2").click(function () {
+                    $.ajax({
+                        url: '@Url.Action("GuardarDatosGestion2", "GestionIndicadores")',
+                        datatype: 'json',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        async: true,
+                        data:  JSON.stringify({
+                            nombre_Proyecto: $("#txtProyecto").val(),
+                            Id_Area: parseInt($("#divArea"))/*Long */,
+                            Id_Nivel: parseInt($("#divNivel")),
+                            Id_Turno: parseInt($("#divTurno")),
+                            Id_Indicador: parseInt($("#divIndicador")),
+                            Id_Usuario: parseInt($("#divUsuario"))
+                        }),
+                        success: function (data) {
+                            data = eval(data);
+
+                            if (data.Resultado == "Guardado") {
+                                $.notificar({ text: 'Guardado', title: 'Exito', type: 'success' });
+
+                            }else {
+
+                                $.notificar({ text: 'no se pudo guardar', title: 'ups', type: 'danger' });
+                            }
+
+                        }
+
+                    });
+                });
+
+                /*______FIN BOTONES______*/
+
+
+                function OcultarBoton() {
+                    $("#btnGuardar").hide(); /*Oculta Boton siguiente*/
+                }
+
+                function Ocultarfg1() {   /*Oculta formulario*/
+                    $("#fg1").hide();
+                }
+
+                /*______CONEXION CONTROLADOR______*/
+                /*Muestra los datos recogidos por el controlador, agrega a "value" el numero del id*/
+                $.ajax({
+                    url: '@Url.Action("TraeArea", "GestionIndicadores")',/*Conexion con el controlador*/
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    success: function (data) {
+                        data = eval(data);
+
+                        var texto = "";
+                        $.each(data, function (i, item) {
+
+                            texto += "<option value='" + item.Id_Area + "'> " + item.Nombre + " </option>"/*da valor a "value" y despliega los datos por el id*/
+
+                        });
+
+                        $("#ddlArea").html(texto);
+
+                    }
+                });
+
+                /*Muestra los datos recogidos por el controlador, agrega a "value" el numero del id*/
+                $.ajax({
+                    url: '@Url.Action("TraeNivel", "GestionIndicadores")',/*Conexion con el controlador*/
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    success: function (data) {
+                        data = eval(data);
+
+                        var texto = "";
+                        $.each(data, function (i, item) {
+
+                            texto += "<option value='" + item.Id_Nivel + "'> " + item.Nombre + " </option>"/*da valor a "value" y despliega los datos por el id*/
+
+                        });
+
+                        $("#").html(texto);
+
+                    }
+                });
+
+                /*Muestra los datos recogidos por el controlador, agrega a "value" el numero del id*/
+                $.ajax({
+                    url: '@Url.Action("TraeTurno", "GestionIndicadores")',/*Conexion con el controlador*/
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    success: function (data) {
+                        data = eval(data);
+
+                        var texto = "";
+                        $.each(data, function (i, item) {
+
+                            texto += "<option value='" + item.Id_Turno + "'> " + item.Nombre + " </option>"/*da valor a "value" y despliega los datos por el id*/
+
+                        });
+
+                        $("#ddlTurno").html(texto);
+
+                    }
+                });
+
+                /*Muestra los datos recogidos por el controlador, agrega a "value" el numero del id*/
+                $.ajax({
+                    url: '@Url.Action("TraeIndicador", "GestionIndicadores")',/*Conexion con el controlador*/
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    success: function (data) {
+                        data = eval(data);
+
+                        var texto = "";
+                        $.each(data, function (i, item) {
+
+                            texto += "<option value='" + item.Id_Indicador + "'> " + item.Nombre + " </option>"/*da valor a "value" y despliega los datos por el id*/
+
+                        });
+
+                        $("#ddlIndicador").html(texto);
+
+                    }
+                });
+
+
+                /*Muestra los datos recogidos por el controlador, agrega a "value" el numero del id*/
+                $.ajax({
+                    url: '@Url.Action("TraeUsuario", "GestionIndicadores")',/*Conexion con el controlador*/
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    success: function (data) {
+                        data = eval(data);
+
+                        var texto = "";
+                        $.each(data, function (i, item) {
+
+                            texto += "<option value='" + item.Id_Usuario + "'> " + item.Nombre + " </option>"/*da valor a "value" y despliega los datos por el id*/
+
+                        });
+
+                        $("#ddlUsuario").html(texto);
+
+                    }
+                });
+                /*______FIN CONEXION CONTROLADOR______*/
+            });
+        });
+       
+        </script>
+
+    
+}

@@ -1,0 +1,254 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>ADMINISTRAR REPUESTOS</h2>
+
+<input type="hidden" id="idactividad" value="@ViewBag.Id" />
+
+<div class="well">
+    <div class="form-horizontal">
+        <h4>Administrar Repuestos Para Actividades</h4>
+        <hr />
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Selecciona Actividad</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control txtActividad" id="txtActividad"  disabled>
+                <button type="submit" value="Selecciona Actividad" id="SeleccionarActividad" class="btn btn-success SeleccionarActividad">Seleccionar Actividad</button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Selecciona El Repuesto </label>
+            <div class="col-md-10">
+                <input type="text" class="form-control txtRepuesto" id="txtRepuesto" disabled>
+                <button type="submit" value="Selecciona Repuesto" id="SeleccionarRepuesto" class="btn btn-success SeleccionarRepuesto">Seleccionar Repuesto</button>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" value="Agregar" id="Agregar" class="btn btn-success Agregar"><i class="glyphicon glyphicon-floppy-disk Agregar"></i>  Agregar</button>
+            </div>
+        </div>
+    </div>
+    <p style="text-align:right"><input type="button" class="btn btn-success AgregarRepuestos" id="AgregarRepuestos" value="Agregar Repuestos" /></p> 
+    <div class="VerActividad" id="VerActividad"> </div>
+</div>
+
+
+<div class="modal fade mdlVerActividaes" id="mdlVerActividaes" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-admin" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Actividad</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    @*<div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Productos</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="txtProducto" placeholder="código o num parte" autocomplete="off">
+                            </div>
+                        </div>*@
+                    <p>Seleccione Actividad</p>
+                    <div id="VerActividades"> </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade " id="mdlVerRepuestos" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-admin" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p style="text-align:right">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>
+                </p>
+                <h4 class="modal-title" id="myModalLabel">Producto</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Producto</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="txtProductoBuscar" placeholder="código o num parte" autocomplete="off">
+                            <input type="button" class="btn btn-default" id="btnMdlProductoBuscar" value="Buscar" />
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Cantidad</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control " id="txtCantidad" placeholder="ej. 5 - 10 - 20" autocomplete="off">
+                        </div>
+                    </div>
+                    <div id="VerRepuestos"></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+        VerRepuestosActividades();
+
+        idactividad = 0;
+
+        idrepuesto = 0;
+
+        seleccionidactividad = 0;
+
+        sleccionRepuesto = 0;
+
+        cantidad = 0;
+
+        $(document).ready(function () {
+
+        });
+
+
+        function VerRepuestosActividades() {
+            $.ajax({
+                url: '@Url.Action("VerRepuestosActividades", "AdministrarRepuestos")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ idactividad: $("#idactividad").val() }),
+                async: true,
+                success: function (data) {
+                    data = eval(data);
+
+                    $("#VerActividad").jsonTabla({ tabla: data });
+                }
+            });
+        }
+
+
+        $(document).on('click', '.SeleccionarActividad', function () {
+
+
+            $.ajax({
+                url: '@Url.Action("VerActividades", "AdministrarRepuestos")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                //data: JSON.stringify({ idactividad: $("#idactividad").val() }),
+                async: false,
+                success: function (data2) {
+                    data2 = eval(data2);
+
+                    $("#VerActividades").jsonTabla({ tabla: data2, lengthMenu: [[5, 10], [5, 10]] });
+                }
+            });
+
+
+            $('#VerActividades tbody').find('tr').each(function (i, item) {
+                $(item).css('background-color', '');
+                $(item).css('color', '');
+            });
+            $("#mdlVerActividaes").modal('show');
+        });
+
+
+
+        $("#btnMdlProductoBuscar").click(function () {
+
+            $.ajax({
+                url: '@Url.Action("VerProductos", "AdministrarRepuestos")',
+                datatype: 'json',
+                type: 'POST',
+                async: true,
+                data: { Busqueda: $("#txtProductoBuscar").val()}, // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+
+                    var r = eval(data);
+
+                    $("#VerRepuestos").jsonTabla({ tabla: r, lengthMenu: [[5, 10, 25], [5, 10, 25]] });
+
+                }
+            });
+
+        });
+
+
+        $(document).on('click', '.SeleccionarRepuesto', function () {
+
+
+            $("#mdlVerRepuestos").modal('show');
+        });
+
+
+
+        $(document).on('click', ".SeleccionActividad", function () {
+            $("#txtActividad").attr('idActividad',$(this).attr('idactividad'));
+
+          //$("#mdlEliminar").modal('show');
+            var cant = $(this).closest('tr').find("td:eq(1)").html();
+            $("#txtActividad").val(cant);
+            $("#mdlVerActividaes").modal('hide');
+
+        });
+
+
+        $(document).on('click', ".SeleccionRepuesto", function () {
+            $("#txtRepuesto").attr('idrepuesto', $(this).attr('idrepuesto'));
+            //PASAR VALORES DE UN TXT A UN TXT
+            $("#txtRepuesto").attr('cantidad', $("#txtCantidad").val());
+
+
+            //$("#mdlEliminar").modal('show');
+            var cant = $(this).closest('tr').find("td:eq(1)").html();
+            $("#txtRepuesto").val(cant);
+            $("#mdlVerRepuestos").modal('hide');
+
+        });
+
+
+        //GUARDAR REPUESTO Y ACTIVIDAD
+
+
+        $(".Agregar").click(function () {
+
+            $.ajax({
+                url: '@Url.Action("AsociarRepuestoActividad", "AdministrarRepuestos")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ idActividad: $("#txtActividad").attr('idactividad'), idRecurso: $("#txtRepuesto").attr('idrepuesto'), Cantidad: $("#txtRepuesto").attr('cantidad') }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    if (data.Resultado == "Guardado") {
+                        $.notificar({ text: 'Guardado', title: 'Exito', type: 'success' });
+                        VerActividad();
+                        $("#txtRepuesto").val('');
+                        $("#txtActividad").val('');
+                    }
+                    else {
+                        $.notificar({ text: 'no se pudo guardar', title: 'ups', type: 'danger' });
+                    }
+                    //$("#VerReporte").jsonTabla({ tabla: data });
+                }
+            });
+        });
+        
+
+
+
+    </script>
+
+}

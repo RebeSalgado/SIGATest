@@ -1,0 +1,59 @@
+﻿@model IEnumerable<Entidades.Control.ControlIndicador>
+
+<div class="well" style="overflow-x:auto ">
+   
+    <table class="table table-hover" >
+        <tr>
+            <th class="success">
+                @Html.DisplayNameFor(model => model.Indicador.Nombre)
+            </th>
+            <th class="success">
+                @Html.DisplayNameFor(model => model.Usuario.Email)
+            </th>
+            <th class="success">
+                Real
+            </th>
+            <th class="success">
+                @Html.DisplayNameFor(model => model.Desviacion)
+            </th>
+            <th class="success">
+                @Html.DisplayNameFor(model => model.fecha)
+            </th>
+            <th class="success">
+                @Html.DisplayNameFor(model => model.Meta)
+            </th>
+            <th class="success"></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Indicador.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Usuario.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nreal)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Desviacion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.fecha)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Meta)
+                </td>
+                <td>
+                    @Html.ActionLink("Editar", "EditarControl", new { id = item.Id_Control }) |
+                    @Html.ActionLink("Detalles", "DetallesControl", new { id = item.Id_Control }) |
+                    @Html.ActionLink("Borrar", "BorrarControl", new { id = item.Id_Control })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+

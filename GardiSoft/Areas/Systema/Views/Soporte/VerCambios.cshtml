@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Entidades.Sys.ControlDeCambios>
+
+<div class="table-responsive">
+    <table class="table table-hover" id="tblCambios">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Aplicacion.Aplicacion)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TipoSoporte.Descripcion)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Fecha)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Version)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CambioRealizado)
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Aplicacion.Aplicacion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TipoSoporte.Descripcion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Fecha)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Version)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CambioRealizado)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,65 @@
+﻿@model Entidades.Rrhh.Capacitaciones.Dnc
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Dnc</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.SubProyecto.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SubProyecto.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreCodigo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreCodigo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.usuarioCreador)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.usuarioCreador)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.anio)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.anio)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cerrada)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cerrada)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

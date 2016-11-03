@@ -1,0 +1,28 @@
+﻿@model Entidades.Control.Proyecto
+
+<div>
+    <h4>Proyecto</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ubicacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ubicacion)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "EditarProyecto", new { id = Model.Id_Proyecto }) |
+    @Html.ActionLink("Volver a Gestion", "Index")
+</p>

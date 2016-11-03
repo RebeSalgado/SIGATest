@@ -1,0 +1,547 @@
+﻿
+@{
+    ViewBag.Title = "DashBoardUma";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .vcenter {
+        margin-top: 50px;
+    }
+</style>
+
+<h2>DashBoard Uma</h2>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Indicadores de Gestión de órdenes de trabajo</h3>
+    </div>
+    <div class="panel-body">
+        <div class="col-md-10 col-md-offset-1">
+          
+        </div>
+        <div class="col-md-12">
+            <div class="form-inline formulario">
+                <h3>Distribución de OT</h3>
+                <hr />
+                <div class="form-group">
+                    <label for="exampleInputName2">Obra</label>
+                    <select type="text" class="form-control input-sm obra" id="exampleInputName2" placeholder="Jane Doe">
+                        <option value="-1">Seleccione</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail2">Inicio</label>
+                    <input type="date" class="form-control input-sm inicio" id="exampleInputEmail2" placeholder="1900-01-01">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail2">Termino</label>
+                    <input type="date" class="form-control input-sm termino " id="exampleInputEmail2" placeholder="1900-01-01">
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm distribucionOt">Generar</button>
+                <button type="submit" class="btn btn-default btn-sm"><li class="glyphicon glyphicon-save"> </li></button>
+                <p></p>
+            </div>
+            <div id="chartDistribucionOT"></div>
+        </div>
+      
+
+        
+        <div class="col-md-12">
+            <div class="form-inline formulario">
+                <h3>Cantidad por Tipos de Falla</h3>
+                <hr />
+                <div class="form-group">
+                    <label for="exampleInputName2">Obra</label>
+                    <select type="text" class="form-control input-sm obra" id="exampleInputName2" placeholder="Jane Doe">
+                        <option value="-1">Seleccione</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputName2">Tipo Maquina</label>
+                    <select type="text" class="form-control input-sm tipoMaquinaFalla" id="exampleInputName2" placeholder="Jane Doe">
+                        <option value="-1">Seleccione</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail2">Inicio</label>
+                    <input type="date" class="form-control input-sm inicio" id="exampleInputEmail2" placeholder="1900-01-01">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail2">Termino</label>
+                    <input type="date" class="form-control input-sm termino" id="exampleInputEmail2" placeholder="1900-01-01">
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm tipoFalla">Generar</button>
+                <button type="submit" class="btn btn-default btn-sm"><li class="glyphicon glyphicon-save"> </li></button>
+                <p></p>
+            </div>
+
+            <div class="row col-md-12">
+                <div id="chartCantidadPorTiposDeFalla">
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-12">
+            <div class="form-inline formulario">
+                <h3>OT Pendientes de Cerrar</h3>
+                <hr />
+                <div class="form-group">
+                    <label for="exampleInputName2">Obra</label>
+                    <select type="text" class="form-control input-sm obra" id="exampleInputName2" placeholder="Jane Doe">
+                        <option value="-1">Seleccione</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail2">Inicio</label>
+                    <input type="date" class="form-control input-sm inicio" id="exampleInputEmail2" placeholder="1900-01-01">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail2">Termino</label>
+                    <input type="date" class="form-control input-sm termino" id="exampleInputEmail2" placeholder="1900-01-01">
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm otPendientes">Generar</button>
+                <button type="submit" class="btn btn-default btn-sm"><li class="glyphicon glyphicon-save"> </li></button>
+            </div>
+            <p></p>
+            <div id="chartCantidadTrabajoPendiente"></div>
+
+        </div>
+
+        <div class="col-md-12">
+            <div class="form-inline formulario">
+                <h3>RRHH Pendientes por OT preventivas</h3>
+                <hr />
+                <div class="form-group">
+                    <label for="exampleInputName2">Obra</label>
+                    <select type="text" class="form-control input-sm obra" id="exampleInputName2" placeholder="Jane Doe">
+                        <option value="-1">Seleccione</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail2">Inicio</label>
+                    <input type="date" class="form-control input-sm inicio" id="exampleInputEmail2" placeholder="1900-01-01">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail2">Termino</label>
+                    <input type="date" class="form-control input-sm termino" id="exampleInputEmail2" placeholder="1900-01-01">
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm RRHHPendiente">Generar</button>
+                <button type="submit" class="btn btn-default btn-sm"><li class="glyphicon glyphicon-save"> </li></button>
+            </div>
+            <div id="chartCantidadRRHHPendientePreventivo"></div>
+
+        </div>
+
+    </div>
+</div>
+
+
+
+<div class="panel panel-warning">
+    <div class="panel-heading">
+        <h3 class="panel-title">Indicadores de costo</h3>
+    </div>
+    <div class="panel-body">
+
+        <div class="col-md-12">
+            <div class="form-inline formulario">
+                <h3>Costo por tipo de Mantenimiento</h3>
+                <hr />
+                <div class="form-group">
+                    <label for="exampleInputName2">Obra</label>
+                    <select type="text" class="form-control input-sm obra" id="exampleInputName2" placeholder="Jane Doe">
+                        <option value="-1">Seleccione</option>
+                    </select>
+                </div>
+
+              
+
+                <div class="form-group">
+                    <label for="exampleInputEmail2">Inicio</label>
+                    <input type="date" class="form-control input-sm inicio" id="exampleInputEmail2" placeholder="1900-01-01">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail2">Termino</label>
+                    <input type="date" class="form-control input-sm termino" id="exampleInputEmail2" placeholder="1900-01-01">
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm">Generar</button>
+                <button type="submit" class="btn btn-default btn-sm"><li class="glyphicon glyphicon-save"> </li></button>
+            </div>
+            <div id="chartCostoPorTipoMantenimiento"></div>
+
+        </div>
+
+        <div class="col-md-12">
+            <div class="form-inline formulario">
+                <h3>Costo Reparación Máquina</h3>
+                <hr />
+                <div class="form-group">
+                    <label for="exampleInputName2">Máquina</label>
+                    @Html.DropDownList("IdMaquina", null, htmlAttributes: new { @class = "form-control input-sm" })
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail2">Inicio</label>
+                    <input type="date" class="form-control input-sm inicio" id="exampleInputEmail2" placeholder="1900-01-01">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail2">Termino</label>
+                    <input type="date" class="form-control input-sm termino" id="exampleInputEmail2" placeholder="1900-01-01">
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm costoMaquina">Generar</button>
+                <button type="submit" class="btn btn-default btn-sm"><li class="glyphicon glyphicon-save"> </li></button>
+            </div>
+            <div id="chartCostoPorMaquina"></div>
+
+        </div>
+
+
+    </div>
+</div>
+
+
+
+
+@section Scripts
+{
+
+    @Scripts.Render("~/bundles/graficos")
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            
+            $.ajax({
+                url: '@Url.Action("CentrosResponsabilidad", "Reporte")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                //  data: JSON.stringify({ idactividad: $("#idactividad").val() }),
+                async: true,
+                success: function (data) {
+                    data = eval(data);
+                    var texto = "<option value=-1>Seleccione</option>";
+
+                    $.each(data, function (i,item) {
+                        texto += "<option value=" + item.idCResp + ">" + item.Centro + "</option>";
+
+
+                    });
+
+                    $(".obra").each(function (i,item) {
+
+                        $(item).html(texto);
+
+                    });
+
+                }
+            });
+
+            $(".distribucionOt").click(function () {
+            
+                var obra =   $(this).closest('.formulario').find('.obra').val();
+                var inicio =  $(this).closest('.formulario').find('.inicio').val();
+                var termino = $(this).closest('.formulario').find('.termino').val();
+                inicio = (inicio == "") ? '2000-01-01' : inicio;
+                termino = (termino == "") ? '3000-01-01' : termino;
+
+                $.ajax({
+                    url: '@Url.Action("GraficoCantidadOtPorTipo", "Reporte")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ crespid: obra, inicio: inicio, termino: termino }),
+                    async: true,
+                    success: function (data) {
+                        data = eval(data);
+                       
+                        FusionCharts.ready(function () {
+                            var revenueChart = new FusionCharts({
+                                "type": "pie2d",
+                                "renderAt": "chartDistribucionOT",
+                                "width": "100%",
+                                "height": "400",
+                                "dataFormat": "json",
+                                "dataSource": {
+                                    "chart": {
+                                        "caption": "DISTRIBUCIÓN OT",
+                                        "subCaption": "Cantidad de OT por tipo",
+                                        "xAxisName": "Tipos de OT",
+                                        "yAxisName": "Cantidad",
+                                        "theme": "fint"
+                                    },
+                                    "data": data
+                                }
+                            });
+
+                            revenueChart.render();
+                        })
+
+                    }
+                });
+
+
+
+            });
+
+
+           
+
+            $.ajax({
+                url: '@Url.Action("GraficoCantidadPorTiposDeFallaMaquinas", "Reporte")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                //  data: JSON.stringify({ idactividad: $("#idactividad").val() }),
+                async: true,
+                success: function (data) {
+                    data = eval(data);
+                    var texto = "<option value=-1>Seleccione</option>";
+
+                    $.each(data, function (i, item) {
+                        texto += "<option value=" + item.Id + ">" + item.Nombre + "</option>";
+                    });
+
+                    $(".tipoMaquinaFalla").html(texto);
+
+                   
+                }
+            });
+           
+            $(".tipoFalla").click(function () {
+
+                var obra = $(this).closest('.formulario').find('.obra').val();
+                var inicio = $(this).closest('.formulario').find('.inicio').val();
+                var termino = $(this).closest('.formulario').find('.termino').val();
+                inicio = (inicio == "") ? '2000-01-01' : inicio;
+                termino = (termino == "") ? '3000-01-01' : termino;
+                var tipo = $(this).closest('.formulario').find('.tipoMaquinaFalla').val();
+             
+
+                $.ajax({
+                    url: '@Url.Action("GraficoCantidadPorTiposDeFalla", "Reporte")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ crespid: obra, inicio: inicio, termino: termino,Idtipo :tipo }),
+                    async: true,
+                    success: function (data) {
+                        data = eval(data);
+
+                        FusionCharts.ready(function () {
+                            var revenueChart = new FusionCharts({
+                                "type": "bar2d",
+                                "renderAt": "chartCantidadPorTiposDeFalla",
+                                "width": "100%",
+                                "height": "400",
+                                "dataFormat": "json",
+                                "dataSource": {
+                                    "chart": {
+                                        "caption": "FALLAS RECURRENTES",
+                                        "subCaption": "Cantidad de OT generadas por tipo de falla",
+                                        "xAxisName": "Fallas",
+                                        "yAxisName": "Cantidad",
+                                        "theme": "fint"
+                                    },
+                                    "data": data
+                                }
+                            });
+
+                            revenueChart.render();
+                        })
+
+                    }
+                });
+
+            });
+          
+          
+            $(".otPendientes").click(function(){ 
+            
+                var obra = $(this).closest('.formulario').find('.obra').val();
+                var inicio = $(this).closest('.formulario').find('.inicio').val();
+                var termino = $(this).closest('.formulario').find('.termino').val();
+                inicio = (inicio == "") ? '2000-01-01' : inicio;
+                termino = (termino == "") ? '3000-01-01' : termino;
+                
+
+                $.ajax({
+                    url: '@Url.Action("GraficoCantidadTrabajoPendiente", "Reporte")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ crespid: obra, inicio: inicio, termino: termino }),
+                    async: true,
+                    success: function (data) {
+                        data = eval(data);
+
+                        FusionCharts.ready(function () {
+                            var revenueChart = new FusionCharts({
+                                "type": "pie2d",
+                                "renderAt": "chartCantidadTrabajoPendiente",
+                                "width": "100%",
+                                "height": "400",
+                                "dataFormat": "json",
+                                "dataSource": {
+                                    "chart": {
+                                        "caption": "TRABAJO PENDIENTE",
+                                        "subCaption": "OT sin cerrar y cerradas",
+                                        "xAxisName": "Estado",
+                                        "yAxisName": "Cantidad",
+                                        "theme": "fint"
+                                    },
+                                    "data": data
+                                }
+                            });
+
+                            revenueChart.render();
+                        })
+
+                    }
+                });
+
+            
+            });
+
+
+            $(".RRHHPendiente").click(function () {
+
+                var obra = $(this).closest('.formulario').find('.obra').val();
+                var inicio = $(this).closest('.formulario').find('.inicio').val();
+                var termino = $(this).closest('.formulario').find('.termino').val();
+                inicio = (inicio == "") ? '2000-01-01' : inicio;
+                termino = (termino == "") ? '3000-01-01' : termino;
+
+                $.ajax({
+                    url: '@Url.Action("GraficoCantidadRRHHPendientePreventivo", "Reporte")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ crespid: obra, inicio: inicio, termino: termino }),
+                    async: true,
+                    success: function (data) {
+                        data = eval(data);
+
+                        FusionCharts.ready(function () {
+                            var revenueChart = new FusionCharts({
+                                "type": "column2d",
+                                "renderAt": "chartCantidadRRHHPendientePreventivo",
+                                "width": "100%",
+                                "height": "400",
+                                "dataFormat": "json",
+                                "dataSource": {
+                                    "chart": {
+                                        "caption": "RRHH PENDIENTE EN MANTENIMIENTO PREVENTIVO",
+                                        "subCaption": "Horas pendientes por cargo",
+                                        "xAxisName": "Cargo",
+                                        "yAxisName": "Horas",
+                                        "theme": "fint"
+                                    },
+                                    "data": data
+                                }
+                            });
+
+                            revenueChart.render();
+                        })
+
+                    }
+                });
+
+            });
+           
+           
+                     
+
+            $.ajax({
+                url: '@Url.Action("GraficoCostoPorTipoMantenimiento", "Reporte")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                //  data: JSON.stringify({ idactividad: $("#idactividad").val() }),
+                async: true,
+                success: function (data) {
+                    data = eval(data);
+                     
+                    FusionCharts.ready(function () {
+                        var revenueChart = new FusionCharts({
+                            "type": "pie2d",
+                            "renderAt": "chartCostoPorTipoMantenimiento",
+                            "width": "100%",
+                            "height": "400",
+                            "dataFormat": "json",
+                            "dataSource": {
+                                "chart": {
+                                    "caption": "COSTO EN REPUESTOS PREVENTIVO VERSUS CORRECTIVO",
+                                    "subCaption": "Monto por tipo valorizado en pesos",
+                                    "xAxisName": "Tipo",
+                                    "yAxisName": "Pesos",
+                                    "theme": "fint"
+                                },
+                                "data": data
+                            }
+                        });
+
+                        revenueChart.render();
+                    })
+
+                }
+            });
+
+
+            $(".costoMaquina").click(function () {
+
+                var IdMaquina = $(this).closest('.formulario').find('#IdMaquina').val();
+                var inicio = $(this).closest('.formulario').find('.inicio').val();
+                var termino = $(this).closest('.formulario').find('.termino').val();
+                inicio = (inicio == "") ? '2000-01-01' : inicio;
+                termino = (termino == "") ? '3000-01-01' : termino;
+
+               
+                $.ajax({
+                    url: '@Url.Action("GraficoConsumoPorMaquina", "Reporte")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ idMaquina: IdMaquina, inicio: inicio, termino: termino }),
+                    async: true,
+                    success: function (data) {
+                        data = eval(data);
+
+                        
+                        FusionCharts.ready(function () {
+                            var revenueChart = new FusionCharts({
+                                "type": "column2d",
+                                "renderAt": "chartCostoPorMaquina",
+                                "width": "100%",
+                                "height": "400",
+                                "dataFormat": "json",
+                                "dataSource": {
+                                    "chart": {
+                                        "caption": "COSTO EN REPUESTOS POR MÁQUINA",
+                                        "subCaption": "Monto por tipo valorizado en pesos",
+                                        "xAxisName": "Máquina",
+                                        "yAxisName": "Pesos",
+                                        "theme": "fint"
+                                    },
+                                    "data": data
+                                }
+                            });
+
+                            revenueChart.render();
+                        })
+
+                    }
+                });
+
+
+            });
+
+        });
+
+    </script>
+
+}
+

@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="c:\program files (x86)\microsoft visual studio 14.0\team tools\static analysis tools\fxcop\Xml\CodeAnalysisReport.xsl"?>
+<FxCopReport Version="14.0">
+ <Targets>
+  <Target Name="C:\Users\rsalgado\Desktop\SIGA\GardiSoft\bin\GardiSoft.dll">
+   <Modules>
+    <Module Name="gardisoft.dll">
+     <Namespaces>
+      <Namespace Name="GardiSoft.Models">
+       <Types>
+        <Type Name="Conectar" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063" Status="Active" Created="2016-11-03 14:26:12Z" FixCategory="Breaking">
+           <Issue Name="ProvideDisposeBool" Certainty="95" Level="Error">Proporcionar una implementación que se pueda reemplazar de Dispose(bool) en 'Conectar' o marcar el tipo como sellado. Una llamada a Dispose(false) solamente debería limpiar recursos nativos. Una llamada a Dispose(true) debería limpiar tanto recursos administrados como nativos.</Issue>
+          </Message>
+         </Messages>
+         <Members>
+          <Member Name="#Dispose()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063" Status="Active" Created="2016-11-03 14:26:12Z" FixCategory="Breaking">
+             <Issue Name="DisposeImplementation" Certainty="95" Level="Error" Path="C:\Users\rsalgado\Desktop\SIGA\GardiSoft\Models" File="Conectar.cs" Line="61">Modifique 'Conectar.Dispose()' para que llame a Dispose(true) y después a GC.SuppressFinalize en la instancia de objeto actual ('this' o 'Me' en Visual Basic), y después devuelva un valor.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#EjecutarConsultaNoSelect(System.String)" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="RethrowToPreserveStackDetails" Category="Microsoft.Usage" CheckId="CA2200" Status="Active" Created="2016-11-03 14:26:12Z" FixCategory="NonBreaking">
+             <Issue Certainty="95" Level="Error" Path="C:\Users\rsalgado\Desktop\SIGA\GardiSoft\Models" File="Conectar.cs" Line="108">'Conectar.EjecutarConsultaNoSelect(string)' vuelve a producir una excepción detectada y la especifica explícitamente como un argumento. Utilice 'throw' sin un argumento, para mantener la ubicación de la pila donde se provocó inicialmente la excepción.</Issue>
+            </Message>
+            <Message TypeName="Revisar consultas SQL para comprobar si tienen vulnerabilidades de seguridad" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2016-11-03 14:26:12Z" FixCategory="DependsOnFix">
+             <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="C:\Users\rsalgado\Desktop\SIGA\GardiSoft\Models" File="Conectar.cs" Line="104">La cadena de consulta pasada a 'SqlCommand.CommandText.set(string)' en 'Conectar.EjecutarConsultaNoSelect(string)' podría contener las siguientes variables: 'sql'. Si alguna de estas variables puede proceder de datos proporcionados por el usuario, considere el uso de un procedimiento almacenado o una consulta SQL parametrizada en lugar de compilar la consulta con concatenaciones de cadenas.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#EjecutarConsultaSelect(System.String,System.Data.CommandType,System.Data.SqlClient.SqlParameter[])" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="Revisar consultas SQL para comprobar si tienen vulnerabilidades de seguridad" Category="Microsoft.Security" CheckId="CA2100" Status="Active" Created="2016-11-03 14:26:12Z" FixCategory="DependsOnFix">
+             <Issue Name="WithNonLiterals" Certainty="75" Level="Warning" Path="C:\Users\rsalgado\Desktop\SIGA\GardiSoft\Models" File="Conectar.cs" Line="75">La cadena de consulta pasada a 'SqlCommand.CommandText.set(string)' en 'Conectar.EjecutarConsultaSelect(string, CommandType, params SqlParameter[])' podría contener las siguientes variables: 'sql'. Si alguna de estas variables puede proceder de datos proporcionados por el usuario, considere el uso de un procedimiento almacenado o una consulta SQL parametrizada en lugar de compilar la consulta con concatenaciones de cadenas.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="ExcelWriter" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063" Status="Active" Created="2016-11-03 14:26:12Z" FixCategory="Breaking">
+           <Issue Name="ProvideDisposeBool" Certainty="95" Level="Error">Proporcionar una implementación que se pueda reemplazar de Dispose(bool) en 'ExcelWriter' o marcar el tipo como sellado. Una llamada a Dispose(false) solamente debería limpiar recursos nativos. Una llamada a Dispose(true) debería limpiar tanto recursos administrados como nativos.</Issue>
+          </Message>
+         </Messages>
+         <Members>
+          <Member Name="#Dispose()" Kind="Method" Static="False" Accessibility="Public" ExternallyVisible="True">
+           <Messages>
+            <Message TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063" Status="Active" Created="2016-11-03 14:26:12Z" FixCategory="Breaking">
+             <Issue Name="DisposeImplementation" Certainty="95" Level="Error" Path="C:\Users\rsalgado\Desktop\SIGA\GardiSoft\Models" File="Excel.cs" Line="594">Modifique 'ExcelWriter.Dispose()' para que llame a Dispose(true) y después a GC.SuppressFinalize en la instancia de objeto actual ('this' o 'Me' en Visual Basic), y después devuelva un valor.</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+      <Namespace Name="GardiSoft.Models.Helper">
+       <Types>
+        <Type Name="HtmlHelper" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Messages>
+          <Message TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001" Status="Active" Created="2016-11-03 14:26:12Z" FixCategory="DependsOnFix">
+           <Issue Name="DependsOnFix" Certainty="95" Level="CriticalError">Implemente IDisposable en 'HtmlHelper' porque crea miembros de los tipos IDisposable siguientes: 'GardiSoftContext'. Si ya se había distribuido 'HtmlHelper', agregar nuevos miembros que implementen IDisposable en este tipo se considera un cambio rotundo para los consumidores existentes.</Issue>
+          </Message>
+         </Messages>
+        </Type>
+       </Types>
+      </Namespace>
+     </Namespaces>
+    </Module>
+   </Modules>
+  </Target>
+ </Targets>
+ <Rules>
+  <Rule TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063">
+   <Name>Implemente IDisposable correctamente</Name>
+   <Description>Todos los tipos IDisposable deben implementar el patrón de Dispose correctamente.</Description>
+   <Resolution Name="DisposeImplementation">Modifique {0} para que llame a Dispose(true) y después a GC.SuppressFinalize en la instancia de objeto actual ('this' o 'Me' en Visual Basic), y después devuelva un valor.</Resolution>
+   <Resolution Name="ProvideDisposeBool">Proporcionar una implementación que se pueda reemplazar de Dispose(bool) en {0} o marcar el tipo como sellado. Una llamada a Dispose(false) solamente debería limpiar recursos nativos. Una llamada a Dispose(true) debería limpiar tanto recursos administrados como nativos.</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/ms244737.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">Error</MessageLevel>
+   <File Name="designrules.dll" Version="14.0.0.0" />
+  </Rule>
+  <Rule TypeName="RethrowToPreserveStackDetails" Category="Microsoft.Usage" CheckId="CA2200">
+   <Name>Reiniciar para mantener los detalles de la pila</Name>
+   <Description>Utilice la instrucción de reinicio IL para mantener los detalles de la pila original cuando vaya a volver a provocar la excepción detectada.</Description>
+   <Resolution Name="Default">{0} vuelve a producir una excepción detectada y la especifica explícitamente como un argumento. Utilice 'throw' sin un argumento, para mantener la ubicación de la pila donde se provocó inicialmente la excepción.</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/ms182363.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">Error</MessageLevel>
+   <File Name="usagerules.dll" Version="14.0.0.0" />
+  </Rule>
+  <Rule TypeName="Revisar consultas SQL para comprobar si tienen vulnerabilidades de seguridad" Category="Microsoft.Security" CheckId="CA2100">
+   <Name>Revisar consultas SQL para comprobar si tienen vulnerabilidades de seguridad</Name>
+   <Description>Una cadena de comando SQL compilada a partir de datos proporcionados por el usuario es vulnerable a ataques pon inyección de código SQL. Microsoft SQL Server y otros servidores de bases de datos admiten procedimientos almacenados y consultas SQL parametrizadas, que reducen el riesgo de ataques por inyección.</Description>
+   <Resolution Name="WithNonLiterals">La cadena de consulta pasada a {0} en {1} podría contener las siguientes variables: {2}. Si alguna de estas variables puede proceder de datos proporcionados por el usuario, considere el uso de un procedimiento almacenado o una consulta SQL parametrizada en lugar de compilar la consulta con concatenaciones de cadenas.</Resolution>
+   <Owner>RuleOwner</Owner>
+   <Url>http://msdn.microsoft.com/library/ms182310.aspx</Url>
+   <Email />
+   <MessageLevel Certainty="75">Warning</MessageLevel>
+   <File Name="dataflowrules.dll" Version="14.0.0.0" />
+  </Rule>
+  <Rule TypeName="TypesThatOwnDisposableFieldsShouldBeDisposable" Category="Microsoft.Design" CheckId="CA1001">
+   <Name>Los tipos que poseen campos descartables deben ser descartables</Name>
+   <Description>Los tipos que declaran miembros descartables también deben implementar IDisposable. Si el tipo no posee ningún recurso no administrado, no implementar un finalizador.</Description>
+   <Resolution Name="DependsOnFix">Implemente IDisposable en {0} porque crea miembros de los tipos IDisposable siguientes: {1}. Si ya se había distribuido {0}, agregar nuevos miembros que implementen IDisposable en este tipo se considera un cambio rotundo para los consumidores existentes.</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/ms182172.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">CriticalError</MessageLevel>
+   <File Name="designrules.dll" Version="14.0.0.0" />
+  </Rule>
+ </Rules>
+ <Localized>
+  <String Key="Category">Categoría</String>
+  <String Key="Certainty">Certeza</String>
+  <String Key="CollapseAll">Contraer todo</String>
+  <String Key="CheckId">Comprobar id.</String>
+  <String Key="Error">Error</String>
+  <String Key="Errors">errores</String>
+  <String Key="ExpandAll">Expandir todo</String>
+  <String Key="Help">Ayuda</String>
+  <String Key="Line">Línea</String>
+  <String Key="Messages">mensajes</String>
+  <String Key="LocationNotStoredInPdb">[Ubicación no almacenada en Pdb]</String>
+  <String Key="Project">Proyecto</String>
+  <String Key="Resolution">Resolución</String>
+  <String Key="Rule">Regla</String>
+  <String Key="RuleFile">Archivo de regla</String>
+  <String Key="RuleDescription">Descripción de la regla</String>
+  <String Key="Source">Origen</String>
+  <String Key="Status">Estado</String>
+  <String Key="Target">Círculos concéntricos</String>
+  <String Key="Warning">Advertencia</String>
+  <String Key="Warnings">advertencias</String>
+  <String Key="ReportTitle">Informe de análisis del código</String>
+ </Localized>
+</FxCopReport>

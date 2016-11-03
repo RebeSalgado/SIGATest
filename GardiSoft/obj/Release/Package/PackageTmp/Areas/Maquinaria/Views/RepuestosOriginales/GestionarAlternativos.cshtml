@@ -1,0 +1,149 @@
+﻿
+@{
+    ViewBag.Title = "GestionarAlternativos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Estos Son Los Repuestos Alternativos Disponibles</h2>
+
+<input type="hidden" id="idOriginal" value="@ViewBag.Id" />
+
+@*--AGREGAR --*@
+
+<div class="well">
+    <div class="form-horizontal">
+        <h4>Ingresa Nuevo Repuesto Alternativo</h4>
+        <hr />
+
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Repuesto</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" id="txtNombreRepuesto" placeholder="escriba aquí el nombre del Repuesto">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" value="Agregar" id="agregar" class="btn btn-success"><i class="glyphicon glyphicon-floppy-disk"></i>  Agregar</button>
+            </div>
+        </div>
+    </div>
+    <div class="VerRepuestos" id="VerRepuestos"> REPUESTOS ORIGINALES</div>
+</div>
+<div class="VerRepuestos" id="VerRepuestos"></div>
+@*--MODAL ELIMINAR --*@
+
+<div class="modal fade " id="mdlEliminar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Eliminar Repuesto</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="NombrePlan" class="col-sm-2 control-label">Nombre Repuesto</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control " disabled id="txtEliminarNombre" placeholder=" " autocomplete="off">
+                        </div>
+                        <div class="col-sm-10">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger EliminarRepuesto" id="EliminarRepuesto" data-dismiss="modal">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var idrepuesto = 0;
+            CargarRepuestos();
+        });
+        //CARGAR REPUESTO ALTERNATIVO
+        function CargarRepuestos() {
+            $.ajax({
+                url: '@Url.Action("VerRepuestosAlternativos", "RepuestosOriginales")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ idOriginal: $("#idOriginal").val() }),
+                async: true,
+                success: function (data) {
+                    data = eval(data);
+
+                    $("#VerRepuestos").jsonTabla({ tabla: data });
+                }
+            });
+        }
+
+        //AGREGAR REPUESTO ALTERNATIVO
+        $("#agregar").click(function () {
+
+            $.ajax({
+                url: '@Url.Action("AgregarRepuestoAlternativo", "RepuestosOriginales")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ CodigoAlternativo: $("#txtNombreRepuesto").val(), idOriginal: $("#idOriginal").val() }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    if (data.Resultado == "Guardado") {
+                        $.notificar({ text: 'Guardado', title: 'Exito', type: 'success' });
+                        $("#txtNombreRepuesto").val('')
+                        CargarRepuestos();
+                    }
+                    else {
+                        $.notificar({ text: 'no se pudo guardar', title: 'ups', type: 'danger' });
+                    }
+                    //$("#VerReporte").jsonTabla({ tabla: data });
+                }
+            });
+        });
+
+        // ELIMINAR REPUESTO ALTERNATIVO
+
+        $(document).on('click', ".Eliminar", function () {
+            idrepuesto = $(this).attr('idrepuesto');
+
+            $("#mdlEliminar").modal('show');
+            var cant = $(this).closest('tr').find("td:eq(1)").html();
+            $("#txtEliminarNombre").val(cant);
+
+        });
+
+
+        $(document).on('click', ".EliminarRepuesto", function () {
+            $.ajax({
+                url: '@Url.Action("EliminarRepuestoAlternativo", "RepuestosOriginales")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ Id: idrepuesto }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    if (data.Resultado == "Guardado") {
+                        $.notificar({ text: 'Repuesto Eliminado', title: 'Todo listo', type: 'success' });
+                        CargarRepuestos();
+                    }
+                    else {
+                        $.notificar({ text: 'No se puede Eliminar Repuesto.', title: 'Todo listo', type: 'danger' });
+                    }
+
+
+                }
+            });
+
+        });
+
+    </script>
+    }

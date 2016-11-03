@@ -1,0 +1,247 @@
+﻿@model Entidades.Control.Kpi
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Gestión de KPI</h2>
+
+<p style="text-align:right">
+    <input type="submit" value="Agregar" class="btn btn-primary" onclick="$('#agregar').toggle(500)" />
+</p>
+@using (Ajax.BeginForm("GuardarKpi", new AjaxOptions { OnComplete = "onSuccess" }))
+{
+
+    <div class="well" id="agregar" style="display:none">
+
+        <div class="form-horizontal">
+            <h4>Utilice el formulario para agregar nuevos Indicadores</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.Label("IdSubproyecto", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("IdSubproyecto", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.IdSubproyecto, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.Label("Nombre", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("IdIndicador", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.IdIndicador, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.Label("Intervalo Días", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.IntervaloDias, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.IntervaloDias, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.Label("Nombre Opcional", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.NombreOpcional, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.NombreOpcional, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.Label("Perspectiva", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Perspectiva, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Perspectiva, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.Label("Ingresador", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.IngresadoPor, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.IngresadoPor, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.Label("Supervisor", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.supervisadoPor, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.supervisadoPor, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.Label("Dueño", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Propietario, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Propietario, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.Label("Fecha Inicio", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.FechaInicioMedicion, new { htmlAttributes = new { @class = "form-control", @type = "date" } })
+                    @Html.ValidationMessageFor(model => model.FechaInicioMedicion, "", new { @class = "text-danger" })
+                </div>
+            </div>        
+
+            <div class="form-group">
+                @Html.Label("Activo", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.Activo)
+                        @Html.ValidationMessageFor(model => model.Activo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="button" value="Crear" id="crearKpi" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<h2>Lista de Kpi</h2>
+
+<div id="listaKpi"></div>
+
+
+<div class="modal fade " id="mdlEliminar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Eliminar Kpi</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="NombrePlan" class="col-sm-2 control-label">Nombre Plan</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control " disabled id="txtEliminarNombre" placeholder="" autocomplete="off">
+                        </div>
+                        <div class="col-sm-10">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger EliminarPlans" id="EliminarConfirmarKpi" data-dismiss="modal">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+        $(document).ready(function () {
+            var id = 0;
+            verKpi();
+
+
+            $(document).on('click', '.EliminarKpi', function () {
+
+                var $boton = $(this);
+                id = $boton.attr('id');
+
+               $("#txtEliminarNombre").val($boton.closest('tr').find("td:eq(0)").html() + ' - ' + $boton.closest('tr').find("td:eq(2)").html());
+                $("#mdlEliminar").modal('show');
+
+            });
+
+            $(document).on('click', '#EliminarConfirmarKpi', function () {
+
+                $.ajax({
+                    url: '@Url.Action("EliminarKpi", "Kpi")',
+                    datatype: 'json',
+                    type: 'POST',
+                    async: true,
+                    data: {
+                        Id: id                     
+                    },
+                    success: function (data) {
+                        var r = eval(data);
+                        if (r.Resultado == "Guardado") {
+                            $.notificar({ text: '', title: 'Éxito', type: 'success' });                            
+                            verKpi();
+                        }
+                        else {
+                            $.notificar({ text: 'Registro en Uso, no se puede eliminar', title: 'Error', type: 'danger' });
+                        }
+                    }
+                });
+
+            });
+
+
+
+            $("#crearKpi").click(function () {
+
+                $.ajax({
+                    url: '@Url.Action("GuardarKpi", "Kpi")',
+                    datatype: 'json',
+                    type: 'POST',
+                    async: true,
+                    data: {
+                        IdSubproyecto:    $("#IdSubproyecto").val()
+                        , IdIndicador:    $("#IdIndicador").val()
+                        , IntervaloDias:  $("#IntervaloDias").val()
+                        , NombreOpcional: $("#NombreOpcional").val()
+                        , Perspectiva: $("#Perspectiva").val()
+                        , IngresadoPor: $("#IngresadoPor").val()
+                        , supervisadoPor: $("#supervisadoPor").val()
+                        , Propietario: $("#Propietario").val()
+                        , FechaInicioMedicion: $("#FechaInicioMedicion").val()
+                        , Activo: $("#Activo").val()
+                        
+
+                    },
+                    success: function (data) {
+                        var r = eval(data);
+                        if (r.Resultado == "Guardado") {
+                            $.notificar({ text: '', title: 'Éxito', type: 'success' });
+                            $("#agregar").hide(500);
+                            verKpi();
+                        }
+                        else {
+                            $.notificar({ text: 'Debe completar el detalle', title: 'Error', type: 'danger' });
+                        }
+                    }
+                });
+
+
+            });
+
+        });
+
+
+        function verKpi()
+        {
+            $.ajax({
+                url: '@Url.Action("VerKpis", "Kpi")',
+                datatype: 'json',
+                type: 'POST',
+                async: true,
+                 data: { IdUbicacion: $("#IdUbicacion").val() },
+                success: function (data) {
+                    var r = eval(data);
+                    $("#listaKpi").jsonTabla({ tabla: r });
+                }
+            });
+        }
+
+     
+
+    </script>
+
+}

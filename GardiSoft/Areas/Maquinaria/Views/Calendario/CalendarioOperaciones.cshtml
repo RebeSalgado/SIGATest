@@ -1,0 +1,517 @@
+﻿
+@{
+    ViewBag.Title = "CalendarioOperaciones";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Calendario Operaciones</h2>
+<div class="form-horizontal">
+    <div class="form-group">
+        <label for="inputEmail3" class="col-sm-2 control-label">Ubicación</label>
+        <div class="col-md-6">
+            @Html.DropDownList("IdUbicacion", null, htmlAttributes: new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10" style="text-align:left">
+            <input type="button" value="Filtrar" id="btnGenerarInforme" class="btn btn-success" />
+        </div>
+    </div>
+
+</div>
+<div id="controles">
+    <p style="text-align:right">
+        <input type="button" id="hoyView" class="btn btn" value="Hoy" />
+        <input type="button" id="mesView" class="btn btn" value="Mes" />
+        <input type="button" id="mesPre" class="btn btn" value="Anterior" />
+        <input type="button" id="mesNext" class="btn btn" value="Siguiente" />
+    </p>
+</div>
+
+
+<div id="calendar"></div>
+
+<h1>Resumen de máquinas</h1>
+<div id="calendario">
+
+    <p class="lead">Cuando seleccione una ubicación la lista aparecerá</p>
+
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="mdlGestionEvento" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Seleccione una acción</h4>
+            </div>
+            <div class="modal-body">
+                <p>  <button type="button" id="btnCancelarPropuesta" class="btn btn-primary btn-lg btn-block">Volver a su fecha original </button>  </p>
+                <p>  <button type="button" id="btnGenerarPropuesta" class="btn btn-warning btn-lg btn-block">Proponer esta OT </button>  </p>
+                @if (ViewBag.permiso == "si")
+                {
+                <p><button type="button" id="btnConfirmaPropuesta" class="btn btn-success btn-lg btn-block">Confirmar y generar OT</button> </p>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">No, nada gracias</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade " id="dlgInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Información de la Máquina</h4>
+            </div>
+            <div class="modal-body">
+
+
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Centro de Consumo</h3>
+                    </div> <div class="panel-body">
+                        <p id="cconsumo" idcconsumo=""></p>
+                    </div>
+                </div>
+
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Centro Responsabilidad</h3>
+                    </div> <div class="panel-body">
+                        <p id="cresp" idcresp=""></p>
+                    </div>
+                </div>
+
+
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Equipo Padre</h3>
+                    </div> <div class="panel-body">
+                        <p id="padre" idPadre=""></p>
+                    </div>
+                </div>
+
+                <span class="label label-danger" id="resumen">Resumen</span>
+                <p id="mensajeCentroResp" class="lead"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <input type="button" value="Guardar" id="btnGenerarOt" class="btn btn-success" />
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade " id="dlgSiguiente" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Información de la Máquina</h4>
+            </div>
+            <div class="modal-body">
+
+                <p id="" class="lead">Existe una mantención anterior para el día <span id="anterior"></span> que aún está pendiente.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Ok, gracias</button>
+              
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts
+{
+
+@Scripts.Render("~/bundles/calendario")
+
+
+    <script type="text/javascript">
+        var idMaquina = 0;
+        var frecuencia = 0;
+        var fecha = "";
+        var evento = 0;
+        var eventos;
+        var tipoOt = 0;
+        var fechaOriginal;
+        $(document).ready(function () {
+
+
+
+
+
+            $("#btnGenerarInforme").click(function () {
+                cargarCalendario();
+            });
+
+
+            $("#btnGenerarOt").click(function () {
+
+                if(tipoOt == 1)
+                {
+
+                    GenerarOtPropuesta(idMaquina, frecuencia, evento.start.format(), $("#cconsumo").attr('idcconsumo'), $("#cresp").attr('idcresp'), $("#cconsumo").html(), $("#cresp").html(), $("#padre").attr('idPadre'));
+                    if (frecuencia >= 125) {
+                        evento.color = "#f0ad4e";
+                    }
+                    else
+                    {
+                        evento.color = "#d9534f";
+                    }
+                    $('#calendar').fullCalendar('updateEvent', evento);
+                    $("#mdlGestionEvento").modal('hide');
+                    $("#dlgInfo").modal('hide');
+                }
+                if(tipoOt == 2)
+                {
+                     $.ajax({
+                         url: '@Url.Action("EliminarOtPropuesta", "Calendario")',
+                         datatype: 'json',
+                         type: 'POST',
+                         contentType: 'application/json',
+                         async: false,
+                         data: JSON.stringify({ idMaquina: idMaquina, frecuencia: frecuencia }), // o sin stringify para datos primitivos  {rut : item.rut },
+                         success: function (data2) {
+                             data2 = eval(data2);
+                             evento.start = data2[0].Calculada;
+                             evento.color = "#3a87ad";
+                             $('#calendar').fullCalendar('updateEvent', evento);
+                            // $("#btnGenerarInforme").trigger('click');
+                             $.notificar({ text: 'Al ' + data2[0].Calculada, title: 'Movido!', type: 'success' });
+                             $("#mdlGestionEvento").modal('hide');
+                             $("#dlgInfo").modal('hide');
+                             
+
+                         }
+                     });
+                }
+                if(tipoOt == 3)
+                {
+                    GenerarOtPropuesta(idMaquina, frecuencia, evento.start.format(), $("#cconsumo").attr('idcconsumo'), $("#cresp").attr('idcresp'), $("#cconsumo").html(), $("#cresp").html(), $("#padre").attr('idPadre'));
+                     $.ajax({
+                         url: '@Url.Action("ConfirmarOtPropuesta", "Calendario")',
+                         datatype: 'json',
+                         type: 'POST',
+                         contentType: 'application/json',
+                         async: false,
+                         data: JSON.stringify({ idMaquina: idMaquina, frecuencia: frecuencia, fecha: evento.start.format("YYYY-MM-DD"),idcconsumo: $("#cconsumo").attr('idcconsumo'),idcresp: $("#cresp").attr('idcresp'),cconsumo:$("#cconsumo").html(),cresp: $("#cresp").html()}), // o sin stringify para datos primitivos  {rut : item.rut },
+                         success: function (data2) {                       
+                                
+                             //evento.start = data2[0].Calculada;
+                             evento.color = "#449d44";
+                             $('#calendar').fullCalendar('updateEvent', evento);                     
+                             $("#mdlGestionEvento").modal('hide');
+                             $("#dlgInfo").modal('hide');
+
+
+                         }
+                     });
+                }
+
+
+
+            });
+
+            $("#btnGenerarPropuesta").click(function () {
+              
+                tipoOt = 1;
+                verInformeMaquina(idMaquina);
+
+            });
+
+
+            $("#btnCancelarPropuesta").click(function () {
+                tipoOt =2
+                verInformeMaquina(idMaquina);
+
+               
+            });
+                
+            $("#btnConfirmaPropuesta").click(function () {
+                tipoOt = 3;
+                verInformeMaquina(idMaquina);
+               
+
+
+            });
+
+            $("#hoyView").click(function () {
+
+                $('#calendar').fullCalendar('today');
+            });
+
+            $("#mesView").click(function () {
+
+                $('#calendar').fullCalendar('changeView', 'month')
+            });
+
+
+            $("#mesNext").click(function () {
+                $('#calendar').fullCalendar('next');
+            });
+
+            $("#mesPre").click(function () {
+                $('#calendar').fullCalendar('prev');
+            });
+
+        });
+
+
+        function verInformeMaquina(idMaquina)
+        {
+            $("#btnGenerarOt").hide();
+            $.ajax({
+                url: '@Url.Action("VerInformacionPadre", "OT")',
+                datatype: 'json',
+                type: 'POST',
+                async: true,
+                data: { idMaquina: idMaquina }, // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    var data = eval(data)
+                    if (data.length > 0) {
+                        $("#padre").html(data[0].Padre);
+                        $("#padre").attr('idPadre', data[0].Id);
+                    }
+
+
+                }
+
+            });
+
+            $.ajax({
+                url: '@Url.Action("VerInformacionEntrega", "OT")',
+                datatype: 'json',
+                type: 'POST',
+                async: false,
+                data: { idMaquina: idMaquina }, // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    var data = eval(data)
+                    $("#cconsumo").text('Sin informacion asociada');
+                    $("#cresp").text('Sin informacion asociada');
+                    $("#resumen").hide();
+                    $("#mensajeCentroResp").text('');
+
+                    if (data.length > 0 && data[0].cconsumoDes != null) {
+                        $("#cconsumo").text(data[0].cconsumoDes + '(' + data[0].cconsumoCod + ')');
+
+                        $("#cconsumo").attr('idcconsumo', data[0].cconsumoId);
+
+                        $("#cresp").text(data[0].creNombre + '(' + data[0].cconsumoCod + ')');
+
+                        $("#cresp").attr('idcresp', data[0].pcreId);
+
+                        $("#codigo").text(data[0].codigo);
+
+                        $("#btnGenerarOt").show();
+
+                    }
+                    else {
+                        $("#resumen").show();
+                        $("#btnGenerarOt").hide();
+                        if (data.codigo == null) {
+                            $("#mensajeCentroResp").text('No se puede hacer una OT porque el componente no tiene una maquina padre');
+                        }
+                        else {
+                            $("#mensajeCentroResp").text('No se puede hacer una OT porque no pude encontrar una centro de responsabilidad en fin700 para el codigo: ' + data[0].codigo);
+                        }
+                        $("#btnEntregar").prop('disabled', true);
+
+                    }
+
+                    $("#dlgInfo").modal('show');
+                }
+            });
+        }
+
+     
+        function cargarCalendario()
+        {
+            //carga la lista de abajo del calendario, da otra vision de las máquinas ya que en el calendario
+            //hay que pasearse por todos los meses para tener una vista global
+          
+                $.ajax({
+                    url: '@Url.Action("CalendarioMantenimiento", "Calendario")',
+                    datatype: 'json',
+                    type: 'POST',
+                    async: true,
+                    data: { IdUbicacion: $("#IdUbicacion").val() },
+                    success: function (data) {
+                        var r = eval(data);
+                        $("#calendario").jsonTabla({ tabla: r });
+                    }
+                });
+          
+
+
+
+            $.ajax({
+                url: '@Url.Action("EventosCalendarioOperaciones", "Calendario")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: false,
+                data: JSON.stringify({ idUbicacion: $("#IdUbicacion").val() }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = JSON.parse(data);
+
+                    eventos = data;
+
+                    //$('#calendar').fullCalendar('refetchEvents');
+
+
+                }
+            });
+
+
+            // $('#calendar').fullCalendar('removeEventSource', eventos)
+
+            $("#calendar").fullCalendar('destroy');
+
+            $('#calendar').fullCalendar({
+                lang: 'es',
+                header: {
+                    left: '',
+                    center: 'title',
+                    right: ''
+                },
+                nowIndicator: true,
+                displayEventTime: false,
+                editable: true,
+                eventStartEditable: true,
+                eventDurationEditable: true,
+                events: eventos,
+                eventRender: function (event, element) {
+                    element.find('.fc-title').append("<br/>" + event.description);
+
+                },
+             
+                eventDrop: function (event, delta, revertFunc) {
+                    
+                    if (event.color == "#449d44") { //si ya confirmó no la puede mover más.
+                        revertFunc();
+                        return;
+                    }
+                    
+                    if (event.color == null && EsSiguiente(fechaOriginal, event.IdMaquina) == 0)
+                    {
+                        revertFunc();
+                        return;
+                    }
+
+                    var elemento = $(this);
+                    idMaquina = event.IdMaquina;
+                    frecuencia = event.Frecuencia;
+                    //fecha = event.start.format();
+                    evento = event;
+                    
+                   // GenerarOtPropuesta(event.IdMaquina, event.Frecuencia, event.start.format(),);
+                    //event.color = "#f0ad4e";
+                    tipoOt = 1;
+                    verInformeMaquina(event.IdMaquina);
+
+
+                },
+                eventClick: function (calEvent, jsEvent, view) {
+                   
+                    
+
+                    if (calEvent.color == null && EsSiguiente(calEvent.start.format(), calEvent.IdMaquina) == 0) {
+                       
+                        return;
+                    }
+                    
+                    $("#btnCancelarPropuesta").css('display', 'block');
+                    $("#btnConfirmaPropuesta").css('display', 'block');
+                    $("#btnGenerarPropuesta").css('display', 'block');
+
+                    if (calEvent.color == "#449d44") { //si ya esta confirmada no hay mas acciones posibles
+                        return;
+                    }
+
+                    if (calEvent.color == "#d9534f") //es de revision, solo se puede confirmar
+                    {
+                        $("#btnCancelarPropuesta").css('display', 'none');
+                        $("#btnConfirmaPropuesta").css('display', 'block');
+                        $("#btnGenerarPropuesta").css('display', 'none');
+                    }
+                  
+                    idMaquina = calEvent.IdMaquina;
+                    frecuencia = calEvent.Frecuencia;
+                    evento = calEvent;
+                    $("#mdlGestionEvento").modal('show');
+
+                },
+                eventDragStart: function (event, jsEvent, ui, view) {
+                   
+                    fechaOriginal = event.start.format();
+
+                }
+
+
+            });
+            
+        }
+        
+
+        function GenerarOtPropuesta(idMaquina, frecuencia, fecha, idcconsumo, idcresp,cconsumo,cresp,idPadre) {
+            $.ajax({
+                url: '@Url.Action("GenerarOtPropuesta", "Calendario")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: false,
+                data: JSON.stringify({ idMaquina: idMaquina, frecuencia: frecuencia, fecha: fecha, idcconsumo, idcresp, cconsumo, cresp, idpadre: idPadre }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data2) {
+
+                }
+            });
+        }
+
+
+
+        function EsSiguiente(fecha, idMaquina)
+        {
+            
+            var pendiente = 0;
+            $.ajax({
+                url: '@Url.Action("EsSiguiente", "Calendario")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: false,
+                data: JSON.stringify({ idMaquina: idMaquina, fecha: fecha }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data2) {
+                    data2 = eval(data2);
+                    console.log(data2[0].Siguiente);
+                    pendiente = (data2[0].Siguiente);
+                    $("#anterior").text(data2[0].fechaSiguiente)
+                    if (pendiente == 0) {
+                        $("#dlgSiguiente").modal('show');
+                    }
+
+                }
+            });
+
+            return pendiente;
+        }
+	
+
+</script>
+
+
+   
+}
+

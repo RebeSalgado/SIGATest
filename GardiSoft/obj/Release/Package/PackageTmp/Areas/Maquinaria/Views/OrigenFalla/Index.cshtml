@@ -1,0 +1,148 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Origenes de Falla</h2>
+
+<div class="well">
+    <div class="form-horizontal">
+        <h4>Agregue un nuevo Origen de falla</h4>
+        <hr />
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Tipo de Falla</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="Falla" id="txtDescripcionFalla" placeholder="Descripcion Falla" autocomplete="off">
+                    <input type="submit" value="Agregar Falla" id="btnAgregarFalla" class="btn btn-success" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="Fallas"></div>
+
+
+
+@*--MODAL ELIMINAR --*@
+
+<div class="modal fade " id="mdlEliminar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Eliminar Falla</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="NombrePlan" class="col-sm-2 control-label">Descripcion Falla</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control " disabled id="txtEliminarNombre" placeholder=" " autocomplete="off">
+                        </div>
+                        <div class="col-sm-10">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger EliminarFalla" data-dismiss="modal">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+<script type="text/javascript">
+        $(document).ready(function () {
+            CargarFallas();
+        });
+
+        // GUARDAR NUEVA FALLA 
+
+        $("#btnAgregarFalla").click(function () {
+
+            $.ajax({
+                url: '@Url.Action("GuardarFalla", "OrigenFalla")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ Descripcion: $("#txtDescripcionFalla").val() }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    if (data.Resultado == "Guardado") {
+                        $.notificar({ text: 'Guardado', title: 'Exito', type: 'success' });
+                        CargarFallas();
+                        $("#txtDescripcionFalla").val('')
+                    }
+                    else {
+                        $.notificar({ text: 'no se pudo guardar', title: 'ups', type: 'danger' });
+                    }
+                    //$("#VerReporte").jsonTabla({ tabla: data });
+                }
+            });
+        });
+        
+
+    //CARGAR FALLAS
+
+    function CargarFallas() {
+        $.ajax({
+            url: '@Url.Action("VerFallas", "OrigenFalla")',
+            datatype: 'json',
+            type: 'POST',
+            contentType: 'application/json',
+            // data: JSON.stringify({Id: $("#Id").val(), Nombre: $("#Nombre").val() }),
+            async: true,
+            success: function (data) {
+                data = eval(data);
+
+                $("#Fallas").jsonTabla({ tabla: data });
+            }
+        });
+    }
+
+
+    // ELIMINAR 
+
+    $(document).on('click', ".Eliminar", function () {
+        idFalla = $(this).attr('idFalla');
+
+        $("#mdlEliminar").modal('show');
+        var cant = $(this).closest('tr').find("td:eq(1)").html();
+        $("#txtEliminarNombre").val(cant);
+
+    });
+
+
+    $(document).on('click', ".EliminarFalla", function () {
+        $.ajax({
+            url: '@Url.Action("EliminarFalla", "OrigenFalla")',
+            datatype: 'json',
+            type: 'POST',
+            contentType: 'application/json',
+            async: true,
+            data: JSON.stringify({ Id: idFalla }), // o sin stringify para datos primitivos  {rut : item.rut },
+            success: function (data) {
+                data = eval(data);
+                if (data.Resultado == "Guardado") {
+                    $.notificar({ text: 'Plan Eliminado', title: 'Todo listo', type: 'success' });
+                    CargarFallas();
+                }
+                else {
+                    $.notificar({ text: 'No se puede Eliminar Plan.', title: 'Todo listo', type: 'danger' });
+                }
+
+
+            }
+        });
+
+    });
+
+</script>
+    }

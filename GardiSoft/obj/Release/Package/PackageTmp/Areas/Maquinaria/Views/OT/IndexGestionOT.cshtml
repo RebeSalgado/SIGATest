@@ -1,0 +1,1802 @@
+﻿@model Entidades.Uma.OT
+
+@{
+    ViewBag.Title = "IndexGestionOT";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    #verAsociarRepuestoActividad .dt-buttons {
+        display: none;
+    }
+
+    #verAsociarRepuestoActividad .dataTables_length {
+        display: none;
+    }
+</style>
+
+
+<h2>Gestión de OT N° @Model.Id</h2>
+
+<div class="progress">
+    <div class="progress-bar" role="progressbar" aria-valuenow="@Model.PorcentajeFinalizado" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width:@Model.PorcentajeFinalizado%">
+        @Model.PorcentajeFinalizado%
+    </div>
+</div>
+
+<div id="felicitacion"></div>
+
+
+<div id="controles">
+    <p style="text-align:right">
+        @*<input type="button" id="hoyView" class="btn btn" value="Hoy" />
+            <input type="button" id="mesView" class="btn btn" value="Mes" />
+            <input type="button" id="mesPre" class="btn btn" value="Anterior" />*@
+        <input type="button" id="btnTodoRealizado" class="btn btn-success" idOt="@Model.Id" style="display : none; " value="Marcar actividades como realizadas" />
+        <input type="button" id="btnCancelarOt" class="btn btn-danger btnCancelarOt" idOt="@Model.Id" value="Cancelar OT" />
+        <input type="button" id="btnCerrar" class="btn btn-primary" idOt="@Model.Id" value="Cerrar OT" />
+    </p>
+</div>
+
+@if (Model.IdTipoOt == 2 || Model.IdTipoOt == 6)
+{
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Actividades Preventivas
+                </a>
+            </h3>
+        </div>
+        <div class="panel-body collapse" id="collapseOne">
+
+            <p class="lead">utilice este listado para marcar las actividades que ha completado</p>
+
+            <div id="listaActividades">
+
+
+            </div>
+        </div>
+    </div>
+}
+
+else
+{
+ <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseCorrectivo" aria-expanded="true" aria-controls="collapseOne">
+                    Actividades Correctivas
+                </a>
+            </h3>
+        </div>
+        <div class="panel-body collapse" id="collapseCorrectivo">
+
+            <div id="pasoImportar" style="display:none">
+
+                <p style="text-align:right">
+                    <input type="button" class="btn btn-default" id="btnCancelarImportar" value="Volver a la lista" />
+                    <input type="button" class="btn btn-warning" id="btnGuardarActividadesMasiva" value="Agregar Actividades" />
+                </p>
+                <p class="lead">Copie las actividades de su excel aquí </p>
+                <div id="actividadesCorrectivasMasivas">
+
+
+                </div>
+            </div>
+            <div id="pasoVerCorrectivas">
+                <p style="text-align:right">
+
+                    <input type="button" class="btn btn-warning" id="btnImportar" value="Agregar Actividades desde Excel" />
+                </p>
+                <p class="lead">utilice este listado para marcar las actividades que ha completado</p>
+
+                <div id="listaActividadesCorrectivas">
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseRRHH" aria-expanded="true" aria-controls="collapseOne">
+                RRHH
+            </a>
+            <span style="float:right">TOTAL: $<span id="totalRRHH"></span> </span>
+        </h3>
+    </div>
+    <div class="panel-body collapse" id="collapseRRHH">
+        <div>
+            <!-- Button trigger modal -->
+            <p style="text-align:right">
+                <span type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">
+                    Agregar Trabajador
+                </span>
+            </p>
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Seleccione un trabajador</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="listTrabajadores">
+                                <p class="lead">Espere, los trabajadores ya vienen...</p>
+                            </div>
+
+                            <div class="modal-footer">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="mdlHoras" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">tiempo que trabajó</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-2 control-label">Minutos</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="txtMinutos" placeholder="ej. 30 - 60 -90" autocomplete="off">
+                                    </div>
+                                </div>
+
+
+                            </form>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                            <button type="button" id="btnAgregar" class="btn btn-primary">Confirmar</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="listaTrabajadoresSeleccionados">
+                <p></p>
+                <p class="lead">Hey! las máquinas no se arreglan solas</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model.IdTipoOt == 2 || Model.IdTipoOt == 6)
+{
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseRepuestos" aria-expanded="true" aria-controls="collapseOne">
+                    Repuestos
+                </a>
+                <span style="float:right">TOTAL: $<span id="totalRepuestos"></span> </span>
+            </h3>
+        </div>
+        <div class="panel-body collapse" id="collapseRepuestos">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">Bodega</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="idBodega" id="txtidBodega" readonly placeholder="Código de bodega" autocomplete="off">
+                        <input type="submit" value="Seleccionar Bodega" id="btnBuscarBodega" class="btn btn-success" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10" style="text-align:left">
+                        <input type="submit" value="Buscar" id="btnBuscar" class="btn btn-success" />
+                    </div>
+                </div>
+            </div>
+            <div id="listaRepuestos">
+                <p style="text-align:right">
+                    <button type="button" class="btn btn-primary agregarProductos">Agregar Repuestos</button>
+                </p>
+                <div id="verRepuestosSolicitados">
+
+                    <p class="lead">no hay nada solicitado aquí</p>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+}
+
+
+@* *****************############################## SERVICIOS #####################################***********************@
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseServicios" aria-expanded="true" aria-controls="collapseOne" style="min-width:100%">
+                <span>Servicios</span>
+            </a>
+            <span style="float:right">TOTAL: $<span id="totalServicio"></span> </span>
+        </h3>
+    </div>
+
+    <div class="panel-body collapse" id="collapseServicios">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-offset-1">
+                    <input type="submit" value="Agregar Servicios " id="btnAgregarServicios" class="btn btn-success" />
+                </div>
+            </div>
+            <div class="VerServicios"></div>
+        </div>
+    </div>
+
+</div>
+
+@* *****************############################## SERVICIOS #####################################***********************@
+
+
+
+
+
+
+<div class="panel" >
+    <div class="panel-heading" style="background-color:#f39200; border-color:#f39200; color:#FFFFFF" >
+        <h3 class="panel-title">
+            <a class="collapsed" style="min-width:100%">
+                <span >TOTAL FINAL: $<span id="totalFinal"></span> </span>
+            </a>
+            
+        </h3>
+    </div>
+</div>
+
+
+
+<div class="modal fade " id="mdlAgregarServicios" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-admin"  role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Seleccione Servicio</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-sm-10">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Numero Pedido</label>
+                            <input type="text" class="form-control" id="txtBuscarPedido" placeholder=" " autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-1">
+                            <input type="submit" value="Buscar Pedido " id="btnBuscarPedido" class="btn btn-success" />
+                        </div>
+                    </div>
+                    <div class="VerPedidos"></div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Cerrar</button>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="mdlBodegas" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Bodegas</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <p>Seleccione Bodega</p>
+                    <div id="VerSeleccionarBodega"> </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="mdlVerRepuestos" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Actividad</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    @*<div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Productos</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="txtProducto" placeholder="código o num parte" autocomplete="off">
+                            </div>
+                        </div>*@
+                    <p>Seleccione Actividad</p>
+                    <div id="verAsociarRepuestoActividad"> </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<div class="modal fade" id="mdlVerRepuestos" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Actividad</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Productos</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="txtProducto" placeholder="código o num parte" autocomplete="off">
+                            </div>
+                        </div>
+                    <p>Seleccione Actividad</p>
+                    <div id="verAsociarRepuestoActividad"> </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+<div class="modal fade" id="mdlCerrarOt" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Cerrar OT</h4>
+            </div>
+            <div class="modal-body">
+                <p id="msjCerrar"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+
+                <button type="button" class="btn btn-success" id="btnCerrarConfirmar" data-dismiss="modal">Cerrar</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="mdlVerRepuestosActividad" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Seleccione Actividad</h4>
+            </div>
+            <div class="modal-body">
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnCerrarConfirmar" class="btn btn-success" data-dismiss="modal">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade " id="mdlCantidad" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-admin" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p style="text-align:right">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>
+                </p>
+                <h4 class="modal-title" id="myModalLabel">Producto</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Producto</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="txtProductoBuscar" placeholder="código o num parte" autocomplete="off">
+                            <input type="button" class="btn btn-default" id="btnMdlProductoBuscar" value="Buscar" />
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Cantidad</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="txtCantidad" placeholder="ej. 5 - 10 - 20" autocomplete="off">
+                        </div>
+                    </div>
+                    <div id="mdlCantidadTablaRepuestos"></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                
+
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade " id="mdlDuplicado" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Posible Duplicado</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label"></label>
+                        <div class="col-sm-10">
+                            <p>producto que trata de agregar esta asociado también a las siguientes actividad(es):</p>
+                            <div id="listaActividadesEnProducto">
+
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">ah, entonces no</button>
+                <button type="button" class="btn btn-primary btnConfirmarAgregar " data-dismiss="modal">Agregar igual</button>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="mdlVerificarRepuestos" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Seleccione Actividad</h4>
+            </div>
+            <div class="modal-body">
+
+                <input type="text" class="form-control" id="txtProductoAgregado" placeholder="código o num parte" autocomplete="off">
+                <input type="text" class="form-control" id="txtProductoAgregado1" placeholder="código o num parte" autocomplete="off">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnCerrarConfirmar" class="btn btn-success" data-dismiss="modal">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade " id="mdlAgregarPreventivo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Quitar</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">¿Cuantos más?</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="txtCantidadAgregarPreventivo" placeholder=" " autocomplete="off">
+
+                        </div>
+                    </div>
+                    <span class="lead">Necesitará aprobación para retirar la cantidad seleccionada</span>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary btnGuardarAgregarPreventivo" data-dismiss="modal">Solicitar</button>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade " id="mdlValorServicio" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Cambiar valor a servicio</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Nuevo valor</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="txtValorServicio" autocomplete="off" ocdetid="0">
+                        </div>
+                    </div>                  
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary btnGuardarModificarValor" data-dismiss="modal">Cambiar</button>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="mdlCancelarOt" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel"> Cancelar la OT</h4>
+            </div>
+            <div class="modal-body">
+                <p>Esta a Punto de Cancelar la OT!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal">Volver Atras</button>
+                <button type="button" class="btn btn-danger btnConfirmarCancelarOt" data-dismiss="modal">Cancelar la OT</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+@Scripts.Render("~/bundles/switch")
+@Scripts.Render("~/bundles/handsomeTable")
+
+    <script type="text/javascript">
+        var idManoDeObra = 0;
+        var minutos = 0;
+        var valor = 0;
+
+
+
+        var idActividadPreventiva = 0 //guarda la activdad que se selecciona al vincula a un repuesto preventivo
+        var idRepuesto = 0; //guarda la activdad que se selecciona al vincula a un repuesto Correctivo
+
+
+
+        cargarTrabajadoresSeleccionados(); // carga los trabajadores ya agregados
+
+        CargarServiciosAgregados();
+
+        ValorRRHH();
+
+        ValorServicios();
+
+        ValorRepuestos();
+
+        $(document).ready(function () {
+
+
+            
+            $(document).on('click', '#btnCancelarOt', function(){
+               
+                $("#mdlCancelarOt").modal('show');
+
+            });
+
+
+            $(document).on('click', '.btnConfirmarCancelarOt', function (){
+               
+                $.ajax({
+
+                    url: '@Url.Action("CancelarOt", "OT")', //muestra todas las actividades
+                    datatype: 'json',
+                    type: 'POST',
+                    async: true,
+                    data: { id: @Model.Id }, // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+                        data = eval(data);
+                        if(data.Resultado == "Guardado")
+                        {
+                            $.notificar({ text: 'No es posible Cancelar esta OT', title: 'Todo listo', type: 'danger' });
+                        }
+                        else
+                        {
+                            $.notificar({ text: 'Ot Cancelada', title: 'Todo listo', type: 'success' });
+                            location.href = '@Url.Action("Index", "OT")' + '/index/';
+                        }
+
+                    }
+                });
+            });
+
+
+
+            $(document).on('click', ".btnEliminarPreventivo", function () {
+                console.log('asasas');
+                $boton = $(this);
+                var maximo = parseInt($boton.closest('tr').find('td:eq(3)').html()) - parseInt($boton.closest('tr').find('td:eq(4)').html());
+
+                $("#txtCantidadEliminar").unbind('keyup').keyup(function () {
+
+                    if ($("#txtCantidadEliminar").val() < 0) {
+                        $("#txtCantidadEliminar").val('0');
+                    }
+
+
+                    if (parseInt($("#txtCantidadEliminar").val()) > maximo) {
+                        $("#txtCantidadEliminar").val(maximo);
+                    }
+
+                });
+
+                $("#txtCantidadEliminar").val(maximo);
+                $("#mdlEliminar").modal('show');
+
+
+
+            });
+
+            $(document).on('click', '.QuitarRepuestoActividad', function () {
+
+                    $.ajax({
+                        url: '@Url.Action("QuitarRecursoOtPreventivo", "GestionRepuestos")',
+                        datatype: 'json',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        async: true,
+                        data: JSON.stringify({ idDetalle: $boton.attr('idactividad'), idProducto: $boton.attr('idrecurso'), cantidad: $("#txtCantidadEliminar").val(), aprobado: ($boton.attr('estado') == 0) ? false : true }), // o sin stringify para datos primitivos  {rut : item.rut },
+                        success: function (data) {
+                            $.notificar({ text: 'Repuesto quitado', title: 'Todo listo', type: 'success' });
+                            cargarRepuestosSolicitadosPreventivo();
+                            $("#mdlEliminar").modal('hide');
+
+
+
+                        }
+                    });
+
+
+            });
+
+
+            $(document).on('click', '.btnAgregarPreventivo', function () {
+                idActividadPreventiva = $(this).attr('idactividad');
+                idProductoPreventivo = $(this).attr('idrecurso');
+                $("#mdlAgregarPreventivo").modal('show');
+
+            });
+
+            $(document).on('click', '.btnGuardarAgregarPreventivo', function () {
+
+                $.ajax({
+                    url: '@Url.Action("GuardarRecursoOtPreventivo", "OT")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    data: JSON.stringify({ idDetalle: idActividadPreventiva, idProducto: idProductoPreventivo, cantidad: $("#txtCantidadAgregarPreventivo").val(), aprobado: false }), // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+                        $.notificar({ text: 'Repuesto agregado', title: 'Todo listo', type: 'success' });
+                        cargarRepuestosSolicitadosPreventivo();
+                        $("#mdlVerRepuestos").modal('hide');
+
+                    }
+                });
+
+            });
+
+
+            $(document).on('click', '.seleccionarProducto', function () {
+
+                idRepuesto = $(this).attr('idproducto');
+
+
+                var boton = $(this);
+                var val = false;
+
+                $('#verAsociarRepuestoActividad tbody').find('tr').each(function (i, item) {
+
+                    if ($(item).css('background-color') == 'rgb(243, 146, 0)' && $("#txtCantidad").val() > 0) //-------- **Recordar que edge utiliza RGB **-----------
+                    {
+                        val = true;
+                    }
+                });
+
+
+
+                if (val == false) {
+                    $.notificar({ text: 'Debe seleccionar un repuesto y una cantidad', title: 'Error', type: 'danger' });
+                }
+                else {
+
+                    //los agrega utilizando la logica correctiva
+                    //  if ($("#tipoOt").text() != '2' && $("#tipoOt").text() != '6') {
+
+                    var actividades = "";
+                    var requiereConfirmacion = false;
+                    var productoNuevo = $(this).closest('tr').find('td:eq(0)').html();
+                    $("#verRepuestosSolicitados tbody").find('tr').each(function (i, item) {
+
+                        if ($.trim($(item).find('td:eq(1)').find('p:eq(1)').text()) == $.trim(productoNuevo)) {
+                            actividades += "<p>" + $.trim($(item).find('td:eq(1)').find('p:eq(0)').text()) + "</p>";
+                            requiereConfirmacion = true;
+                        }
+
+                    });
+
+                    $("#listaActividadesEnProducto").html(actividades)
+
+
+                    if (requiereConfirmacion == false) {
+
+                        agregarRepuestopreventivo(idRepuesto);
+
+                    }
+                    else {
+                        $("#mdlDuplicado").modal('show');
+                    }
+
+                }
+
+            });
+
+
+            $("#btnMdlProductoBuscar").click(function () {
+
+                $.ajax({
+                    url: '@Url.Action("VerProductos", "OT")',
+                    datatype: 'json',
+                    type: 'POST',
+                    async: true,
+                    data: { Busqueda: $("#txtProductoBuscar").val(), bodegaId: $("#txtidBodega").attr('idbodega') }, // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+
+                        var r = eval(data);
+
+                        $("#mdlCantidadTablaRepuestos").jsonTabla({ tabla: r, lengthMenu: [[5, 10, 25], [5, 10, 25]] });
+
+                    }
+                });
+
+            });
+
+
+            $(document).on('click', '.agregarProductos', function () {
+
+
+
+                $.ajax({
+                    url: '@Url.Action("VerAsociarRepuestoActividad", "OT")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ idOt: @Model.Id }),
+                    async: false,
+                    success: function (data2) {
+                        data2 = eval(data2);
+
+                        $("#verAsociarRepuestoActividad").jsonTabla({ tabla: data2, lengthMenu: [[5, 10], [5, 10]] });
+                        $("#mdlVerRepuestos").modal('show');
+                    }
+                });
+
+
+                $('#verAsociarRepuestoActividad tbody').find('tr').each(function (i, item) {
+                    $(item).css('background-color', '');
+                    $(item).css('color', '');
+                });
+                productoEncontrado = false;
+                $("#txtProducto").val('');
+                $("#mdlVerRepuestos").modal('show');
+
+            });
+
+
+            var productoEncontrado = false;
+            // cargarRepuestosSolicitadosPreventivo();
+           $(document).on('click', '.Seleccionar', function () {
+
+                idBodega = $(this).attr('idbodega');
+                $("#txtidBodega").attr('idbodega', idBodega);
+                var Bod = $(this).closest('tr').find("td:eq(0)").html();
+                $("#txtidBodega").val(Bod);
+                $("#mdlBodegas").modal('hide');
+
+            });
+
+            $("#btnBuscarBodega").click(function () {
+                $("#mdlBodegas").modal('show');
+
+                $.ajax({
+                    url: '@Url.Action("PermisoUsuario", "PermisosBodega")',
+                    datatype: 'json',
+                    type: 'POST',
+                    async: true,
+                    //data: { Busqueda: $("#txtProductoBuscar").val(), bodegaId: $("#idBodega").val() }, // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+
+                        var r = eval(data);
+
+                        $("#VerSeleccionarBodega").jsonTabla({ tabla: r, lengthMenu: [[5, 10, 25], [5, 10, 25]] });
+
+                    }
+                });
+
+            });
+
+            $("#btnBuscar").click(function () {
+
+
+                //$("#panelGestion").hide();
+                //$("#panelActividadesCorrectivas").css('display', 'none');
+
+                $.ajax({
+                    url: '@Url.Action("verOt", "GestionRepuestos")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: false,
+                    data: JSON.stringify({ idOt: @Model.Id }), // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+                        data = eval(data);
+
+                        //$("#panelGestion").show();
+
+                        //$("#tipoOt").text(data.IdTipoOt);
+                        //$("#maquina").text(data.Maquina.Codigo);
+                        //if (data.MaquinaPadre != null) {
+                        //    $("#padre").text(data.MaquinaPadre.Codigo);
+                        //}
+
+                        //if ($("#tipoOt").text() == '2' || $("#tipoOt").text() == '6') {
+                        //    $("#panelActividadesCorrectivas").css('display', 'none');
+                        //    $("#agregarProducto").css('display', 'none');
+                        //}
+                        //else {
+                        //    $("#panelActividadesCorrectivas").css('display', 'block');
+                        //    $("#agregarProducto").css('display', 'block');
+                        //}
+
+                        //if ($("#tipoOt").text() == '2' || $("#tipoOt").text() == '6') {
+                            cargarRepuestosSolicitadosPreventivo();
+                        //}
+                        //else {
+                        //    VerRepuestosCorrectivosSolicitados();
+                        //}
+                    }
+                });
+
+
+
+
+
+            });
+
+
+            $("#btnCerrarConfirmar").click(function(){
+
+                $.ajax({
+                    url: '@Url.Action("CerrarOT", "OT")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    data: JSON.stringify({ id : @Model.Id}), // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+                        $.notificar({ text: 'OT cerrada', type: 'success' });
+                    }
+                });
+
+
+
+
+            });
+
+
+
+
+            $("#btnCerrar").click(function(){
+
+                $("#msjCerrar").text('La OT se cerrará con un ' + $(".progress-bar").html() +  ' de avance y ' + $("#listaTrabajadoresSeleccionados tbody tr").length + ' trabajador(es) asociado' );
+                $("#mdlCerrarOt").modal('show');
+
+            });
+
+            $(document).on('click',".agregar",function(){
+                idManoDeObra = $(this).attr('id');
+                valor = $(this).attr('valor');
+                ValorRRHH();
+                ValorServicios();
+
+
+                $("#mdlHoras").modal('show');
+
+
+            });
+
+
+            $('#myModal').on('hide.bs.modal', function (e) {        //al cerrar refresca la lista de trabajadores
+
+                cargarTrabajadoresSeleccionados();
+
+
+            })
+
+            $('#mdlHoras').on('shown.bs.modal', function (e) {        //al abrir entrega el foco a la caja de texto
+
+                $("#txtMinutos").focus();
+
+            })
+
+
+            $("#btnAgregar").click(function(){ //agrega una mano de obra
+                minutos = $("#txtMinutos").val();
+
+
+                $.ajax({
+                    url: '@Url.Action("AgregarManoDeObra", "OT")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    data: JSON.stringify({ idManoDeObra: idManoDeObra, minutos: minutos, valor:valor, idOt: @Model.Id}), // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+                        if(data.Resultado == "Cerrada")
+                        {
+                            $.notificar({ text: 'La ot se encuentra cerrada', type: 'danger' });
+
+
+                        }
+
+                        $("#mdlHoras").modal('hide');
+                        $("#txtMinutos").val('');
+
+                    }
+                });
+
+
+            });
+
+
+            $("#btnGuardarActividadesMasiva").click(function () {
+                var actividades = [];
+                for (var i = 0; i < hot.countRows(); i++) {
+                    var actividad = {};
+                    actividad = hot.getDataAtCell(i, 0);
+                    actividades.push(actividad);
+                }
+                console.log(actividades);
+                $.ajax({
+                    url: '@Url.Action("GuardarActividadesMasiva", "OT")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    data: JSON.stringify({ actividades: actividades, idOt : @Model.Id}), // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+                        $.notificar({ text: 'Agregamos tus actividades', title: 'Todo listo', type: 'success' });
+                       // cargarActividades();
+                        cargarActividadesCorrectivas();
+                        volerALista();
+
+                    }
+                });
+
+
+            });
+
+
+            $.ajax({
+                url: '@Url.Action("VerTrabajadores", "OT")', //carga todos los trabajadores
+                datatype: 'json',
+                type: 'POST',
+                async: true,
+                data: { id: @Model.Id }, // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+
+                    var r = eval(data);
+
+                    $("#listTrabajadores").jsonTabla({ tabla: r,lengthMenu : [[5, 10, 25], [5, 10, 25]] });
+
+                }
+            });
+
+
+
+
+            @*$.ajax({
+                url: '@Url.Action("VerRepuestosSolicitados", "OT")', //muestra los repuestos
+                datatype: 'json',
+                type: 'POST',
+                async: true,
+                data: { id: @Model.Id }, // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+
+                    var r = eval(data);
+
+                    $("#listaRepuestos").jsonTabla({ tabla: r });
+
+                }
+            });*@
+
+
+            $.ajax({
+                url: '@Url.Action("VerActividadesOT", "OT")', //muestra todas las actividades
+                datatype: 'json',
+                type: 'POST',
+                async: true,
+                data: { id: @Model.Id }, // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+
+                    var r = eval(data);
+
+                    $("#listaActividades").jsonTabla({ tabla: r,lengthMenu : [[-1, 10, 25], ["Todo", 10, 25]] });
+
+                    $(".bootstrap-switch-default").bootstrapSwitch({ //carga los switch
+                        onText : 'Si',
+                        offText : 'No',
+                    });
+
+
+
+
+                    //al cambiar un switch actualiza la información
+                    $('.bootstrap-switch-default').on('switchChange.bootstrapSwitch', function(event, state) {
+                        var chk = $(this);
+
+                        $.ajax({
+                            url: '@Url.Action("ActualizarAvanceOt", "OT")',
+                            datatype: 'json',
+                            type: 'POST',
+                            async: true,
+                            data: { id: $(this).attr('id'),estado: (state?100:0),idTipo: @Model.IdTipoOt }, // o sin stringify para datos primitivos  {rut : item.rut },
+                            success: function (data2) {
+                                console.log(data2);
+
+                                if(data2.Resultado == "Cerrada")
+                                {
+                                    $.notificar({ text: 'La ot se encuentra cerrada', type: 'danger' });
+                                    chk.bootstrapSwitch('state', !state, !state);
+
+                                }
+                                else
+                                {
+                                    data2 = eval(data2);
+                                    //avanza o retrocede la barra de progreso
+                                    $(".progress-bar").html(data2[0].porcentajeFinalizado + '%');
+                                    $(".progress-bar").css('width',data2[0].porcentajeFinalizado + '%');
+
+
+                                    if(data[0].porcentajeFinalizado == 100)
+                                    {
+                                        $("#felicitacion").html('<p class="lead"><i class="fa fa-smile-o fa-4" style="margin-right:15px"></i>Excelente trabajo a todo el equipo!!</p>')
+                                    }
+                                    else
+                                    {
+                                        $("#felicitacion").html('');
+                                    }
+                                }
+
+                            }
+                        });
+
+
+                    });
+
+                }
+            });
+
+
+            cargarActividadesCorrectivas();
+
+
+
+            //---------------- gestion de actividadec correctivas ----------------------------
+
+
+            //------------------ eliminar -----------------------------------------
+
+            $(document).on('click','.eliminar',function(){
+
+                var boton=$(this);
+
+                var id = $(this).attr('id');
+
+
+                $.ajax({
+                    url: '@Url.Action("EliminarSolicitudDeRepuesto", "OT")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    data: JSON.stringify({ id: id}),
+                    success: function (data) {
+                        data = eval(data);
+                        if(data.Resultado == "Guardado")
+                        {
+                            $.notificar({ text: 'Repuesto Eliminado', title: 'Todo listo', type: 'success' });
+                            VerRepuestosCorrectivosSolicitados();
+                        }
+                        else
+                        {
+                            $.notificar({ text: 'No es posible eliminar', title: 'Todo listo', type: 'danger' });
+                        }
+
+                    }
+                });
+
+            });
+
+
+
+
+
+            $(document).on('click','.guardarRepuestoActividad',function(){
+
+
+            });
+
+
+            $(document).on('click','.seleccionarActividad',function(){
+
+                var boton=$(this);
+
+                idActividadPreventiva = $(this).closest('tr').find('td:eq(0)').html();
+
+                $('#verAsociarRepuestoActividad').find('tr').each(function(i,item){
+
+                    $(item).css('background-color','');
+                    $(item).css('color','');
+
+
+                });
+
+                $(boton).closest('tr').css('background-color','#f39200');
+                $(boton).closest('tr').css('color', '#ffffff');
+
+                $("#mdlCantidad").modal('show');
+
+            });
+
+
+            var container = document.getElementById('actividadesCorrectivasMasivas');
+            hot = new Handsontable(container, {
+                data: [[""]],
+                fixedColumnsLeft: 0,
+                minSpareRows: 0,
+                minSpaceCols: 0,
+                rowHeaders: true,
+                colHeaders: ["Nombre Actividad"],
+                contextMenu: false,
+                //afterChange : cambio
+            });
+
+
+            $("#btnImportar").click(function(){
+
+                $("#pasoVerCorrectivas").hide();
+                $("#pasoImportar").fadeIn(1000);
+
+
+            });
+
+            $("#btnVerRepuestosActividad").click(function(){
+
+                $("#mdlVerRepuestosActividad").modal('show');
+
+            });
+
+            $("#btnCancelarImportar").click(function(){
+
+                volerALista();
+
+            });
+
+            $(document).on('click',".Cantidad",function(){
+                id = $(this).attr('id');
+                valor = $(this).attr('valor');
+
+                $("#mdlCantidad").modal('show');
+
+
+            });
+
+            $('#mdlCantidad').on('shown.bs.modal', function (e) {        //al abrir entrega el foco a la caja de texto
+
+                $("#txtProducto").focus();
+
+            })
+
+
+            cargarActividades();
+
+
+          //  VerRepuestosCorrectivosSolicitados();
+
+
+            $("#btnMdlProductoBuscar").click(function(){
+
+                $.ajax({
+                    url: '@Url.Action("VerProductos", "OT")',
+                    datatype: 'json',
+                    type: 'POST',
+                    async: true,
+                    data: { Busqueda: $("#txtProductoBuscar").val(), bodegaId : 69 }, // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+
+                        var r = eval(data);
+
+                        $("#mdlCantidadTablaRepuestos").jsonTabla({ tabla: r,lengthMenu : [[5, 10, 25], [5, 10, 25]] });
+
+                    }
+                });
+
+            });
+
+
+            $(document).on('click','.seleccionarProducto',function(){
+
+                $("#verRepuestoscorrectivosSolicitados tr").each(function(i,item){
+
+                    var r = $(this).closest('tr').find("td:eq(0)").html();
+                    var a = $(this).closest('tr').find("td:eq(0)").html();
+
+                    if ( a == r)
+                    {
+                        $("#mdlVerificarRepuestos").modal('show')
+                        $.notificar({ text: 'Producto ya seleccionado', title: 'Error', type: 'danger' });
+                    }
+
+                    else{
+
+                                    @*var idRepuestoCorrectiva =$(this).attr('idproducto');
+
+                        console.log({ idDetalle: idActividadCorrectiva, idProducto : idRepuestoCorrectiva, cantidad: $("#txtCantidad").val(), aprobado: true});
+
+                        var boton=$(this);
+                        var val=false;
+
+                        $('#verAsociarRepuestoActividad tbody').find('tr').each(function(i,item){
+
+                            if($(item).css('background-color')=='rgb(243, 146, 0)' && $("#txtCantidad").val() > 0) //-------- **Recordar que edge utiliza RGB **-----------
+                            {
+                                val = true;
+                            }
+                        });
+
+                        if (val==false )
+                        {
+                            $.notificar({ text: 'Debe seleccionar un repuesto y una cantidad', title: 'Error', type: 'danger' });
+                        }
+                        else {
+
+                            $.ajax({
+                                url: '@Url.Action("GuardarRecursoOtCorrectivo", "OT")',
+                                datatype: 'json',
+                                type: 'POST',
+                                contentType: 'application/json',
+                                async: true,
+                                data: JSON.stringify({ idDetalle: idActividadCorrectiva, idProducto : idRepuestoCorrectiva, cantidad: $("#txtCantidad").val(), aprobado: false}), // o sin stringify para datos primitivos  {rut : item.rut },
+                                success: function (data) {
+                                    $("#mdlCantidad").modal('hide');
+                                    VerRepuestosCorrectivosSolicitados();
+
+                                    $("#txtCantidad").val('')
+                                    $.notificar({ text: 'Repuesto agregado', title: 'Todo listo', type: 'success' });
+
+                                }
+                            });
+
+                            // $.notificar({ text: 'Exito', title: 'Todo listo', type: 'success' });
+                        }*@
+
+                    }
+
+
+                });
+            });
+
+
+            $("#btnVerRepuestos").click(function(){
+                $("#mdlVerRepuestos").modal('show');
+            });
+
+
+
+            $(document).on('click','.agregarActividad',function(){
+
+                $("#mdlVerRepuestosActividad").modal('show');
+
+            });
+
+
+
+
+          
+
+
+            
+            // --------------------------- FIN gestion activiades correctivas-----------------
+
+        });
+
+        //carga toda la lista de trabajadores para seleccionarlos en la OT
+        function cargarTrabajadoresSeleccionados()
+        {
+            $.ajax({
+                url: '@Url.Action("VerTrabajadoresSolicitados", "OT")',
+                datatype: 'json',
+                type: 'POST',
+                async: true,
+                data: { id: @Model.Id }, // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    var r = eval(data);
+                    $("#listaTrabajadoresSeleccionados").jsonTabla({ tabla: r });
+                }
+            });
+        }
+
+        function volerALista()
+        {
+            $("#pasoVerCorrectivas").fadeIn(500);
+            $("#pasoImportar").hide();
+        }
+
+
+        function VerRepuestosCorrectivosSolicitados()
+        {
+            $.ajax({
+                url: '@Url.Action("verRepuestoscorrectivosSolicitados", "OT")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ idOt : @Model.Id}),
+                async: true,
+                success: function (data) {
+                    data=eval(data);
+                    $("#verRepuestoscorrectivosSolicitados").jsonTabla({tabla:data});
+
+                }
+            });
+
+        }
+
+        function cargarActividadesCorrectivas()
+        {
+            $.ajax({
+                url: '@Url.Action("VerActividadesCorrectivasOT", "OT")', //muestra todas las actividades
+                datatype: 'json',
+                type: 'POST',
+                async: false,
+                data: { id: @Model.Id }, // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+
+                    var r = eval(data);
+
+                    $("#listaActividadesCorrectivas").jsonTabla({ tabla: r,lengthMenu : [[-1, 10, 25], ["Todo", 10, 25]] });
+
+                    $(".bootstrap-switch-default").bootstrapSwitch({ //carga los switch
+                        onText : 'Si',
+                        offText : 'No',
+                    });
+
+                    //al cambiar un switch actualiza la información
+                    $('.bootstrap-switch-default').on('switchChange.bootstrapSwitch', function(event, state) {
+                        var chk = $(this);
+
+                        $.ajax({
+                            url: '@Url.Action("ActualizarAvanceOt", "OT")',
+                            datatype: 'json',
+                            type: 'POST',
+                            async: true,
+                            data: { id: $(this).attr('id'),estado: (state?100:0) , idTipo : @Model.IdTipoOt }, // o sin stringify para datos primitivos  {rut : item.rut },
+                            success: function (data2) {
+                                console.log(data2);
+
+                                if(data2.Resultado == "Cerrada")
+                                {
+                                    $.notificar({ text: 'La ot se encuentra cerrada', type: 'danger' });
+                                    chk.bootstrapSwitch('state', !state, !state);
+
+                                }
+                                else
+                                {
+                                    data2 = eval(data2);
+                                    //avanza o retrocede la barra de progreso
+                                    $(".progress-bar").html(data2[0].porcentajeFinalizado + '%');
+                                    $(".progress-bar").css('width',data2[0].porcentajeFinalizado + '%');
+
+
+                                    if(data[0].porcentajeFinalizado == 100)
+                                    {
+                                        $("#felicitacion").html('<p class="lead"><i class="fa fa-smile-o fa-4" style="margin-right:15px"></i>Excelente trabajo a todo el equipo!!</p>')
+                                    }
+                                    else
+                                    {
+                                        $("#felicitacion").html('');
+                                    }
+                                }
+
+                            }
+                        });
+
+
+                    });
+
+                }
+            });
+        }
+
+        function cargarActividades()
+        {
+            $.ajax({
+                url: '@Url.Action("VerAsociarRepuestoActividad", "OT")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ idOt : @Model.Id}),
+                async: true,
+                success: function (data) {
+                    data=eval(data);
+                    $("#verAsociarRepuestoActividad").jsonTabla({tabla:data, lengthMenu : [[5,10],[5, 10]]});
+                }
+            });
+        }
+
+        function VerRepuestosCorrectivosSolicitados() {
+            $.ajax({
+                url: '@Url.Action("VerRepuestosSolicitadosCorrectivo", "GestionRepuestos")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ idOt: $("#idOt").val() }),
+                async: true,
+                success: function (data) {
+                    data = eval(data);
+                    console.log(data);
+                    $("#verRepuestosSolicitados").jsonTabla({ tabla: data });
+
+                }
+            });
+
+        }
+
+
+
+        function cargarRepuestosSolicitadosPreventivo() {
+
+            $.ajax({
+                url: '@Url.Action("VerRepuestosSolicitadosPreventivos", "GestionRepuestos")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ idOt: @Model.Id, idBodega: $("#txtidBodega").attr('idbodega') }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    $("#verRepuestosSolicitados").jsonTabla({ tabla: data });
+
+                }
+            });
+
+        }
+
+
+        function agregarRepuestopreventivo (idRepuesto){
+
+            $.ajax({
+                url: '@Url.Action("GuardarRecursoOtPreventivo", "OT")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ idProducto: idRepuesto, Iddetalle : idActividadPreventiva, cantidad: $("#txtCantidad").val(), aprobado:false }),
+                async: true,
+                success: function (data) {
+                    data = eval(data);
+                    $("#mdlCantidad").modal('hide');
+                    cargarRepuestosSolicitadosPreventivo();
+
+                    $("#txtCantidad").val('')
+                    $.notificar({ text: 'Repuesto agregado', title: 'Todo listo', type: 'success' });
+
+                }
+            });
+
+
+        }
+
+        // ####################################################### BUSCAR PEDIDOS ##########################################################
+
+        function ValorRRHH(){
+
+            $.ajax({
+
+                url: '@Url.Action("ValorRRHH", "OT")', //muestra todas las actividades
+                datatype: 'json',
+                type: 'POST',
+                async: true,
+                data: { idOT: @Model.Id }, // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    if(data.length >0)
+                    {
+                        $("#totalRRHH").html(conPuntos(data[0].valor));
+                    }
+                    else
+                    {
+                        $("#totalRRHH").html(0);
+                    }
+
+                }
+            });
+        }
+
+        function ValorRepuestos(){
+
+            $.ajax({
+
+                url: '@Url.Action("ValorRepuestos", "OT")', //muestra todas las actividades
+                datatype: 'json',
+                type: 'POST',
+                async: true,
+                data: { idOT: @Model.Id }, // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    if(data.length >0)
+                    {
+                        $("#totalRepuestos").html(conPuntos(data[0].valor));
+                    }
+                    else
+                    {
+                        $("#totalRepuestos").html(0);
+                    }
+
+                }
+            });
+        }
+
+        function ValorServicios(){
+
+            $.ajax({
+
+                url: '@Url.Action("ValorServicio", "OT")', //muestra todas las actividades
+                datatype: 'json',
+                type: 'POST',
+                async: true,
+                data: { idOT: @Model.Id }, // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    if(data.length >0)
+                    {
+                        $("#totalServicio").html(conPuntos(data[0].valor));
+                    }
+                    else
+                    {
+                        $("#totalServicio").html(0);
+                    }
+
+                }
+            });
+        }
+
+        function conPuntos(valor) {
+            var nums = new Array();
+            var simb = "."; //Éste es el separador
+            valor = valor.toString();
+            valor = valor.replace(/\D/g, ""); //Ésta expresión regular solo permitira ingresar números
+            nums = valor.split(""); //Se vacia el valor en un arreglo
+            var long = nums.length - 1; // Se saca la longitud del arreglo
+            var patron = 3; //Indica cada cuanto se ponen las comas
+            var prox = 2; // Indica en que lugar se debe insertar la siguiente coma
+            var res = "";
+            while (long > prox) {
+                nums.splice((long - prox), 0, simb); //Se agrega la coma
+                prox += patron; //Se incrementa la posición próxima para colocar la coma
+            }
+
+            for (var i = 0; i <= nums.length - 1; i++) {
+                res += nums[i]; //Se crea la nueva cadena para devolver el valor formateado
+            }
+
+            return res;
+        }
+
+
+        function CargarServiciosAgregados(){
+
+            $.ajax({
+
+                url: '@Url.Action("CargarServiciosAgregados", "OT")', //muestra todas las actividades
+                datatype: 'json',
+                type: 'POST',
+                async: true,
+                data: { idOT: @Model.Id }, // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    $(".VerServicios").jsonTabla(
+                        
+                        {tabla: data}
+                        
+                        );
+
+                }
+            });
+        }
+
+
+        function CargarServicios() {
+
+            $.ajax({
+
+                url: '@Url.Action("BuscarPedidos", "OT")', //muestra todas las actividades
+                datatype: 'json',
+                type: 'POST',
+                async: true,
+                data: { idpedido: $("#txtBuscarPedido").val(),idot : @Model.Id }, // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    $(".VerPedidos").jsonTabla({ tabla: data });
+
+                }
+            });
+        }
+
+
+
+
+
+        $(document).on('click', '#btnBuscarPedido', function (){
+            CargarServicios();
+        });
+
+
+        $(document).on('click', '#btnAgregarServicios', function (){
+            $("#mdlAgregarServicios").modal('show');
+        });
+
+
+        // ####################################################### GUARDAR  SERVICIO ##########################################################
+
+
+        $(document).on('click', '.agregarServicio', function (){
+
+            var $boton = $(this);
+            $boton.prop('disabled',true);
+            $.ajax({
+                url: '@Url.Action("GuardarServicios", "OT")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ idOT: @Model.Id, OcDetId: $boton.attr('ocdetid'), Glosa: $boton.attr('glosa'), RazonSocial: $boton.attr('razonsocial'), Cantidad: $boton.attr('cantidad'), Valor: $boton.attr('valor'), Fecha: $boton.attr('fecha') }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    if (data.Resultado == "Guardado") {
+                        $.notificar({ text: 'Guardado', title: 'Exito', type: 'success' });
+                        CargarServicios();
+                        CargarServiciosAgregados();
+                        ValorRRHH();
+                        ValorServicios();
+                    }
+                    else {
+                        $.notificar({ text: 'no se pudo guardar', title: 'ups', type: 'danger' });
+                    }
+                    $boton.prop('disabled',false);
+                    //$("#VerReporte").jsonTabla({ tabla: data });
+                }
+            });
+        });
+
+
+        $(document).on('click', ".btnGuardarModificarValor", function () {
+           
+            $.ajax({
+                url: '@Url.Action("ModificarServicio", "OT")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ Id: $("#txtValorServicio").attr('ocdetid'), valor : $("#txtValorServicio").val()}),
+                success: function (data) {
+                    data = eval(data);
+                    if (data.Resultado == "Guardado") {
+                        $.notificar({ text: 'Guardado', title: 'Exito', type: 'success' });
+                        CargarServiciosAgregados();
+                    }
+                    else {
+                        $.notificar({ text: 'no se pudo guardar', title: 'ups', type: 'danger' });
+                    }
+                  
+                    //$("#VerReporte").jsonTabla({ tabla: data });
+                }
+            });
+           
+
+        });
+
+
+        $(document).on('click', ".modificarServicio", function () {
+            var $boton = $(this);
+            var idModificar = $boton.attr('ocdetid');
+            $("#txtValorServicio").attr('ocdetid',idModificar);
+            $("#txtValorServicio").val($boton.closest('tr').find('td:eq(4)').html());
+
+            $("#mdlValorServicio").modal('show');
+
+        });
+
+        // ####################################################### ELIMINAR  SERVICIO##########################################################
+
+        $(document).on('click', ".quitarServicio", function () {
+            var $boton = $(this);
+
+            $.ajax({
+                url: '@Url.Action("EliminarServicio", "OT")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ OcDetId: $boton.attr('ocdetid') }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    if (data.Resultado == "Guardado") {
+                        $.notificar({ text: 'Servicio Eliminado', title: 'Todo listo', type: 'success' });
+                        CargarServicios();
+                        CargarServiciosAgregados();
+                        ValorRRHH();
+                        ValorServicios();
+                    }
+                    else {
+                        $.notificar({ text: 'No se puede Eliminar Servicio.', title: 'Todo listo', type: 'danger' });
+                    }
+
+
+                }
+            });
+
+        });
+
+
+    </script>
+}
+
+
+

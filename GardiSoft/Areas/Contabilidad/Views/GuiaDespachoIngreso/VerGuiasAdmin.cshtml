@@ -1,0 +1,1108 @@
+﻿@model Entidades.Contabilidad.GuiaDespacho.GuiaDespacho
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    label {
+        width: 100px;
+        margin-left: 15px;
+        margin-right: 5px;
+    }
+
+    .form-group {
+        margin-top: 15px;
+    }
+
+    select {
+        max-width: 204px !important;
+        min-width: 204px !important;
+    }
+
+    .glyphicon {
+        cursor: pointer;
+        font-size: 18px;
+    }
+</style>
+
+<h2>Guia Despacho</h2>
+
+@using (Ajax.BeginForm("Create", new AjaxOptions { OnComplete = "onSuccess" }))
+{
+   
+    <div class="form-inline" style="text-align:right">
+
+        <input type="button" value="Solicitar correcciones" class="btn btn-warning corregirMjs" />
+
+        <input type="button" value="Rechazar" class="btn btn-danger rechazarMjs" />
+
+        <input type="button" value="Guardar y aprobar" class="btn btn-primary guardar" />
+        <p>
+
+        </p>
+       
+    </div>
+    <p></p>
+    <div id="msj" class="alert alert-warning alert-dismissible" role="alert" style="display:none">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <span id="mensaje">hola a todos</span>
+    </div>
+
+    <div class="well">
+        <div class="form-inline">
+            <h4>Encabezado</h4>
+            <span class="label label-info">@Model.Estado</span>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            @Html.Hidden(Model.Id.ToString(), Model.Id, htmlAttributes: new { @Class = "idCabecera" })
+            @Html.Hidden("Usuario", Model.Usuario)
+            <div class="form-group">
+                @Html.Label("Folio", htmlAttributes: new { @class = "control-label inputSmall",@Style= "max-width:204px" })
+
+                @Html.EditorFor(model => model.FolioDocumento, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FolioDocumento, "", new { @class = "text-danger" })
+
+            </div>
+
+
+            <div class="form-group">
+                @Html.Label("Tipo Documento", htmlAttributes: new { @class = "control-label inputSmall" })
+
+                @Html.DropDownList("TipoDocumento", null, htmlAttributes: new { @class = "form-control " })
+                @Html.ValidationMessageFor(model => model.TipoDocumento, "", new { @class = "text-danger" })
+
+            </div>
+
+          
+
+            <div class="form-group">
+                @Html.Label("Fecha", htmlAttributes: new { @class = "control-label inputSmall" })
+
+                @Html.EditorFor(model => model.FechaEmision, new { htmlAttributes = new { @class = "form-control " } })
+                @Html.ValidationMessageFor(model => model.FechaEmision, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="form-group">
+                @Html.Label("Tipo Despacho", htmlAttributes: new { @class = "control-label inputSmall" })
+
+                @Html.DropDownList("TipoDespacho", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.TipoDespacho, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="form-group">
+                @Html.Label("Forma de Pago", htmlAttributes: new { @class = "control-label inputSmall" })
+
+                @Html.DropDownList("FormaDePago", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.FormaDePago, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="form-group">
+                @Html.Label("Vencimiento", htmlAttributes: new { @class = "control-label inputSmall" })
+
+                @Html.EditorFor(model => model.FechaVencimiento, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FechaVencimiento, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="form-group">
+                @Html.Label("Traslado", htmlAttributes: new { @class = "control-label inputSmall" })
+                @Html.DropDownList("IndicadorTipoTraslado", null, htmlAttributes: new { @class = "form-control" })
+
+
+                @Html.ValidationMessageFor(model => model.IndicadorTipoTraslado, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="form-group">
+                @Html.Label("Observaciones", htmlAttributes: new { @class = "control-label inputSmall" })
+
+                @Html.EditorFor(model => model.Observaciones, new { htmlAttributes = new { @class = "form-control", @maxlength = "40" } })
+                @Html.ValidationMessageFor(model => model.Observaciones, "", new { @class = "text-danger" })
+
+            </div>
+
+        </div>
+
+    </div>
+
+        <div class="well">
+            <div class="form-inline">
+                <h4>Emisor</h4>
+                <hr />
+             
+
+                <div class="form-group">
+                    @Html.Label("Dirección origen", htmlAttributes: new { @class = "control-label inputSmall" })
+
+                    @Html.EditorFor(model => model.DireccionOrigen, new { htmlAttributes = new { @class = "form-control", } })
+                    @Html.ValidationMessageFor(model => model.DireccionOrigen, "", new { @class = "text-danger" })
+
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Comuna Origen", htmlAttributes: new { @class = "control-label inputSmall" })
+
+                    @Html.EditorFor(model => model.ComunaOrigen, new { htmlAttributes = new { @class = "form-control", } })
+                    @Html.ValidationMessageFor(model => model.ComunaOrigen, "", new { @class = "text-danger" })
+
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Ciudad Origen", htmlAttributes: new { @class = "control-label inputSmall" })
+
+                    @Html.EditorFor(model => model.CiudadOrigen, new { htmlAttributes = new { @class = "form-control",  } })
+                    @Html.ValidationMessageFor(model => model.CiudadOrigen, "", new { @class = "text-danger" })
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="well">
+            <div class="form-inline">
+                <h4>Receptor</h4>
+                <div class="btn-group" id="direcciones">
+
+                </div>
+                <hr />
+                <div class="form-group">
+                    @Html.Label("Rut receptor", htmlAttributes: new { @class = "control-label inputSmall" })
+
+                    @Html.EditorFor(model => model.RutReceptor, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.RutReceptor, "", new { @class = "text-danger" })
+
+                </div>
+
+                @*<div class="form-group">
+                        @Html.LabelFor(model => model.CodigoInternoReceptor, htmlAttributes: new { @class = "control-label inputSmall" })
+
+                        @Html.EditorFor(model => model.CodigoInternoReceptor, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.CodigoInternoReceptor, "", new { @class = "text-danger" })
+
+                    </div>*@
+
+                <div class="form-group">
+                    @Html.Label("Giro", htmlAttributes: new { @class = "control-label inputSmall" })
+
+                    @Html.EditorFor(model => model.GiroReceptor, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.GiroReceptor, "", new { @class = "text-danger" })
+
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Dir receptor", htmlAttributes: new { @class = "control-label inputSmall" })
+
+                    @Html.EditorFor(model => model.DireccionReceptor, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.DireccionReceptor, "", new { @class = "text-danger" })
+
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Comuna Receptor", htmlAttributes: new { @class = "control-label inputSmall" })
+
+                    @Html.EditorFor(model => model.ComunaReceptor, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ComunaReceptor, "", new { @class = "text-danger" })
+
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Ciudad Receptor", htmlAttributes: new { @class = "control-label inputSmall" })
+
+                    @Html.EditorFor(model => model.CiudadReceptor, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CiudadReceptor, "", new { @class = "text-danger" })
+
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Mail receptor", htmlAttributes: new { @class = "control-label inputSmall" })
+
+                    @Html.EditorFor(model => model.emalReceptor, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.emalReceptor, "", new { @class = "text-danger" })
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="well">
+            <div class="form-inline">
+                <h4>Transporte</h4>
+                <hr />
+                <div class="form-group">
+                    @Html.Label("Patente", htmlAttributes: new { @class = "control-label inputSmall" })
+
+                    @Html.EditorFor(model => model.Patente, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Patente, "", new { @class = "text-danger" })
+
+                </div>
+
+
+                <div class="form-group">
+                    @Html.Label("Rut Transportista", htmlAttributes: new { @class = "control-label inputSmall" })
+
+                    @Html.EditorFor(model => model.RutTransportista, new { htmlAttributes = new { @class = "form-control", @maxlength = "10", @placeholder = "ej 15367355-1" } })
+                    @Html.ValidationMessageFor(model => model.RutTransportista, "", new { @class = "text-danger" })
+
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Dir Destino", htmlAttributes: new { @class = "control-label inputSmall" })
+
+                    @Html.EditorFor(model => model.DireccionDestino, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.DireccionDestino, "", new { @class = "text-danger" })
+
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Comuna Destino", htmlAttributes: new { @class = "control-label inputSmall" })
+
+                    @Html.EditorFor(model => model.ComunaDestino, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ComunaDestino, "", new { @class = "text-danger" })
+
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Ciudad Destino", htmlAttributes: new { @class = "control-label inputSmall" })
+
+                    @Html.EditorFor(model => model.CiudadDestino, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CiudadDestino, "", new { @class = "text-danger" })
+
+                </div>
+
+
+
+            </div>
+        </div>
+
+        <div class="well">
+
+            <h4>Documento Referencia</h4>
+            <hr />
+            <table class="table  table-hover">
+
+
+                <thead>
+                    <tr>
+
+                        <th>Tipo Doc.</th>
+                        <th>Folio Referencia</th>
+                        <th>Fecha  Doc. de referencia</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody id="listaReferencias">
+                    @if (Model.Referencias != null)
+                {
+
+                    foreach (var item in Model.Referencias)
+                    {
+                            <tr>
+                                <td>@Html.DropDownList("TipoReferencia", null, htmlAttributes: new { @class = "form-control" })</td>
+                                <td>@Html.Editor("Folio", new { htmlAttributes = new { @class = "form-control", @Value = item.Folio ?? "" } })</td>
+                                <td>@Html.Editor("Fecha", new { htmlAttributes = new { @class = "form-control", @Value = item.Fecha ?? "" } }) @Html.Hidden(item.Id.ToString(), item.Id.ToString())</td>
+                                <td style="text-align:center"><i class="glyphicon glyphicon-remove" style="font-size:16px"></i></td>
+                            </tr>
+
+                        }
+                    }
+                    else
+                    {
+                        <tr id="0"><td><select class="form-control "><option value="0">Ninguno</option><option value="30">30 factura afecta</option><option value="32">32 Fact. de bienes y servicios exento.</option><option value="33">33 factura electronica</option><option value="34">34 factura elec. exenta</option><option value="50">50 guía de despacho</option><option value="61">61 nota de crédito electrónica</option><option value="52">52 guía de despacho electrónica</option><option value="801">801 orden de compra</option><option value="802">802 nota de pedido</option><option value="803">803 contrato </option></select></td> <td><input class="form-control" type="text"></td> <td><input class="form-control"></td><td style="text-align:center"><i class="glyphicon glyphicon-remove" style="font-size:16px"></i></td></tr>
+
+                    }
+
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="7" style="text-align: right">
+                            <span id="addReferencia" class="glyphicon glyphicon-plus-sign"></span>
+                        </td>
+                    </tr>
+
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="well">
+            <h4>Detalle</h4>
+            <hr />
+            <table class="table table-hover">
+
+
+                <thead>
+                    <tr class="subtitulo">
+                        <td>Exento</td>
+                        <td>Cant</td>
+                        <td>Unidad</td>
+                        <td>Cod.</td>
+                        <td>Ítem</td>
+                        <td>Precio</td>
+                        <td>Desc/rec</td>
+                        <td>Total</td>
+                        <td></td>
+                    </tr>
+
+                </thead>
+                <tbody id="listaDetalles">
+                    @if (Model.Detalles != null)
+                {
+                    foreach (var item in Model.Detalles)
+                    {
+                            <tr id="0" IndicadorExencion="@item.IndicadorExencion">
+                                <td>
+
+                                    @Html.DropDownList("TipoDetalle", null, htmlAttributes: new { @class = "form-control" })
+                                </td>
+                                <td>@Html.Editor("CantidadItem", new { htmlAttributes = new { @class = "form-control", @Value = item.CantidadItem } })</td>
+                                <td>@Html.Editor("UnidadMedida", new { htmlAttributes = new { @class = "form-control", @Value = item.UnidadMedida } })</td>
+                                <td>@Html.Editor("CodigoInternoItem", new { htmlAttributes = new { @class = "form-control", @Value = item.CodigoInternoItem, @maxlength = "40" } })</td>
+                                <td class="col-lg-3">@Html.Editor("NombreItem", new { htmlAttributes = new { @class = "form-control", @Value = item.NombreItem, @maxlength = "40", @style="max-width:400px" } })</td>
+                                <td>@Html.Editor("PrecioUnitarioItem", new { htmlAttributes = new { @class = "form-control", @Value = item.PrecioUnitarioItem } })</td>
+                                <td>@Html.Editor("DescuentoEnPesos", new { htmlAttributes = new { @class = "form-control", @Value = item.DescuentoEnPesos } })</td>
+                                <td>@Html.Editor("MontoItem", new { htmlAttributes = new { @class = "form-control", @Value = item.MontoItem, @readonly = "readonly" } })@Html.Hidden(item.Id.ToString(), item.Id.ToString())</td>
+
+                                <td style="text-align:center"><i class="glyphicon glyphicon-remove" style="font-size:16px"></i> </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr id="0">
+                            <td>
+                                <select id="exento" class="form-control " style="max-width:20px;"><option value="0" selected="">Exento de IVA</option><option value="1">Afecto a IVA</option><option value="4">Observaciones</option></select>
+                            </td>
+                            <td><input class="form-control input-sm" type="text"></td>
+                            <td><input class="form-control input-sm" type="text"></td>
+                            <td><input class="form-control input-sm" type="text" maxlength="40"></td>
+                            <td class="col-lg-4"><input class="form-control" style="max-width:400px;" type="text"></td>
+                            <td><input class="form-control input-sm" type="text"></td>
+                            <td><input class="form-control input-sm" type="text"></td>
+                            <td><input class="form-control input-sm" type="text" disabled=""></td>
+                            <td style="text-align:center"><i class="glyphicon glyphicon-remove" style="font-size:16px"></i> </td>
+                        </tr>
+
+                    }
+
+
+
+
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="9" style="text-align: right">
+                            <span id="addDetalle" class="glyphicon glyphicon-plus-sign"></span>
+                        </td>
+                    </tr>
+
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="well">
+            <div class="form-inline">
+                <h4>Totales</h4>
+                <hr />
+                <div class="form-group">
+                    @Html.Label("Sub total", htmlAttributes: new { @class = "control-label inputSmall" })
+
+                    @Html.EditorFor(model => model.Subtotal, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.Subtotal, "", new { @class = "text-danger" })
+
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Total Descuento", htmlAttributes: new { @class = "control-label inputSmall" })
+
+                    @Html.EditorFor(model => model.TotalDescRec, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.TotalDescRec, "", new { @class = "text-danger" })
+
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Total Neto", htmlAttributes: new { @class = "control-label inputSmall" })
+
+                    @Html.EditorFor(model => model.totalNeto, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.totalNeto, "", new { @class = "text-danger" })
+
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("IVA", htmlAttributes: new { @class = "control-label inputSmall" })
+
+                    @Html.EditorFor(model => model.MontoIva, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.MontoIva, "", new { @class = "text-danger" })
+
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Monto Excento", htmlAttributes: new { @class = "control-label inputSmall" })
+
+                    @Html.EditorFor(model => model.MontoExento, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.MontoExento, "", new { @class = "text-danger" })
+
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Monto Total", htmlAttributes: new { @class = "control-label inputSmall" })
+
+                    @Html.EditorFor(model => model.MontoTotal, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.MontoTotal, "", new { @class = "text-danger" })
+
+                </div>
+
+
+
+
+            </div>
+
+        </div>
+
+        <div class="modal fade" id="rechazarModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Favor, comunique al usuario las razones de rechazo</h4>
+                    </div>
+                    <div class="modal-body">
+                        <textarea class="form-control" type="text" id="rechazarMotivo">
+
+                        </textarea>
+                    </div>
+                    <div class="modal-footer">
+
+                        <input type="button" value="Guardar" class="btn btn-primary rechazar" />
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+
+    <div class="modal fade" id="corregirModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Favor, comunique al usuario las correcciones necesarias</h4>
+                </div>
+                <div class="modal-body">
+                    <textarea class="form-control" type="text" id="corregirMotivo"></textarea>
+                </div>
+                <div class="modal-footer">
+
+                    <input type="button" value="Guardar" class="btn btn-primary ingresado" />
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+
+}
+
+<div>
+    @Html.ActionLink("Volver a la lista", "IndexAdmin")
+</div>
+
+@section scripts
+{
+    <script>
+
+
+        $(document).ready(function () {
+
+
+            $(".rechazarMjs").on('click', function () {
+
+                
+                $("#rechazarModal").modal('show');
+
+            });
+
+            $(".corregirMjs").on('click', function () {
+
+               
+                $("#corregirModal").modal('show');
+
+            });
+
+
+            $("#listaDetalles tr").each(function (i, item) {
+
+                console.log($(item).attr('IndicadorExencion'));
+                $(item).find("select:first").val($(item).attr('IndicadorExencion'));
+
+
+            });
+
+
+
+            var direcciones = [];
+
+            //  $("#RutReceptor").trabajadores();
+
+            $(document).on('click', ".buscaDireccion", function () {
+
+                var direccion = direcciones[parseInt($(this).html() - 1)];
+
+                $("#GiroReceptor").val(direccion.Razon);
+                $("#DireccionReceptor").val(direccion.Direccion);
+                $("#ComunaReceptor").val(direccion.Comuna);
+                $("#CiudadReceptor").val(direccion.Ciudad);
+
+
+
+
+
+            });
+
+            $('#RutReceptor').typeahead({
+
+
+
+                source: function (query, process) {
+                    var nombres = [];
+                    $("#direcciones").html('');
+                    $("#GiroReceptor").val('');
+                    $("#DireccionReceptor").val('');
+                    $("#ComunaReceptor").val('');
+                    $("#CiudadReceptor").val('');
+                    var obj = {};
+                    obj.busqueda = $('#RutReceptor').val();
+                    obj.cantidad = 20;
+
+                    $.ajax({
+                        url: "http://informatica.gardilcic.cl/webservice/globalService.svc/VerEntidad",
+                        //      url: "http://localhost:10471/globalService.svc/VerEntidad",
+                        type: "POST",
+                        async: false,
+                        data: JSON.stringify(obj),
+                        dataType: "JSON",
+                        success: function (datos) {
+                            //console.log(datos);
+                            var objeto = eval(datos.d);
+                            if (objeto.length <= 0) {
+                                // $('#txtNombre').val("");
+                                //("000000000000" + $('#txtRut').val()).slice(-12);
+                            }
+                            $.map(objeto, function (item) {
+                                //   var nombre = item.ApellidoPaterno + " " + item.ApellidoMaterno + " " + item.Nombre;
+                                var itm = {
+                                    id: item.Id,
+                                    name: item.nombre,
+                                    rut: item.Rut,
+                                    toString: function () {
+                                        return JSON.stringify(this);
+                                    },
+                                    toLowerCase: function () {
+                                        return this.name.toLowerCase();
+                                    },
+                                    indexOf: function (string) {
+                                        return String.prototype.indexOf.apply(this.name, arguments);
+                                    },
+                                    replace: function (string) {
+                                        var value = '';
+                                        value += this.name;
+                                        if (typeof (this.level) != 'undefined') {
+                                            value += ' <span class="pull-right muted">';
+                                            value += this.level;
+                                            value += '</span>';
+                                        }
+                                        return String.prototype.replace.apply('<div style="padding: 1px 2px; font-size: 12px;">' + value + '</div>', arguments);
+                                    }
+                                };
+                                nombres.push(itm);
+                            });
+                            return process(nombres);
+                        }
+                    });
+                },
+                matcher: function () {
+
+                    return true;
+                },
+                property: 'name',
+                items: 10,
+                minLength: 2,
+                updater: function (item) {
+                    console.log(item);
+                    item = JSON.parse(item);
+                    console.log(item);
+                    $.ajax({
+                        url: '@Url.Action("VerDireccionesReceptor", "GuiaDespachoIngreso")',
+                        dataType: "json",
+                        type: "POST",
+                        contentType: 'application/json',
+                        data: JSON.stringify({ rut: item.rut }),
+                        success: function (data) {
+                            var data = eval(data);
+                            $("#direcciones").html('');
+                            $("#GiroReceptor").val('');
+                            $("#DireccionReceptor").val('');
+                            $("#ComunaReceptor").val('');
+                            $("#CiudadReceptor").val('');
+                            $("#RutReceptor").val(item.rut);
+                            direcciones = data;
+                            $.each(data, function (i, item) {
+
+                                $("#direcciones").append('<div class="btn btn-default buscaDireccion">' + (i + 1) + '</div>');
+
+
+
+
+                            });
+
+                            $(".buscaDireccion").first().trigger('click');
+
+
+                        },
+                    });
+
+
+
+                }
+            });
+
+
+            configurarCalendario();
+
+            $(document).on('click', "#listaDetalles i", function () {
+
+
+                var fila = $(this).closest('tr');
+                $.ajax({
+                    url: '@Url.Action("EliminaDetalle","GuiaDespachoIngreso")',
+                    dataType: "json",
+                    type: "POST",
+                    contentType: 'application/json',
+                    data: JSON.stringify({ Id: $(this).closest('tr').find("input:eq(7)").val() }),
+                    success: function (data) {
+                        data = eval(data);
+
+                        if (data.Resultado == "exito") {
+                            $(fila).closest('tr').remove();
+
+
+                            if ($("#listaDetalles tr").length == 0) {
+                                $("#Subtotal").val(0);
+                                $("#TotalDescRec").val(0);
+                                $("#totalNeto").val(0);
+                                $("#MontoIva").val(0);
+                                $("#MontoExento").val(0);
+                                $("#MontoTotal").val(0);
+                            }
+                            else {
+                                actualizarResumen($("#listaDetalles tr:last").find("input:eq(7)"));
+                            }
+
+
+                        }
+
+
+
+                    },
+                });
+
+            });
+
+
+
+            $(document).on('click', "#listaDetalles i", function () {
+
+
+                var fila = $(this).closest('tr');
+                $.ajax({
+                    url: '@Url.Action("EliminaDetalle","GuiaDespachoIngreso")',
+                    dataType: "json",
+                    type: "POST",
+                    contentType: 'application/json',
+                    data: JSON.stringify({ Id: $(this).closest('tr').find("input:eq(7)").val() }),
+                    success: function (data) {
+                        data = eval(data);
+
+                        if (data.Resultado == "exito") {
+                            $(fila).closest('tr').remove();
+
+
+                            if ($("#listaDetalles tr").length == 0) {
+                                $("#Subtotal").val(0);
+                                $("#TotalDescRec").val(0);
+                                $("#totalNeto").val(0);
+                                $("#MontoIva").val(0);
+                                $("#MontoExento").val(0);
+                                $("#MontoTotal").val(0);
+                            }
+                            else {
+                                actualizarResumen($("#listaDetalles tr:last").find("input:eq(7)"));
+                            }
+
+
+                        }
+
+
+
+                    },
+                });
+
+            });
+
+
+            $("#FechaEmision").calendario({ format: 'yyyy-mm-dd' });
+            $("#FechaVencimiento").calendario({ format: 'yyyy-mm-dd' });
+
+
+            $("#archivoDescarga").click(function () {
+
+                $(this).css('display', 'none');
+            });
+
+            $(".guardar").on('click', function () {
+
+
+                //corrige posibles errores del usuario, si es NF
+                $("#listaDetalles tr").each(function (i, item) {
+
+
+                });
+
+
+                var a = generarGuia();
+                a.Estado = "Aprobada";
+                $.ajax({
+                    url: '@Url.Action("CreateAdmin", "GuiaDespachoIngreso")',
+                    dataType: "json",
+                    type: "POST",
+                    async:false,
+                    contentType: 'application/json',
+                    data: JSON.stringify({ g: a }),
+                    success: function (data) {
+                        data = eval(data);
+                        console.log(data);
+
+                        $("#msj").removeClass('alert-danger');
+                        $("#msj").removeClass('alert-success');
+
+                        if(data.Error)
+                        {
+                            $("#msj").addClass('alert-danger');
+                            $("#mensaje").text(data.Resultado);
+                        }
+                        else
+                        {
+                            $("#msj").addClass('alert-success');
+                            $("#mensaje").text(data.Resultado);
+                        }
+
+                        $("#msj").css('display','block');
+                      
+
+                        //var archivoDescarga = '/ArchivosExcel/contabilidad/' + data.result;
+                        //$("#archivoDescarga").attr('href', '' + archivoDescarga)
+                        //$("#archivoDescarga").css('display', 'block');
+                    },
+                });
+
+
+            });
+
+
+
+
+            $(".rechazar").on('click', function () {
+
+                var a = generarGuia();
+                a.Estado = "Rechazado";
+                $.ajax({
+                    url: '@Url.Action("CreateAdmin", "GuiaDespachoIngreso")',
+                    dataType: "json",
+                    type: "POST",
+                    contentType: 'application/json',
+                    data: JSON.stringify({ g: a,mensaje: $("#rechazarMotivo").val() }),
+                    success: function (data) {
+                        data = eval(data);
+
+                        location.href = '@Url.Action("IndexAdmin")';
+
+                    },
+                });
+
+
+            });
+
+            $(".ingresado").on('click', function () {
+
+                var a = generarGuia();
+                a.Estado = "Ingresado";
+                $.ajax({
+                    url: '@Url.Action("CreateAdmin", "GuiaDespachoIngreso")',
+                    dataType: "json",
+                    type: "POST",
+                    contentType: 'application/json',
+                    data: JSON.stringify({ g: a, mensaje: $("#corregirMotivo").val() }),
+                    success: function (data) {
+                        data = eval(data);
+
+                        location.href = '@Url.Action("IndexAdmin")';
+
+                    },
+                });
+
+
+            });
+
+
+
+            $("#addReferencia").on('click', function () {
+
+                $("#listaReferencias").append('<tr id="0"><td><select class="form-control"><option value="0">Ninguno</option><option value="30">30 factura afecta</option><option value="32">32 Fact. de bienes y servicios exento.</option><option value="33">33 factura electronica</option><option value="34">34 factura elec. exenta</option><option value="50">50 guía de despacho</option><option value="61">61 nota de crédito electrónica</option><option value="52">52 guía de despacho electrónica</option><option value="801">801 orden de compra</option><option value="802">802 nota de pedido</option><option value="803">803 contrato </option></select></td> <td><input class="form-control" type="text"></td> <td><input class="form-control"></td><td style="text-align:center"><i class="glyphicon glyphicon-remove" style="font-size:16px"></i> </td></tr>');
+
+                configurarCalendario();
+
+
+            });
+
+
+            $("#addDetalle").on('click', function () {
+
+                $("#listaDetalles").append('<tr id="0"><td><select id="exento" class="form-control"><option value="0" selected="">Exento de IVA</option><option value="1">Afecto de IVA</option><option value="4">Observaciones</option></select></td> <td><input class="form-control"  type="text"></td> <td><input  class="form-control" type="text"></td> <td><input class="form-control" maxlength="40"  type="text"></td> <td class="col-lg-3"><input maxlength="40" class="form-control" style="max-width:400px" type="text"></td> <td><input  class="form-control" type="text"></td> <td><input class="form-control" type="text" value="0"></td> <td><input class="form-control" type="text" readonly="readonly"><input name="0" type="hidden" value="0"></td> <td style="text-align:center"><i class="glyphicon glyphicon-remove" style="font-size:16px"></i> </td></tr>')
+            });
+
+            $(document).on('keyup', '#listaDetalles input', function () {
+
+                actualizarResumen($(this));
+            });
+
+        });
+
+        function conPuntos(valor) {
+            var nums = new Array();
+            var simb = "."; //Éste es el separador
+            valor = valor.toString();
+            valor = valor.replace(/\D/g,""); //Ésta expresión regular solo permitira ingresar números
+            nums = valor.split(""); //Se vacia el valor en un arreglo
+            var long = nums.length - 1; // Se saca la longitud del arreglo
+            var patron = 3; //Indica cada cuanto se ponen las comas
+            var prox = 2; // Indica en que lugar se debe insertar la siguiente coma
+            var res = "";
+            while (long > prox) {
+                nums.splice((long - prox), 0, simb); //Se agrega la coma
+                prox += patron; //Se incrementa la posición próxima para colocar la coma
+            }
+
+            for (var i = 0; i <= nums.length - 1; i++) {
+                res += nums[i]; //Se crea la nueva cadena para devolver el valor formateado
+            }
+
+            return res;
+        }
+
+        function sinPuntos(valor) {
+
+            var r = "";
+            for (var i = 0; i < valor.length; i++) {
+
+                valor = valor.replace('.', '');
+            }
+
+            return valor;
+        }
+
+        function generarGuia() {
+            var d = new Date();
+            var month = d.getMonth() + 1;
+            var day = d.getDate();
+            fecha = d.getFullYear() + '-' +
+                    (month < 10 ? '0' : '') + month + '-' +
+                    (day < 10 ? '0' : '') + day + 'T' +
+                    (d.getHours() < 10 ? '0' : '') + d.getHours() + ':' +
+                    (d.getMinutes() < 10 ? '0' : '') + d.getMinutes() + ':' +
+                    (d.getSeconds() < 10 ? '0' : '') + d.getSeconds();
+
+            var objeto = {};
+            objeto.Id = $(".idCabecera").val();
+            console.log($("#Usuario").val());
+            objeto.Usuario = $("#Usuario").val();
+            objeto.TipoDocumento = $("#TipoDocumento").val();
+            objeto.FolioDocumento = $("#FolioDocumento").val();
+            objeto.FechaEmision = $("#FechaEmision").val();
+            objeto.TipoDespacho = $("#TipoDespacho").val();
+            objeto.FormaDePago = $("#FormaDePago").val();
+            objeto.FechaVencimiento = $("#FechaVencimiento").val();
+            objeto.IndicadorTipoTraslado = $("#IndicadorTipoTraslado").val();
+            objeto.Observaciones = $("#Observaciones").val();
+            objeto.rutEmisor = '79538350-6';
+            objeto.razonSocial = 'CONSTRUCTORA GARDILCIC LTDA.';
+            objeto.giroNegocio = 'Extracción de cobre';
+            objeto.codigoActividad = '133000';
+            objeto.codigoSucursal = '';
+            objeto.DireccionOrigen = $("#DireccionOrigen").val();
+            objeto.ComunaOrigen = $("#ComunaOrigen").val();
+            objeto.CiudadOrigen = $("#CiudadOrigen").val();
+            objeto.codigoDelVendedor = '';
+            objeto.RutReceptor = $("#RutReceptor").val();
+            objeto.codigoInternoReceptor = $("#codInternoReceptor").val();
+            objeto.razonSocialReceptor = $("#razonSocialReceptor").val();
+            objeto.GiroReceptor = $("#GiroReceptor").val();
+            objeto.DireccionReceptor = $("#DireccionReceptor").val();
+            objeto.ComunaReceptor = $("#ComunaReceptor").val();
+            objeto.CiudadReceptor = $("#CiudadReceptor").val();
+            objeto.emalReceptor = $("#emalReceptor").val();
+            objeto.enviarMail = "no";
+            objeto.Estado = 'Ingresado';
+           
+
+            //if ($("#avisaContabilidad").prop('checked')) {
+            //    objeto.enviarMail = "si";
+            //    objeto.estado = 'Esperando aprobación';
+
+            //}
+            //if (objeto.foliodocumento.length > 0) {
+            //    objeto.estado = "Aprobada y esperando a SII";
+            //}
+            //encabezado = '52' + '|' + objeto.foliodocumento + '|' + objeto.fechaEmision + '|' + objeto.tipoDespacho + '|'
+            //        + objeto.formaDePago + '|' + objeto.fechaVencimiento + '|' + objeto.tipoTraslado + '|' + objeto.observaciones + '|' + fecha + '|}';
+            //emisor = '79538350-6|CONSTRUCTORA GARDILCIC LTDA.|Extracción de cobre|133000||' + $("#DireccionEmisor").val() + '|' + $("#comunaEmisor").val() + '|' + $("#ciudadEmisor").val() + '||}';
+            //receptor = objeto.RutReceptor + '|' + objeto.codigoInternoReceptor + '|' + objeto.razonSocialReceptor + '|' + objeto.giroReceptor + '|' + objeto.direccionReceptor + '|' + objeto.comunaReceptor + '|' + objeto.ciudadReceptor + '|' + objeto.emailReceptor + '|}';
+
+
+            objeto.Subtotal = sinPuntos($("#Subtotal").val());
+            objeto.TotalDescRec = sinPuntos($("#TotalDescRec").val());
+            objeto.totalNeto = sinPuntos($("#totalNeto").val());
+            objeto.MontoExento = sinPuntos($("#MontoExento").val());
+
+            objeto.MontoIva = sinPuntos($("#MontoIva").val());
+            objeto.MontoTotal = sinPuntos($("#MontoTotal").val());
+
+            objeto.TotalAPagar = sinPuntos($("#MontoTotal").val());
+
+            // totales = sinPuntos(objeto.totales.subtotal) + '|' + sinPuntos(objeto.totales.totalDescuento) + '|' + sinPuntos(objeto.totales.neto) + '|' + sinPuntos(objeto.totales.exento) + '|' + objeto.totales.tasaIva + '|' + sinPuntos(objeto.totales.iva) + '|' + sinPuntos(objeto.totales.total) + '|<palabras>|' + sinPuntos(objeto.totales.porcentajeRetencion) + '|' + sinPuntos(objeto.totales.MontoRetencion) + '|' + sinPuntos(objeto.totales.totalAPagar) + '|}~';
+
+
+            // referencia = [];
+            var Referencias = [];
+            $("#listaReferencias tr").each(function (i, item) {
+                var Referencia = {};
+                var tipoReferencia = $(item).find('select:eq(0)').val();
+                var folio = $(item).find('input:eq(0)').val();
+                var fecha = $(item).find('input:eq(1)').val();
+                // referencia.push(tipoReferencia + '|' + (i + 1) + '|' + folio + '|' + fecha + '||}');
+                Referencia.TipoReferencia = tipoReferencia;
+                Referencia.Folio = folio;
+                Referencia.Fecha = fecha;
+                Referencia.Id = $(item).find('input:eq(2)').val();
+
+                Referencia.idCabecera = $(".idCabecera").val();
+                Referencias.push(Referencia);
+
+            });
+            objeto.Referencias = Referencias;
+            //referencia.push('~');
+
+            //detalles = [];
+            objeto.detalles = [];
+            $("#listaDetalles tr").each(function (i, item) {
+                var detalle = {};
+                var IndicadorExencion = $(this).find('select:eq(0)').val();
+
+                var codigoInternoItem = $(this).find('input:eq(2)').val();
+                var nombreDelItem = $(this).find('input:eq(3)').val()
+                var cantidad = $(this).find('input:eq(0)').val();
+                var unidad = $(this).find('input:eq(1)').val();
+                var precio = sinPuntos($(this).find('input:eq(4)').val());
+                var descRecAux = sinPuntos($(this).find('input:eq(5)').val());
+                var descPorcentaje = 0;
+                var descuentoEnPesos = 0;
+                var recargaPorcentaje = 0;
+                var recargeEnPesos = 0;
+                var total = 0;
+                if (descRecAux == '') {
+                    descRecAux = 0;
+                }
+
+                if (descRecAux >= 0) {
+                    recargeEnPesos = descRecAux;
+                    recargaPorcentaje = (descRecAux * 100 / (precio * cantidad));
+                }
+                else {
+                    descuentoEnPesos = descRecAux * -1;
+                    descPorcentaje = ((descRecAux * -1) * 100 / (precio * cantidad))
+                }
+
+
+                descPorcentaje = (isNaN(descPorcentaje)) ? 0 : descPorcentaje;
+                descuentoEnPesos = (isNaN(sinPuntos(descuentoEnPesos))) ? 0 : sinPuntos(descuentoEnPesos);
+                recargaPorcentaje = (isNaN(recargaPorcentaje)) ? 0 : recargaPorcentaje;
+                console.log(recargaPorcentaje);
+                total = parseFloat((precio * cantidad)) + parseFloat(recargeEnPesos) - descuentoEnPesos;
+                //  detalles.push('|' + numeroExcencion + '|' + codigoInternoItem + '|' + nombreDelItem + '||' + cantidad + '|' + unidad + '|' + precio + '|' + descPorcentaje + '|' + descuentoEnPesos + '|' + recargaPorcentaje + '|' + recargeEnPesos + '|' + total + '|}');
+                detalle.IndicadorExencion = IndicadorExencion;
+                detalle.CodigoInternoItem = codigoInternoItem;
+                detalle.NombreItem = nombreDelItem;
+                detalle.CantidadItem = cantidad;
+                detalle.UnidadMedida = unidad;
+                detalle.PrecioUnitarioItem = sinPuntos(precio);
+                detalle.DescuentoEnPorcentaje = descPorcentaje;
+                detalle.DescuentoEnPesos = descuentoEnPesos;
+                detalle.RecargoPorcentaje = recargaPorcentaje;
+                detalle.RecargoPesos = sinPuntos(recargeEnPesos);
+                detalle.MontoItem = sinPuntos(total);
+                detalle.idCabecera = $(".idCabecera").val();
+                detalle.Id = $(this).find('input:eq(7)').val();
+                objeto.detalles.push(detalle);
+
+
+            });
+            //detalles.push('~');
+            objeto.Patente = $("#Patente").val();
+            objeto.RutTransportista = $("#RutTransportista").val();
+            objeto.DireccionDestino = $("#DireccionDestino").val();
+            objeto.ComunaDestino = $("#ComunaDestino").val();
+            objeto.CiudadDestino = $("#CiudadDestino").val();
+            // patente = objeto.patente + '|' + objeto.rutTransporte + '|' + objeto.direccionRuta + '|' + objeto.comunaRuta + '|' + objeto.ciudadRuta + '|}}~!';
+            //guarda cabecera
+
+            return objeto;
+        }
+
+        function configurarCalendario() {
+            $("#listaReferencias tr").each(function (i, item) {
+
+                $(item).find("input:eq(1)").calendario({ format: 'yyyy-mm-dd' });
+
+            });
+        }
+
+        function actualizarResumen(item) {
+
+            var fila = $(item).closest('tr');
+            var total = sinPuntos($(fila).find('input:eq(0)').val()) * sinPuntos($(fila).find('input:eq(4)').val());
+            $(fila).find('input:eq(4)').val(conPuntos($(fila).find('input:eq(4)').val()));
+            $(fila).find('input:eq(6)').val(total);
+            total = parseInt(total) + parseInt(($(fila).find('input:eq(5)').val() == '') ? '0' : $(fila).find('input:eq(5)').val());
+            $(fila).find('input:eq(6)').val(conPuntos(total));
+            var subtotal = 0;
+            var totalDescuento = 0;
+            $("#listaDetalles tr").each(function () {
+
+                subtotal = parseInt(sinPuntos(subtotal)) + parseInt(sinPuntos($(this).find('input:eq(0)').val()) * sinPuntos($(this).find('input:eq(4)').val()));
+                totalDescuento = parseInt(sinPuntos(totalDescuento)) + +parseInt(($(this).find('input:eq(5)').val() == '') ? '0' : $(this).find('input:eq(5)').val());
+            });
+            $("#Subtotal").val(conPuntos(subtotal));
+            $("#TotalDescRec").val(conPuntos(totalDescuento));
+            $("#totalNeto").val(conPuntos(parseInt(sinPuntos($("#Subtotal").val())) + parseInt(sinPuntos($("#TotalDescRec").val()))));
+            $("#MontoIva").val(sinPuntos($("#totalNeto").val()) * 0.19);
+            $("#MontoExento").val(0);
+            var n1 = parseInt(sinPuntos($("#totalNeto").val()));
+            var n2 = parseInt(sinPuntos($("#MontoIva").val()));
+            $("#MontoTotal").val(conPuntos(parseInt(sinPuntos($("#totalNeto").val())) + parseInt($("#MontoIva").val())));
+        }
+
+    </script>
+}

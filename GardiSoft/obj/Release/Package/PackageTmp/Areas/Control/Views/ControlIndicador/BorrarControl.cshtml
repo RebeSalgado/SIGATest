@@ -1,0 +1,72 @@
+﻿@model Entidades.Control.ControlIndicador
+
+@{
+   Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="well">
+    <h3>Esta seguro de que desea borrar el registro?</h3>
+    <div>
+        <hr />
+
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Indicador.Nombre)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Indicador.Nombre)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Usuario.Email)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Usuario.Email)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Nreal)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Nreal)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Desviacion)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Desviacion)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.fecha)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.fecha)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Meta)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Meta)
+            </dd>
+
+        </dl>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-actions no-color">
+                <input type="submit" value="Borrar" class="btn btn-success" /> |
+                @Html.ActionLink("Volver a Control de Indicadores", "Index")
+            </div>
+        }
+    </div>
+</div>

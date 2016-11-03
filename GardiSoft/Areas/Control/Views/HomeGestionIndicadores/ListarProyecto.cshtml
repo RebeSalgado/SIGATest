@@ -1,0 +1,37 @@
+﻿@model IEnumerable<Entidades.Control.Proyecto>
+
+
+<div class="well" style="overflow-x:auto ">
+    <p>
+        @Html.ActionLink("Crear Nuevo Proyecto", "CrearProyecto")
+    </p>
+    <table class="table table-hover">
+        <tr>
+            <th class="success">
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th class="success">
+                @Html.DisplayNameFor(model => model.Ubicacion)
+            </th>
+            <th class="success"></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ubicacion)
+                </td>
+                <td>
+                    @Html.ActionLink("Editar", "EditarProyecto", new { id = item.Id_Proyecto }) |
+                    @Html.ActionLink("Detalles", "DetallesProyecto", new { id = item.Id_Proyecto }) |
+                    @Html.ActionLink("Borrar", "BorrarProyecto", new { id = item.Id_Proyecto })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

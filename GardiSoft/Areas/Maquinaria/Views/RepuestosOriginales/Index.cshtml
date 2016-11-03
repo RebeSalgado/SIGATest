@@ -1,0 +1,237 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Repuestos Originales</h2>
+
+@*-- AGREGAR --*@
+
+<div class="well">
+    <div class="form-horizontal">
+        <h4>Utilice el formulario para agregar o modificar Repuestos</h4>
+        <hr />
+        @*-- AGREGAR --*@
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Repuesto</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" id="txtNombreRepuesto" placeholder="escriba aquí el nombre del Repuesto">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Guardar" id="guardar" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+    <div class="VerRepuestos" id="VerRepuestos"> REPUESTOS ORIGINALES</div>
+</div>
+
+
+
+@*--MODAL MODIFICAR  --*@
+<div class="modal fade " id="mdlModificar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Plan</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="NombrePlan" class="col-sm-2 control-label">Nombre Repuesto</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="txtNuevoNombre" placeholder="Nuevo Nombre" autocomplete="off">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success GuardarNombre" id="GuardarNombre" data-dismiss="modal">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*--MODAL ELIMINAR --*@
+<div class="modal fade " id="mdlEliminar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Eliminar Repuesto</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="NombrePlan" class="col-sm-2 control-label">Nombre Repuesto</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control " disabled id="txtEliminarNombre" placeholder=" " autocomplete="off">
+                        </div>
+                        <div class="col-sm-10">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger EliminarRepuesto" id="EliminarRepuesto" data-dismiss="modal">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            var idrepuesto = 0;
+
+            cargarRepuestos();
+
+            //GUARDAR REPUESTO ORIGINAL
+
+            $("#guardar").click(function () {
+
+                $.ajax({
+                    url: '@Url.Action("GuardarRepuesto", "RepuestosOriginales")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    data: JSON.stringify({ CodigoOriginal: $("#txtNombreRepuesto").val() }), // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+                        data = eval(data);
+                        if (data.Resultado == "Guardado") {
+                            $.notificar({ text: 'Guardado', title: 'Exito', type: 'success' });
+                            $("#txtNombreRepuesto").val('');
+                            cargarRepuestos();
+                        }
+                        else {
+                            $.notificar({ text: 'no se pudo guardar', title: 'ups', type: 'danger' });
+                        }
+                        //$("#VerReporte").jsonTabla({ tabla: data });
+                    }
+                });
+            });
+
+        })
+
+        //CARGAR REPUESTO ORIGINAL 
+        function cargarRepuestos()
+        {
+            $.ajax({
+                url: '@Url.Action("VerRepuestos", "RepuestosOriginales")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                // data: JSON.stringify({Id: $("#Id").val(), Nombre: $("#Nombre").val() }),
+                async: true,
+                success: function (data) {
+                    data = eval(data);
+
+                    $("#VerRepuestos").jsonTabla({ tabla: data });
+                }
+            });
+        }
+
+   
+        
+        // MODIFICAR REPUESTO ORIGINAL
+
+        $(document).on('click', ".Modificar", function () {
+            idrepuesto = $(this).attr('idrepuesto');
+
+            $("#mdlModificar").modal('show');
+            var cant = $(this).closest('tr').find("td:eq(1)").html();
+            $("#txtNuevoNombre").val(cant);
+
+        });
+
+        //GUARDAR NUEVO REPUESTO
+
+        $(document).on('click', ".GuardarNombre", function () {
+            $.ajax({
+                url: '@Url.Action("ModificarRepuesto", "RepuestosOriginales")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ Id: idrepuesto, CodigoOriginal: $("#txtNuevoNombre").val() }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    if (data.Resultado == "Guardado") {
+                        $.notificar({ text: 'Repuesto modificado', title: 'Todo listo', type: 'success' });
+                        $("#txtNuevoNombre").val('')
+                        cargarRepuestos();
+                    }
+                    else {
+                        $.notificar({ text: 'No se puede modificar.', title: 'Todo listo', type: 'danger' });
+                    }
+
+
+                }
+            });
+
+        });
+
+        // ELIMINAR 
+
+        $(document).on('click', ".Eliminar", function () {
+            idrepuesto = $(this).attr('idrepuesto');
+
+            $("#mdlEliminar").modal('show');
+            var cant = $(this).closest('tr').find("td:eq(1)").html();
+            $("#txtEliminarNombre").val(cant);
+
+        });
+
+
+        $(document).on('click', ".EliminarRepuesto", function () {
+            $.ajax({
+                url: '@Url.Action("EliminarRepuesto", "RepuestosOriginales")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ Id: idrepuesto }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    if (data.Resultado == "Guardado") {
+                        $.notificar({ text: 'Repuesto Eliminado', title: 'Todo listo', type: 'success' });
+                        cargarRepuestos();
+                    }
+                    else {
+                        $.notificar({ text: 'No se puede Eliminar Repuesto.', title: 'Todo listo', type: 'danger' });
+                    }
+
+
+                }
+            });
+
+        });
+
+        // ADMINISTRAR
+
+        $(document).on('click', ".Administrar", function () {
+            idrepuesto = $(this).attr('idrepuesto');
+            location.href = '@Url.Action("GestionarAlternativos","RepuestosOriginales")' + '/' + idrepuesto;
+            //$("#mdlEliminar").modal('show');
+            //var cant = $(this).closest('tr').find("td:eq(1)").html();
+            //$("#txtEliminarNombre").val(cant);
+
+        });
+
+    </script>
+}

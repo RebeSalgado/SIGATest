@@ -1,0 +1,251 @@
+﻿@model Entidades.Rrhh.Capacitaciones.CursoTrabajadores
+
+@{
+    ViewBag.Title = "AgregarTrabajadores";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>Solicitud de capacitaciones</h2>
+<p style="text-align:right">
+    <input type="button" value="Cerrar Capacitación" id="btnCerrar" class="btn btn-primary" />
+</p>
+<div class="well">
+
+    <h4>Utilice el formulario para agregar trabajadores a su capacitación</h4>
+    <span class="label label-info">@ViewBag.Estado</span>
+
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            @using (Ajax.BeginForm("AgregaTrabajador", new AjaxOptions { OnSuccess = "onSuccess" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.RutTrabajador, "Rut/Nombre trabajador", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.RutTrabajador, new { htmlAttributes = new { @class = "form-control", @AutoComplete = "off" } })
+                            <h5 id="nombre"></h5>
+                            @Html.HiddenFor(model => model.NombreTrabajador)
+                            @Html.ValidationMessageFor(model => model.RutTrabajador, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+
+                    @if (ViewBag.Estado == "Ingresado")
+                {
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10" style="text-align:left">
+                                <input type="submit" value="Inscribir" class="btn btn-success" />
+                            </div>
+                        </div>
+
+                    }
+                </div>
+            }
+
+        </div>
+        <div class="col-md-6">
+
+
+        </div>
+    </div>
+</div>
+
+
+
+<h2>Trabajadores Inscritos</h2>
+<div id="trabajadores">
+
+    @Html.Action("TrabajadoresInscritos")
+
+</div>
+
+<div class="modal fade" id="dlgCerrar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Solicitar Capacitación</h4>
+            </div>
+            <div class="modal-body">
+                @using (Ajax.BeginForm("GuardarListaAsistencia", "CapacitacionesInterna", new AjaxOptions() { HttpMethod = "POST" }, new { enctype = "multipart/form-data" }))
+                {
+                  
+
+                    <div class="form-horizontal">
+                        @Html.Hidden("Id", (object)ViewBag.Id)
+
+                        <div class="form-group">
+                            <h4>Adjunte el registro de la asistencia para finalizar la capacitación</h4>
+                            <div class="col-md-2"></div>
+                            <div class="col-md-10">
+                                <input type="file" name="file" id="file" accept="image/*" capture="camera">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10" style="text-align:left">
+                                <input type="submit" value="Guardar Archivo" class="btn btn-primary" />
+                            </div>
+                        </div>
+
+                    </div>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btnAvisar">Si, Gracias</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $("#btnCerrar").click(function () {
+
+
+                $("#dlgCerrar").modal('show');
+
+            });
+
+
+            $('#file').fileUpload({ url: '@Url.Action("GuardarListaAsistencia", "CapacitacionesInterna", new { Id = ViewBag.Id })' });
+
+            $(document).on('change', ".asistio", function () {
+
+                var asistio = $(this).prop('checked');
+                var id = $(this).closest("tr").attr("idasistio");
+
+                $.ajax({
+                    url: '@Url.Action("GuardarAsistio", "CapacitacionesInterna")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    data: JSON.stringify({ id: id, asistio: asistio }), // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+
+                        if (data.Resultado == "Guardado") {
+                            $.notificar({ text: 'Guardado', title: 'Exito', type: 'success' });
+                        }
+
+
+                    }
+                });
+
+            });
+
+
+            $("#RutTrabajador").typeahead({
+                source: function (query, process) {
+                    var nombres = [];
+
+                    var obj = {};
+                    obj.busqueda = $("#RutTrabajador").val();
+                    obj.cantidad = 20;
+                    // console.log($(caja).val());
+                    $.ajax({
+                        url: 'http://informatica.gardilcic.cl/webservice/rrhhService.svc/BuscarTrabajadores',
+                        type: "POST",
+                        async: false,
+                        data: JSON.stringify(obj),
+                        dataType: "JSON",
+                        success: function (datos) {
+                            var objeto = eval(datos.d);
+
+                            $.map(objeto, function (item) {
+                                //console.log(item);
+                                var nombre = item.ApellidoPaterno + " " + item.ApellidoMaterno + " " + item.Nombre;
+                                var itm = {
+                                    rut: item.Rut,
+                                    name: nombre,
+                                    id: item.Id,
+                                    cargo: item.Cargo,
+                                    toString: function () {
+                                        return JSON.stringify(this);
+                                    },
+                                    toLowerCase: function () {
+                                        return this.name.toLowerCase();
+                                    },
+                                    indexOf: function (string) {
+                                        return String.prototype.indexOf.apply(this.name, arguments);
+                                    },
+                                    replace: function (string) {
+                                        var value = '';
+                                        value += this.name;
+                                        if (typeof (this.level) != 'undefined') {
+                                            value += ' <span class="pull-right muted">';
+                                            value += this.level;
+                                            value += '</span>';
+                                        }
+                                        return String.prototype.replace.apply('<div style="padding: 1px 2px; font-size: 12px;">' + value + '</div>', arguments);
+                                    }
+                                };
+                                nombres.push(itm);
+                            });
+                            return process(nombres);
+                        }
+                    });
+                },
+                matcher: function () {
+                    return true;
+                },
+                property: 'name',
+                items: 10,
+                minLength: 3,
+                updater: function (item) {
+                    var item = JSON.parse(item);
+                    $("#NombreTrabajador").val(item.name);
+                    $("#nombre").text(item.name);
+                    return item.rut;
+                }
+            });
+
+        });
+
+
+
+
+        function onSuccess(datos) {
+
+            if (datos.Id == "agregado") {
+                new PNotify({
+                    title: 'Agregado',
+                    text: 'Solicitud creada',
+                    type: 'success'
+                });
+
+
+
+
+                $.ajax({
+                    url: '@Url.Action("TrabajadoresInscritos","CapacitacionesInterna", new { Area = "Rrhh" })',
+                    datatype: 'html',
+                    type: 'POST',
+                    success: function (data) {
+
+                        $("#trabajadores").html(data);
+
+                    }
+                });
+
+            }
+
+
+
+
+        }
+
+
+
+    </script>
+}

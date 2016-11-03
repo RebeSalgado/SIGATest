@@ -1,0 +1,123 @@
+﻿@model Entidades.Rrhh.Capacitaciones.Trabajadores
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Trabajadores</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Aspecto.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Aspecto.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Dnc.usuarioCreador)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Dnc.usuarioCreador)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tipo.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tipo.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RutTrabajador)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RutTrabajador)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Trimestre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Trimestre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Objetivo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Objetivo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NombreCapacitacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NombreCapacitacion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Realizada)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Realizada)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ValorCurso)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ValorCurso)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CantidadDeHoras)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CantidadDeHoras)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SubsidioSense)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SubsidioSense)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ValorHoraSense)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ValorHoraSense)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaEjecucionCurso)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaEjecucionCurso)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

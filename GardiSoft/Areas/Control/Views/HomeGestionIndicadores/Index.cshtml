@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+    <h2>Gestion Indicadores.</h2>
+    <hr />
+
+    <h4>Seccion Area</h4>
+
+    <p style="text-align:right">
+        <input type="submit" value="Agregar" class="btn btn-success" onclick="$('#agregarArea').toggle(500)" />
+    </p>
+    <div id="agregarArea" style="">
+        @Html.Action("ListarAreas", "HomeGestionIndicadores")
+    </div>
+    <hr />
+    <h4>Seccion Turno</h4>
+
+    <p style="text-align:right">
+        <input type="submit" value="Agregar" class="btn btn-success" onclick="$('#agregarTurno').toggle(500)" />
+    </p>
+    <div id="agregarTurno" style="display:none">
+        @Html.Action("ListarTurno", "HomeGestionIndicadores")
+    </div>
+    <hr />
+    <h4>Seccion Nivel</h4>
+
+    <p style="text-align:right">
+        <input type="submit" value="Agregar" class="btn btn-success" onclick="$('#agregarNivel').toggle(500)" />
+    </p>
+    <div id="agregarNivel" style="display:none">
+        @Html.Action("ListarNivel", "HomeGestionIndicadores")
+    </div>
+    <hr />
+    <h4>Seccion Proyecto</h4>
+
+    <p style="text-align:right">
+        <input type="submit" value="Agregar" class="btn btn-success" onclick="$('#agregarProyecto').toggle(500)" />
+    </p>
+    <div id="agregarProyecto" style="display:none">
+        @Html.Action("ListarProyecto", "HomeGestionIndicadores")
+    </div>
+
+    <hr />
+    <div class="well">
+        <h4>@Html.ActionLink("Ir a Indicadores", "ListarControl", "ControlIndicador")</h4>
+    </div>
+<hr /> 
+

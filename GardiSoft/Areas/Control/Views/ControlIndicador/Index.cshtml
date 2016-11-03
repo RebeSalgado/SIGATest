@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Entidades.Control.ControlIndicador>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+     @Html.Action("CrearControl", "ControlIndicador")
+</div>
+<hr />
+<div style="background-color: azure">
+    <h4>  @Html.ActionLink("Ir a Listar por Indicador o Fecha", "ListaPorIndicador", "ControlIndicador")</h4>
+</div>
+<hr />
+
+<div>
+    @Html.Action("ListarControl", "ControlIndicador")
+</div>
+
+
+
+
+
+
+
+
+
+
+
+

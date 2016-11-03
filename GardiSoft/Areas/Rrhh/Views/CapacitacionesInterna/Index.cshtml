@@ -1,0 +1,386 @@
+﻿@model Entidades.Rrhh.Capacitaciones.Capacitacion
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<p style="text-align:right">
+    <input type="submit" value="Agregar Capacitación" class="btn btn-primary nuevaCapacitacion" />
+</p>
+
+<div id="nuevaCapacitacion" style="display:none">
+    <h2>Solicitud de capacitaciones</h2>
+@using (Ajax.BeginForm("Create", new AjaxOptions { OnSuccess = "onSuccess" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="well">
+        <div class="form-horizontal">
+            <h4>Utilice el formulario para solicitar una nueva capacitación</h4>
+            <hr/>
+                     
+            <div class="form-group">
+                @Html.LabelFor(model => model.IdSubproyecto, "SubProyecto", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("IdSubproyecto", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.IdSubproyecto, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.Nombre, "Nombre", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.Relator, "Relator", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Relator, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Relator, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Ubicacion, "Ubicacion", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Ubicacion, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Ubicacion, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.idTipoEFC, "EFC", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("idTipoEFC", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.idTipoEFC, "", new { @class = "text-danger" })
+                </div>
+            </div>
+         
+            <div class="form-group">
+                @Html.LabelFor(model => model.CantidadHoras, "Cant. de Minutos", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CantidadHoras, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CantidadHoras, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+          
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.FechaInicio, "Fecha Inicio", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.FechaInicio, new { htmlAttributes = new { @class = "form-control", @autoComplete = "off" } })
+                    @Html.ValidationMessageFor(model => model.FechaInicio, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Descripcion, "Descripción", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @class = "form-control", @autoComplete = "off" } })
+                    @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
+                </div>
+            </div>
+          
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10" style="text-align:right">
+                    <input type="submit" value="Crear" class="btn btn-success" />
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+}
+    </div>
+    <h2>Administrar Mis Capacitaciones</h2>
+    @*<div id="solicitudes">*@
+    <div id="VerCapacitaciones">
+
+        @*@Html.Action("Solicitud")*@
+
+    </div>
+
+
+    <div class="modal fade" id="dlgAvisar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Solicitar Capacitación</h4>
+                </div>
+                <div class="modal-body">
+                    Enviará su solicitud a RRHH ¿desea continuar?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btnAvisar">Si, Gracias</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    @*--MODAL COPIAR --*@
+
+    <div class="modal fade " id="mdlCopiar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Capacitación</h4>
+                </div>
+
+
+                <div class="form-horizontal">
+                                           
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="Nombre">Nombre</label>
+                        <div class="col-md-10">
+                            <input class="form-control text-box single-line" id="txtNombre" disabled name="Nombre" type="text" value="">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="EFC">EFC</label>
+                        <div class="col-md-10">
+                            <input class="form-control text-box single-line" id="txtEFC" disabled name="EFC" type="text" value="">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="Minutos">Minutos</label>
+                        <div class="col-md-10">
+                            <input class="form-control text-box single-line" id="txtMinutos" disabled name="Minutos" type="text" value="">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="FechaInicio">Fecha Inicio</label>
+                        <div class="col-md-10">
+                            <input class="form-control text-box single-line" id="txtFechaInicio" name="FechaInicio" type="date" value="">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="Relator">Relator</label>
+                        <div class="col-md-10">
+                            <input class="form-control text-box single-line" id="txtRelator" name="Relator" type="text" value="">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="Estado">Estado</label>
+                        <div class="col-md-10">
+                            <input class="form-control text-box single-line" id="txtEstado" name="Estado" disabled type="text" value="">
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="Descripcion">Descripción</label>
+                        <div class="col-md-10">
+                            <input class="form-control text-box single-line" id="txtDescripcion" name="Descripcion" type="text" value="">
+                            
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success GuardarCapacitacion" data-dismiss="modal">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+@section Scripts
+{
+    <script type="text/javascript">
+        var idAvisar = "";
+        $(document).ready(function () {
+
+            VerCapacitaciones();
+            $("#FechaInicio").calendario();
+            $("#fechaTermino").calendario();
+
+            $(".nuevaCapacitacion").click(function () {
+
+                $("#nuevaCapacitacion").toggle(500);
+
+            });
+
+            $(document).on('click', '.solicitar', function () {
+
+                idAvisar = $(this).attr('id');
+                $("#dlgAvisar").modal('show');
+
+            });
+
+            $("#btnAvisar").click(function () {
+
+                $.ajax({
+                    url: '@Url.Action("AvisarARrhh", "CapacitacionesInterna")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    data: JSON.stringify({ id: idAvisar }), // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+
+                                     $.ajax({
+                                        type: "POST",
+                                        url: '@Url.Action("Solicitud", "CapacitacionesInterna")',
+                                        success: function (msg) {
+                                            $("#solicitudes").html(msg);
+                                        }
+                                    });
+
+                        $("#dlgAvisar").modal('hide');
+                    }
+                });
+
+
+            })
+
+
+            $("#IdTipoCurso").change(function () {
+
+                $("#NombreOtec").closest(".form-group").css('display', 'none');
+                $("#CodSense").closest(".form-group").css('display', 'none');
+                $("#ValorCurso").val(0);
+                $("#ValorCurso").closest(".form-group").css('display', 'none');
+                $("#ContactoOtec").closest(".form-group").css('display', 'none');
+                $("#MailContactoOtec").closest(".form-group").css('display', 'none');
+
+
+
+                if($(this).val() == 1)
+                {
+                    $("#NombreOtec").closest(".form-group").css('display', 'block');
+                    $("#CodSense").closest(".form-group").css('display', 'block');
+                    $("#ValorCurso").closest(".form-group").val(0);
+                    $("#ValorCurso").closest(".form-group").css('display', 'block');
+                    $("#ContactoOtec").closest(".form-group").css('display', 'block');
+                    $("#MailContactoOtec").closest(".form-group").css('display', 'block');
+                }
+
+
+
+            });
+
+        });
+
+        function onSuccess(datos) {
+
+            if (datos.Id == "agregado") {
+                new PNotify({
+                    title: 'Agregado',
+                    text: 'Solicitud creada',
+                    type: 'success'
+                });
+
+
+                $.ajax({
+                    url: '@Url.Action("Solicitud","CapacitacionesInterna")',
+                    type:'POST',
+                    datatype: 'html',
+                    success: function (data) {
+                        console.log(data);
+                        $('#solicitudes').html(data);
+
+
+                    }
+                });
+
+            }
+
+            $("#IdSubproyecto").val('');
+            $("#Nombre").val('');
+            $("#Relator").val('');
+            $("#Ubicacion").val('');
+            $("#CantidadHoras").val('');
+            $("#FechaInicio").val('');
+
+        }
+
+
+        $(document).on('click', ".btnCopiar", function () {
+            id = $(this).attr('id');
+
+            $("#mdlCopiar").modal('show');
+            var Nombre = $(this).closest('tr').find("td:eq(4)").html();
+            $("#txtNombre").val(Nombre);
+
+            var EFC = $(this).closest('tr').find("td:eq(5)").html();
+            $("#txtEFC").val(EFC);
+
+            var Minutos = $(this).closest('tr').find("td:eq(6)").html();
+            $("#txtMinutos").val(Minutos);
+
+            var FechaInicio = $(this).closest('tr').find("td:eq(7)").html();
+            $("#txtFecha").val(FechaInicio);
+
+            var Relator = $(this).closest('tr').find("td:eq(8)").html();
+            $("#txtRelator").val(Relator);
+
+            var Estado = $(this).closest('tr').find("td:eq(9)").html();
+            $("#txtEstado").val(Estado);
+
+            var Descripcion = $(this).closest('tr').find("td:eq(10)").html();
+            $("#txtDescripcion").val(Descripcion);
+
+            
+
+        });
+
+        
+        //Navegar a pagina 
+
+        $(document).on('click', ".btnInvitarTrabajadores", function () {
+            idcapacitacion = $(this).attr('id');
+            location.href = '@Url.Action("AgregarTrabajadores", "CapacitacionesInterna")' + '/' + idcapacitacion;
+        });
+
+        //CARGAR CAPACITACIONES
+
+        function VerCapacitaciones() {
+            $.ajax({
+                url: '@Url.Action("VerCapacitaciones", "CapacitacionesInterna")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                // data: JSON.stringify({Id: $("#Id").val(), Nombre: $("#Nombre").val() }),
+                async: true,
+                success: function (data) {
+                    data = eval(data);
+
+                    $("#VerCapacitaciones").jsonTabla({ tabla: data });
+
+                    $("#VerCapacitaciones tr").each(function (i, item) {
+                        $(item).find('td:eq(0)').css('display', 'none');
+                        $(item).find('td:eq(1)').css('display', 'none');
+                        $(item).find('td:eq(2)').css('display', 'none');
+                        $(item).find('td:eq(3)').css('display', 'none');
+                    });
+                }
+            });
+        }
+
+    </script>
+}
+

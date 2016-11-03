@@ -1,0 +1,204 @@
+﻿
+@{
+    ViewBag.Title = "OtCerrada";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>OT Cerradas</h2>
+<div class="well">
+    <div class="form-horizontal">
+        <h4>Seleccione una ubicación</h4>
+
+        @Html.AntiForgeryToken()
+        <hr />
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Ubicación</label>
+                <div class="col-md-6">
+                    @Html.DropDownList("IdUbicacion", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10" style="text-align:left">
+                    <input type="button" value="Filtrar" id="btnGenerarInforme" class="btn btn-success" />
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<div class="modal fade " id="mdlImprimir" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-admin" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Imprimir OT</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align:right">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-success Imprimir" data-dismiss="modal">Imprimir</button>
+                </p>
+
+
+                <div id="printer">
+
+
+                    <img width="128" style="padding-top:5px;" src="/Imagenes/logo2.png">
+                    <h1>OT: <span id="printIdOT"></span></h1>
+
+                    <div class="row">
+                        <table style="width:50%;margin-left:20px">
+                            <tr>
+                                <td> Tipo: <span id="printTipo"></span></td>
+                                <td> Frecuencia: <span id="printFrecuencia"></span></td>
+                                <td>Codigo: <span id="printCodigo"></span></td>
+                            </tr>
+                        </table>
+                        @*<div class="col-md-12">
+                                <div class="col-md-4 col-sm-4">
+                                    Tipo: <span id="printTipo"></span>
+                                </div>
+                                <div class="col-md-4 col-sm-4">
+                                    Frecuencia: <span id="printFrecuencia"></span>
+                                </div>
+                                <div class="col-md-4 col-sm-4">
+                                    Codigo: <span id="printCodigo"></span>
+                                </div>
+                            </div>*@
+                    </div>
+                    <p></p><p></p>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Actividades y Repuestos</div>
+                        <div class="panel-body">
+                            <div id="Imprimir">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-success Imprimir" data-dismiss="modal">Imprimir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="calendario">
+
+    <p class="lead">cuando seleccione una ubicación la lista aparecerá</p>
+
+</div>
+
+
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+
+
+            $("#btnGenerarInforme").click(function (){
+                CargarOtCerradas();
+            });
+
+
+
+
+            $(document).on('click', ".gestionarOt", function () {
+                $.ajax({
+                    url: '@Url.Action("VolverAbrirOT", "OT")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    data: JSON.stringify({ idOT: $(this).attr('id') }), // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+                        data = eval(data);
+                        CargarOtCerradas();
+
+                    }
+                });
+
+            });
+
+        });
+
+        function CargarOtCerradas() {
+
+            $.ajax({
+                url: '@Url.Action("VerCalendarioOtCerrada", "Ot")',
+                datatype: 'json',
+                type: 'POST',
+                async: true,
+                data: { IdUbicacion: $("#IdUbicacion").val() },
+                success: function (data) {
+                    var r = eval(data);
+                    $("#calendario").jsonTabla({ tabla: r });
+                }
+            });
+        }
+
+
+        $(document).on('click', ".imprimirOT", function () {
+            $("#mdlImprimir").modal('show');
+            var idot = $(this).attr('idot');
+           
+            $.ajax({
+                url: '@Url.Action("VistaImpresion", "Ot")',
+                datatype: 'json',
+                type: 'POST',
+                async: true,
+                data: { idOT: idot },
+                success: function (data) {
+                    var r = eval(data);
+                    $("#printIdOT").text(idot);
+                    $("#printCodigo").text(r[0].Codigo);
+                    $("#printTipo").text(r[0].Tipo);
+                    $("#printFrecuencia").text(r[0].Frecuencia);
+
+                    $("#Imprimir").jsonTabla({ tabla: r, lengthMenu: [[-1, 10], [-1, 10]] });
+                    $(".dataTables_filter").hide();
+                    $(".dataTables_length").hide();
+                    $(".dataTables_info").hide();
+                    $(".dataTables_paginate").hide();
+                    $(".dt-buttons").hide();
+                    $("#Imprimir tr").each(function (i, item) {
+                        
+                        $(item).find('td:eq(0)').css('display', 'none');
+                        $(item).find('td:eq(1)').css('display', 'none');
+                        $(item).find('td:eq(2)').css('display', 'none');
+                        $(item).find('td:eq(3)').css('display', 'none');
+
+                    });
+                   
+                }
+            });
+
+        });
+
+        $(".Imprimir").click(function () {
+
+            $("#printer").print();
+
+        });
+
+
+
+
+
+
+
+    </script>
+}

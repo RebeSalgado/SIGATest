@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Entidades.Sys.Menu>
+
+
+<div class="navbar-collapse collapse">
+    <ul class="nav navbar-nav">
+        <li><a href="/Home/Index"> <span class="glyphicon glyphicon-home"></span></a></li>
+
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">@item.Nombre <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        @if (item.Submenu != null)
+                        {
+                            foreach (var submenu in item.Submenu)
+                            {
+
+                              <li>@Html.ActionLink(submenu.Titulo,submenu.NombreAction,submenu.NombreControlador,new { area = item.Modulo.Nombre }, null )</li>
+
+                            }
+                        }
+                    </ul>
+                </li>
+
+            
+            }
+        }
+    </ul>
+    @Html.Partial("_LoginPartial")
+</div>

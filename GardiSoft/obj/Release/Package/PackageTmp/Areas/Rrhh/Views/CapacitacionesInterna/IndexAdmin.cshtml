@@ -1,0 +1,271 @@
+﻿@model Entidades.Rrhh.Capacitaciones.Capacitacion
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Solicitud de capacitaciones</h2>
+
+@using (Ajax.BeginForm("Create", new AjaxOptions { OnSuccess = "onSuccess" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="well">
+        <div class="form-horizontal">
+            <h4>Utilice el formulario para solicitar una nueva capacitación</h4>
+
+
+            <hr />
+            @*<div class="form-group">
+                    @Html.LabelFor(model => model.IdTipoCurso, "Tipo", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("IdTipoCurso", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.IdTipoCurso, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+
+            @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CodSense, "Codigo Sence", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.CodSense, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.CodSense, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+
+
+
+            @*<div class="form-group">
+                    @Html.LabelFor(model => model.NombreOtec, "Nombre OTEC", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.NombreOtec, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.NombreOtec, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.IdSubproyecto, "SubProyecto", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("IdSubproyecto", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.IdSubproyecto, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.idTipoEFC, "EFC", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("idTipoEFC", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.idTipoEFC, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            @*<div class="form-group">
+                    @Html.LabelFor(model => model.ValorCurso, "Valor", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.ValorCurso, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ValorCurso, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.CantidadHoras, "Cant. de Horas", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CantidadHoras, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CantidadHoras, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Ubicacion, "Ubicacion", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Ubicacion, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Ubicacion, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.FechaInicio, "Fecha Inicio", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.FechaInicio, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.FechaInicio, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            @*<div class="form-group">
+                    @Html.LabelFor(model => model.fechaTermino, "Fecha Termino", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.fechaTermino, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.fechaTermino, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.Relator, "Relator", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Relator, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Relator, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            @*<div class="form-group">
+                    @Html.LabelFor(model => model.ContactoOtec, "Contacto Otec", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.ContactoOtec, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ContactoOtec, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+
+            @*<div class="form-group">
+                    @Html.LabelFor(model => model.MailContactoOtec, "Mail Contacto Otec.", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.MailContactoOtec, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.MailContactoOtec, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10" style="text-align:right">
+                    <input type="submit" value="Crear" class="btn btn-success" />
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+    <h2>Administrar Solicitudes</h2>
+    <div id="solicitudes">
+
+        @Html.Action("SolicitudAdmin")
+
+    </div>
+
+
+    <div class="modal fade" id="dlgAvisar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Solicitar Capacitación</h4>
+                </div>
+                <div class="modal-body">
+                    Enviará su solicitud a RRHH ¿desea continuar?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btnAvisar">Si, Gracias</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+@section Scripts
+{
+    <script type="text/javascript">
+        var idAvisar = "";
+        $(document).ready(function () {
+
+
+            $("#FechaInicio").calendario();
+            $("#fechaTermino").calendario();
+
+
+            $(document).on('click', '.solicitar', function () {
+
+                idAvisar = $(this).attr('id');
+                $("#dlgAvisar").modal('show');
+
+            });
+
+            $("#btnAvisar").click(function () {
+
+                $.ajax({
+                    url: '@Url.Action("AvisarARrhh", "CapacitacionesInterna")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    data: JSON.stringify({ id: idAvisar }), // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+
+                                     $.ajax({
+                                        type: "POST",
+                                        url: '@Url.Action("Solicitud", "CapacitacionesInterna")',
+                                        success: function (msg) {
+                                            $("#solicitudes").html(msg);
+                                        }
+                                    });
+
+                        $("#dlgAvisar").modal('hide');
+                    }
+                });
+
+
+            })
+
+
+            $("#IdTipoCurso").change(function () {
+
+                $("#NombreOtec").closest(".form-group").css('display', 'none');
+                $("#CodSense").closest(".form-group").css('display', 'none');
+                $("#ValorCurso").val(0);
+                $("#ValorCurso").closest(".form-group").css('display', 'none');
+                $("#ContactoOtec").closest(".form-group").css('display', 'none');
+                $("#MailContactoOtec").closest(".form-group").css('display', 'none');
+
+
+
+                if($(this).val() == 1)
+                {
+                    $("#NombreOtec").closest(".form-group").css('display', 'block');
+                    $("#CodSense").closest(".form-group").css('display', 'block');
+                    $("#ValorCurso").closest(".form-group").val(0);
+                    $("#ValorCurso").closest(".form-group").css('display', 'block');
+                    $("#ContactoOtec").closest(".form-group").css('display', 'block');
+                    $("#MailContactoOtec").closest(".form-group").css('display', 'block');
+                }
+
+
+
+            });
+
+        });
+
+        function onSuccess(datos) {
+
+            if (datos.Id == "agregado") {
+                new PNotify({
+                    title: 'Agregado',
+                    text: 'Solicitud creada',
+                    type: 'success'
+                });
+
+
+                $.ajax({
+                    url: '@Url.Action("Solicitud","CapacitacionesInterna")',
+                    type:'POST',
+                    datatype: 'html',
+                    success: function (data) {
+                        console.log(data);
+                        $('#solicitudes').html(data);
+
+
+                    }
+                });
+
+            }
+
+
+
+
+        }
+
+    </script>
+}
+

@@ -1,0 +1,457 @@
+﻿@model Entidades.Uma.OT
+
+@{
+    ViewBag.Title = "OtCorrectiva";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+ <h2>Generar Ot Correctiva</h2>
+
+<div class="form-horizontal well">
+    <h4>OT</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.IdMaquina, "Máquina", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("IdMaquina", null, htmlAttributes: new { @class = "form-control", @readOnly = "", @disabled="true" })
+            @Html.ValidationMessageFor(model => model.IdMaquina, "", new { @class = "text-danger" })
+            <input type="button" value="Seleccionar una máquina" id="btnBuscarMAquina" class="btn btn-primary" />
+        </div>
+    </div>
+
+    <div class="form-group" style="display:none">
+        @Html.LabelFor(model => model.IdTipoOt, "Origen de Falla", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("IdOrigenDefalla", null, htmlAttributes: new { @class = "form-control" })
+
+        </div>
+    </div>
+    <div class="form-group" style="display:none">
+        @Html.LabelFor(model => model.IdTipoOt, "Tipo De Falla", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("IdTipoDeFalla", null, htmlAttributes: new { @class = "form-control" })
+
+        </div>
+    </div>
+
+
+
+
+    <div class="form-group">
+        @Html.Label("Descripcion del trabajo", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.IdTipoOt, "Tipo", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("IdTipoOt", null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.IdTipoOt, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="inputEmail3" class="col-sm-2 control-label">Fecha Aviso Operaciones</label>
+        <div class="col-sm-10">
+            <input type="date" class="form-control" id="txtFechaAvisoOperaciones" placeholder="Fecha" autocomplete="off">
+            <input type="time" class="form-control" id="txtHoraAvisoOperaciones" placeholder="Fecha" autocomplete="off">
+        </div>
+
+    </div>
+    <div class="form-group">
+        <label for="inputEmail3" class="col-sm-2 control-label">Tu ubicación</label>
+        <div class="col-md-10">
+            @Html.DropDownList("LugarOt", null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.FechaInicio, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @*<div class="form-group">
+        @Html.LabelFor(model => model.FechaTermino, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.FechaTermino, new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+            @Html.ValidationMessageFor(model => model.FechaTermino, "", new { @class = "text-danger" })
+        </div>
+    </div>*@
+
+    <div class="form-group">
+
+        <div class="col-md-offset-2 col-md-10">
+            <p style="text-align:right">
+          @*    <input type="button" value="Guardar" id="btnCorrectiva" class="btn btn-success" />*@
+                <input type="button" value="Guardar" id="btnBuscar" class="btn btn-success" />
+            </p>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal fade " id="dlgMaquina" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Información de la Máquina</h4>
+            </div>
+            <div class="modal-body">
+
+                <div id="listaMaquinas"></div>
+              
+
+             
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+             
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade " id="dlgInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Información de la Máquina</h4>
+            </div>
+            <div class="modal-body">
+
+
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Centro de Consumo</h3>
+                    </div> <div class="panel-body">
+                        <p id="cconsumo" idcconsumo=""></p>
+                    </div>
+                </div>
+
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Centro Responsabilidad</h3>
+                    </div> <div class="panel-body">
+                        <p id="cresp" idcresp=""></p>
+                    </div>
+                </div>
+
+
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Equipo Padre</h3>
+                    </div> <div class="panel-body">
+                        <p id="padre" idPadre=""></p>
+                    </div>
+                </div>
+
+                <span class="label label-danger" id="resumen">Resumen</span>
+                <p id="mensajeCentroResp" class="lead"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <input type="button" value="Guardar" id="btnCorrectiva" class="btn btn-success" />
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade " id="mdlNotificar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Información de la Máquina</h4>
+            </div>
+            <div class="modal-body">
+
+
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">OT Creada</h3>
+                    </div> <div class="panel-body">
+                        <p id="txtConfirmarAcpetar" ></p>
+                    </div>
+                </div>
+
+               
+               
+            </div>
+            <div class="modal-footer">
+             
+                <input type="button" value="Guardar" id="mdlConfirmarAceptar" class="btn btn-success" />
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="correctivas">
+
+</div>
+
+
+
+
+@section Scripts
+{
+
+@Scripts.Render("~/bundles/handsomeTable")
+
+    <script type="text/javascript">
+        var idCreada = 0;
+        $(document).ready(function () {
+        
+            $("#btnBuscarMAquina").click(function () {
+
+                $("#dlgMaquina").modal('show');
+            });
+
+
+            $(document).on('click', '.seleccionarMaquina', function () {
+
+                var idMaquina = $(this).attr('idmaquina');
+                console.log(idMaquina);
+                $("#IdMaquina").val(idMaquina).change();
+                $("#dlgMaquina").modal('hide');
+
+            });
+
+            $.ajax({
+                url: '@Url.Action("VerMaquinasSeleccion", "Maquina")',
+                datatype: 'json',
+                type: 'POST',
+                async: true,
+               // data: { idMaquina: $("#IdMaquina").val() }, // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    var data = eval(data);
+
+                    $("#listaMaquinas").jsonTabla({ tabla: data });
+
+                }
+
+            });
+
+
+            $(document).on('click', '#btnBuscar', function () {
+
+                //$("#cconsumo").text('');
+                //$("#cresp").text('');
+                //$("#cconsumo").attr('cconsumoId', '');
+                //$("#cresp").attr('pcreId', '');
+
+                $("#btnCorrectiva").hide();
+
+                $.ajax({
+                    url: '@Url.Action("VerInformacionPadre", "OT")',
+                    datatype: 'json',
+                    type: 'POST',
+                    async: true,
+                    data: { idMaquina: $("#IdMaquina").val() }, // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+                        var data = eval(data)
+                        if(data.length > 0)
+                        {
+                            $("#padre").html(data[0].Padre);
+                            $("#padre").attr('idPadre',data[0].Id);
+                        }
+
+
+                    }
+
+                });
+
+
+
+                $.ajax({
+                    url: '@Url.Action("VerInformacionEntrega", "OT")',
+                    datatype: 'json',
+                    type: 'POST',
+                    async: true,
+                    data: { idMaquina: $("#IdMaquina").val() }, // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+                        var data = eval(data)
+                        $("#cconsumo").text('Sin informacion asociada');
+                        $("#cresp").text('Sin informacion asociada');
+                        $("#resumen").hide();
+                        $("#mensajeCentroResp").text('');
+
+                        if (data.length > 0 && data[0].cconsumoDes != null) {
+                            $("#cconsumo").text(data[0].cconsumoDes + '(' + data[0].cconsumoCod + ')');
+
+                            $("#cconsumo").attr('idcconsumo',data[0].cconsumoId);
+
+                            $("#cresp").text(data[0].creNombre + '(' + data[0].cconsumoCod + ')');
+
+                            $("#cresp").attr('idcresp',data[0].pcreId);
+
+                            $("#codigo").text(data[0].codigo);
+
+                            $("#btnCorrectiva").show();
+                           
+                        }
+                        else {
+                            $("#resumen").show();
+                            $("#btnCorrectiva").hide();
+                            if (data.codigo == null) {
+                                $("#mensajeCentroResp").text('No se puede hacer una OT porque el componente no tiene una maquina padre');
+                            }
+                            else {
+                                $("#mensajeCentroResp").text('No se puede hacer una OT porque no pude encontrar una centro de responsabilidad en fin700 para el codigo: ' + data[0].codigo);
+                            }
+                            $("#btnEntregar").prop('disabled', true);
+
+                        }
+
+                        $("#dlgInfo").modal('show');
+                    }
+                });
+
+
+
+
+
+            });
+
+
+
+            //  $("#FechaInicio").calendario();
+            //   $("#FechaTermino").calendario();
+            $("#btnCorrectiva").click(function () {
+
+                var obj = {};
+               
+                obj.IdMaquina = $("#IdMaquina").val();
+                obj.Descripcion = $("#Descripcion").val();
+                obj.IdTipoOt = $("#IdTipoOt").val();
+                obj.FechaInicio = $("#FechaInicio").val();
+                obj.FechaTermino = $("#FechaTermino").val();
+                obj.IdCConsumo = $("#cconsumo").attr('idcconsumo');
+                obj.CconsumoDesc = $("#cconsumo").html();
+                obj.CRespDes = $("#cresp").html();
+                obj.IdCResp = $("#cresp").attr('idcresp');
+                obj.LugarOt = $("#LugarOt").val();
+                obj.HoraAvisoOperaciones = $("#txtFechaAvisoOperaciones").text() + ' ' + $("#txtHoraAvisoOperaciones").val();
+                
+                if ($("#IdOrigenDefalla").val() == null || $("#IdTipoDeFalla").val() == null)
+                {
+                    $.notificar({ text: 'No existe Origen y Tipo de fallas asociadas a la máquina seleccionada', title: 'Ups', type: 'danger' });
+                    return;
+                }
+                console.log($("#IdTipoDeFalla").val());
+                $.ajax({
+                    url: '@Url.Action("GuardarOtCorrectiva", "OT")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    data: JSON.stringify({ ot: obj, idOrigenDefalla: $("#IdOrigenDefalla").val(), IdTipoDeFalla: $("#IdTipoDeFalla").val(), idPadre: $("#padre").attr('idPadre') }),
+                    success: function (data) {
+                        data = eval(data);
+                        $("#dlgInfo").modal('hide');
+                        onSuccess(data);
+
+                    }
+
+                });
+
+
+            });
+
+
+
+            $(document).on('change', '#IdMaquina', function () {
+
+                $.ajax({
+                    url: '@Url.Action("VerTipoDeFalla", "OT")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    data: JSON.stringify({ IdMAquina: $("#IdMaquina").val() }),
+                    success: function (data) {
+                        data = eval(data);
+
+                        var texto = "";
+
+                        $.each(data, function (i, item) {
+
+                            texto += "<option value='" + item.Id + "'>" + item.DescripcionFalla + "</option>";
+
+                        });
+
+
+
+                        $("#IdTipoDeFalla").html(texto);
+
+                    }
+
+                });
+
+            });
+
+            //verOtCorrectiva();
+
+
+            var hot = "";
+
+            $("#btnCancelar").click(function () {
+
+                $("#AsistenteActividadesMasivas").fadeOut();
+                $("#btnAbrirAsistente").show();
+
+            });
+
+
+            $("#mdlConfirmarAceptar").click(function () {
+                
+                location.href = '@Url.Action("Index","GestionRepuestos")' + '/Index/' + idCreada;
+            });
+
+
+        });
+
+        function verOtCorrectiva() {
+            $.ajax({
+                url: '@Url.Action("VerOtCorrectiva", "ot")',
+                datatype: 'json',
+                type: 'POST',
+                async: true,
+                //   data: { id: $("#id").val() }, // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    $("#correctivas").jsonTabla({ tabla: data });
+                }
+            });
+        }
+
+
+        function onSuccess(data) {
+
+            data = eval(data);
+            if (data.Resultado == "Guardado") {
+                idCreada = data.Id;
+                // verOtCorrectiva();
+                $("#txtConfirmarAcpetar").text('Agregamos la OT nume: ' + data.Id);
+                $("#mdlNotificar").modal('show');
+                //$.notificar({ text: 'Agregamos tu OT num: ' + data.Id, title: 'Exito', type: 'success' });
+               
+            }
+            else {
+                $.notificar({ text: 'Complete todo los datos del formulario', title: 'Ups', type: 'danger' });
+            }
+
+
+        }
+
+    </script>
+}

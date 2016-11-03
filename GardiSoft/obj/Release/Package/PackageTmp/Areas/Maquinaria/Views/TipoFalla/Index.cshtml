@@ -1,0 +1,230 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Tipos de Falla</h2>
+
+@*-- AGREGAR FALLAS --*@
+
+<div class="well">
+    <div class="form-horizontal">
+        <h4>Utilice el formulario para agregar nuevas fallas</h4>
+        <hr />
+
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Nombre Falla</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" id="txtDescripcionFalla" placeholder="escriba aquí la nueva falla">
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Tipo Máquina</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" name="idMáquina" id="txtidMaquina" disabled placeholder="Tipo Máquina" autocomplete="off">
+                <input type="submit" value="Seleccionar Tipo Máquina" id="btnBuscarMaquina" class="btn btn-success" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Guardar" id="btnGuardarFalla" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="Fallas"> <h2>Fallas</h2></div>
+
+@*MODAL MÁQUINAS*@
+
+<div class="modal fade" id="mdlMaquinas" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Máquinas</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <p>Seleccione Máquina</p>
+                    <div id="VerSeleccionarTipoMaquina"> </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@*--MODAL ELIMINAR --*@
+
+<div class="modal fade " id="mdlEliminarFalla" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Eliminar Falla</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="DescripcionFalla" class="col-sm-2 control-label">Descripcion Falla</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control " disabled id="txtEliminarFalla" placeholder=" " autocomplete="off">
+                        </div>
+                        <div class="col-sm-10">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger EliminarFalla" data-dismiss="modal">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            CargarFallas();
+        });
+
+        //CARGAR FALLAS 
+
+
+
+        function CargarFallas() {
+            $.ajax({
+                url: '@Url.Action("VerFallas", "TipoFalla")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                success: function (data) {
+                    data = eval(data);
+
+                    $("#Fallas").jsonTabla({ tabla: data });
+                }
+            });
+        }
+
+
+        //GUARDAR FALLAS
+
+        $("#btnGuardarFalla").click(function () {
+
+            $.ajax({
+                url: '@Url.Action("GuardarFalla", "TipoFalla")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ Descripcion: $("#txtDescripcionFalla").val(), IdTipoMaquina: $("#txtidMaquina").attr('idTipoMaquina') }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    if (data.Resultado == "Guardado") {
+                        $.notificar({ text: 'Guardado', title: 'Exito', type: 'success' });
+                        $("#txtNombreUsuario").val('')
+                        $("#txtNumeroBodega").val('')
+                        CargarFallas();
+                    }
+                    else {
+                        $.notificar({ text: 'no se pudo guardar', title: 'ups', type: 'danger' });
+                    }
+                    //$("#VerReporte").jsonTabla({ tabla: data });
+                }
+            });
+        });
+
+        //ELIMINAR FALLA  
+
+
+
+
+        $(document).on('click', ".Eliminar", function () {
+            idTipoFalla = $(this).attr('idTipoFalla');
+
+            $("#mdlEliminarFalla").modal('show');
+            var cant = $(this).closest('tr').find("td:eq(1)").html();
+            $("#txtEliminarFalla").val(cant);
+
+        });
+
+        $(document).on('click', ".EliminarFalla", function () {
+            $.ajax({
+                url: '@Url.Action("EliminarFalla", "TipoFalla")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ Id: idTipoFalla }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    if (data.Resultado == "Guardado") {
+                        $.notificar({ text: 'Permiso Eliminado', title: 'Todo listo', type: 'success' });
+                        CargarFallas();
+                    }
+                    else {
+                        $.notificar({ text: 'No se puede Eliminar Permiso.', title: 'Todo listo', type: 'danger' });
+                    }
+
+
+                }
+            });
+
+        });
+
+
+
+        // *****************************************TIPOS MAQU¡INA***************************************
+        $("#btnBuscarMaquina").click(function () {
+            $("#mdlMaquinas").modal('show');
+
+            $.ajax({
+                url: '@Url.Action("VerMaquinas", "TipoFalla")',
+                datatype: 'json',
+                type: 'POST',
+                async: true,
+                //data: { Busqueda: $("#txtProductoBuscar").val(), bodegaId: $("#idBodega").val() }, // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+
+                    var r = eval(data);
+
+                    $("#VerSeleccionarTipoMaquina").jsonTabla({ tabla: r, lengthMenu: [[5, 10, 25], [5, 10, 25]] });
+
+                }
+            });
+
+        });
+
+
+
+
+
+
+
+        $(document).on('click', '.Seleccionar', function () {
+
+            idTipoMaquina = $(this).attr('idTipoMaquina');
+            $("#txtidMaquina").attr('idTipoMaquina', idTipoMaquina);
+            var TM = $(this).closest('tr').find("td:eq(1)").html();
+            $("#txtidMaquina").val(TM);
+            $("#mdlMaquinas").modal('hide');
+
+        });
+
+
+
+    </script>
+ }

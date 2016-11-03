@@ -1,0 +1,59 @@
+﻿@model Entidades.Rrhh.Capacitaciones.Dnc
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Dnc</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.SubProyecto.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SubProyecto.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreCodigo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreCodigo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.usuarioCreador)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.usuarioCreador)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.anio)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.anio)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cerrada)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cerrada)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

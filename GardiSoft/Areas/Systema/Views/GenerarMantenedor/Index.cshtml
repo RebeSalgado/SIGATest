@@ -1,0 +1,224 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Generar Mantenedor</h2>
+
+<div class="well">
+    <div class="form-horizontal">
+        <h4>Utilice el formulario para agregar un nuevo mantenedor</h4>
+        <hr />
+
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Nombre Tabla</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" id="txtNombreTabla" placeholder="escriba aquí el nombre de la tabla">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Nombre Entidad</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" id="txtNombreEntidad" placeholder="escriba aquí el nombre de la entidad">
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="Area" class="col-sm-2 control-label">Área</label>
+            <div class="col-sm-10">
+                <select class="form-control valid txtArea">
+                    <option value="Seleccione">Seleccione</option>
+                    <option value="Contabilidad">Contabilidad</option>
+                    <option value="Control">Control</option>
+                    <option value="Logistica">Logística</option>
+                    <option value="Maquinaria">Máquinaria</option>
+                    <option value="Rrhh">RRHH</option>
+                    <option value="systema">Systema</option>
+                </select>
+            </div>
+        </div>
+
+    </div>
+
+
+    <p style="text-align:right"><input type="button" class="btn btn-success btnAgregarCampos" value="Agregar Campos" /></p>
+</div>
+
+
+
+@*--MODAL Agregar --*@
+
+<div class="modal fade " id="mdlAgregarCampos" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Plan</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="NombrePlan" class="col-sm-2 control-label">Nombre Campo</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="txtNombre" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="TipoDato" class="col-sm-2 control-label">Tipo Dato</label>
+                        <div class="col-sm-10">
+                            <select class="form-control valid txtDato">
+                                <option value="Seleccione">Seleccione</option>
+                                <option value="int">INT</option>
+                                <option value="string">VARCHAR</option>
+                                <option value="BOOLEANO">BOOLEANO</option>
+                                <option value="DECIMAL">DECIMAL</option>
+                                <option value="DATETIME">DATETIME</option>
+                                <option value="FLOAT">FLOAT</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </form>
+            </div>+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success btnAgregarCampo" data-dismiss="modal">Agregar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <h2>Campos</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Campo</th>
+                <th>Tipo Dato</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody id="tblcampos"></tbody>
+    </table>
+</div>
+
+<p style="text-align:right"><input type="button" class="btn btn-success btnAgregarMantenedor" value="Generar" /></p>
+
+<div id="resumen">
+
+</div>
+
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $(".btnAgregarCampo").click(function () {
+
+                var fila = "<tr><td>" + $("#txtNombre").val() + "</td><td>" + $(".txtDato").val() + "</td><td><input class='btn btn-danger btnquitar' value='Quitar' type='button'></td></tr>"
+                $("#tblcampos").append(fila);
+
+            });
+
+
+            $(document).on('click', '.btnquitar', function () {
+
+                $(this).closest('tr').remove();
+            });
+
+
+            // Agregar Campo
+
+            $(document).on('click', ".btnAgregarCampos", function () {
+                $("#mdlAgregarCampos").modal('show');
+
+            });
+
+            $(document).on('click', ".GuardarCampo", function () {
+                $.ajax({
+                    url: '@Url.Action("AgregarCampo", "GenerarMantenedor")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    data: JSON.stringify({ Id: idplan, Nombre: $("#txtNuevoNombre").val() }), // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+                        data = eval(data);
+                        if (data.Resultado == "Guardado") {
+                            $.notificar({ text: 'Plan modificado', title: 'Todo listo', type: 'success' });
+                            cargarPlanes();
+                        }
+                        else {
+                            $.notificar({ text: 'No se puede modificar.', title: 'Todo listo', type: 'danger' });
+                        }
+                    }
+                });
+
+            });
+
+            // Agregar Mantenedor
+            $(document).on('click', ".btnAgregarMantenedor", function () {
+
+
+                var clase = "<p>public class " + $("#txtNombreEntidad").val(); + "</p>";
+                clase += "<p>{</p>"
+
+
+
+                $("#tblcampos tr").each(function (i, item) {
+
+
+                    clase += "<p>public " + $(item).find('td:eq(1)').html() + " " + $(item).find('td:eq(0)').html() + " {get;set;}</p>";
+
+                });
+
+                clase += "<p>}</p>"
+
+                $("#resumen").html(clase);
+
+
+                var entidad = $("#txtNombreEntidad").val();
+
+                var nombretbl = $("#txtNombreTabla").val();
+
+                var nombreArea = $(".txtArea").val();
+
+                var controlador = "<p>using Newtonsoft.Json;</p><p>using System;</p><p>using System.Collections.Generic;</p><p>using System.Data;</p><p>using System.Web;</p><p>using System.Web.Mvc;</p><p>namespace Gardisoft.Areas." + nombreArea + ".Controller<p>{</p><p>Models.GardiSoftContext db = new Models.GardiSoftContext();</p>";
+
+                controlador += "<p> public class " + nombretbl + " Controller : Controller </p>";
+
+                controlador += "<p> public JsonResult Guardar" + entidad + " (Entidades." + nombreArea + "." + nombretbl + " elemento) </p>" +
+                    "<p> { </p>"+
+                    "<p>try {</p> " +
+                        "<p>db."+ nombretbl +".Add(elemento);</p>"+
+                        "<p>db.SaveChanges();</p>"+
+                "<p>return Json(new { Resultado = \"Guardado\" });</p>" +
+
+            "}" +
+            "<p>catch (Exception ex)</p>"+
+                "<p> { </p>"+
+                "<p>return Json(new { Resultado = \"Error\" });</p>" +
+            "<p>}</p>" +
+        "<p>}</p>"
+
+
+                $("#resumen").append('<h1>Controlador</h1>');
+                $("#resumen").append(controlador);
+                $("#resumen").append(campos);
+                
+
+
+            });
+
+
+
+        });
+    </script>
+}
+

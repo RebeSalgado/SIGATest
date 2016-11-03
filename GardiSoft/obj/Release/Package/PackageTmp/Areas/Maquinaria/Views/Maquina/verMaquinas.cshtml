@@ -1,0 +1,124 @@
+﻿@model IEnumerable<Entidades.Uma.Maquina>
+
+
+<table class="table" id="tablaMaquinas">
+    <thead>
+        <tr>
+            <th>
+                Código
+            </th>
+            <th>
+                Tipo
+            </th>
+            <th>
+                Padre
+            </th>
+            <th>
+                Plan
+            </th>
+
+            <th>
+                Ubicación
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Promedio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LecturaActual)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LecturaBase)
+            </th>
+
+            <th>
+                Última Fecha Lectura
+            </th>
+            <th>
+                Última Lectura
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.NumeroSerie)
+            </th>
+
+            <th>
+            </th>
+            <th>
+            </th>
+            <th>
+            </th>
+            <th>
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Codigo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TipoMaquina.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Padre.Codigo)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Plan.Nombre)
+
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ubicacion.Nombre)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Promedio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LecturaActual)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LecturaBase)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.UltimoContadorFecha)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UltimoContador)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumeroSerie)
+                </td>
+                <td>
+                    @if (item.IdPlan > 0)
+                    {
+
+                        @Html.ActionLink("Plan", "ConfigurarPlan", "Maquina", new { idPlan = item.IdPlan, idMaquina = item.Id }, new { @Class = "btn btn-default" })
+
+                    }
+
+
+
+                </td>
+                <td>
+                    @Html.ActionLink("Componentes", "VerComponentes", "Maquina", new { idPlan = item.IdPlan, idMaquina = item.Id }, new { @Class = "btn btn-default" }) 
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Editar", new { id = item.Id }, new { @Class = "btn btn-default" })
+
+                </td>
+                <td>
+                    <button class="btn btn-default eliminarMaquina" idMaquina="@item.Id">Eliminar</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>

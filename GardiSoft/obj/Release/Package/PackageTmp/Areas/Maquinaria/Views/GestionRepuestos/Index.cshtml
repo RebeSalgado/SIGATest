@@ -1,0 +1,1275 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Gestión y solicitud de repuestos</h2>
+
+<div class="well">
+    <div class="form-horizontal">
+        <h4>Busque los respuestos para su OT</h4>
+
+
+        <hr />
+        <div class="form-horizontal">
+          
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Numero de OT</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="idOt" placeholder="Número de OT" autocomplete="off" value="@ViewBag.Id">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10" style="text-align:left">
+                    <input type="submit" value="Buscar" id="btnBuscar" class="btn btn-success" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<h2>Maquina <span id="maquina"></span></h2>
+<p class="lead">Padre: <span id="padre"></span></p>
+<p class="lead" style="display:none">Tipo OT: <span id="tipoOt"></span></p>
+
+
+<div class="modal fade" id="mdlVerRepuestos" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Actividad</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    @*<div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Productos</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="txtProducto" placeholder="código o num parte" autocomplete="off">
+                            </div>
+                        </div>*@
+                    <p>¿Para que actividad quieres el repuesto?</p>
+                    <div id="verAsociarRepuestoActividad"> </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default listoTermine" data-dismiss="modal">Listo, terminé</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="panelGestion" style="display:none">
+        <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <a class="" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseRepuestos" aria-expanded="true" aria-controls="collapseOne">
+                    Utiliza esta sección para agregar repuestos a tu OT
+                </a>
+            </h3>
+        </div>
+        <div class="panel-body " id="collapseRepuestos">
+            <p style="text-align:right">
+                
+               @* <button type="button" style="float:right;margin-right:15px" class="btn btn-primary" id="agregarActividadesCorrectivasModal" data-dismiss="modal">Agregar Actividad</button>*@
+                <button type="button" style="float:right;margin-right:15px" class="btn btn-primary agregarProducto" id="agregarProducto" data-dismiss="modal">Agregar Repuestos</button>
+                <button type="button" style="float:right;margin-right:15px" class="btn btn-warning" id="avisaSolicitud" data-dismiss="modal">Avisar al aprobador</button>
+            </p>
+            <div id="listaRepuestos">
+                <div id="verRepuestosSolicitados" style="width:100%">
+                    <p class="lead">no hay nada solicitado aquí</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-primary" id="panelActividadesCorrectivas">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <a class="" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseCorrectivo" aria-expanded="true" aria-controls="collapseOne">
+                    Utiliza este panel para agregar más actividades
+                </a>
+            </h3>
+        </div>
+        <div class="panel-body" id="collapseCorrectivo" style="min-height:160px;">
+            <div id="pasoImportar">
+                <p style="text-align:right">
+                    <input type="button" class="btn btn-warning" id="btnGuardarActividadesMasiva" value="Agregar Actividades" />
+                </p>
+                <p class="lead">Copie las actividades de su excel o escriba una actividad aquí </p>
+                <div id="actividadesCorrectivasMasivas">
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+    <!--- Gestión repuestos Correctivos-->
+</div>
+
+@* se movío a la opción "Finalizar turno"
+    <div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseCorrectivo" aria-expanded="true" aria-controls="collapseOne">
+                Actividades Correctivas
+            </a>
+        </h3>
+    </div>
+    <div class="panel-body" id="collapseCorrectivo">
+
+
+        <div id="pasoVerCorrectivas">
+            <p style="text-align:right">
+
+                <input type="button" class="btn btn-warning cerrarOt" value="Cerrar OT" />
+            </p>
+            <p class="lead">utilice este listado para marcar las actividades que ha completado</p>
+
+            <div id="listaActividadesCorrectivas">
+
+
+            </div>
+        </div>
+    </div>
+</div>*@
+
+@*MODAL BODEGAS*@ 
+
+
+
+
+<div class="modal fade " id="mdlCantidad" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-admin" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p style="text-align:right">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>
+                </p>
+                <h4 class="modal-title" id="myModalLabel">Producto</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label for="inputEmail3" @*class="col-sm-2 control-label"*@>Bodega</label>
+                        @*<div class="col-sm-10">*@
+                            <input type="text" class="form-control input-sm" name="idBodega" id="txtidBodega" readonly placeholder="Código de bodega" autocomplete="off">
+                           
+                       @*  </div>*@
+                    </div>
+                    <div class="form-group">
+                        <input type="button" value="Seleccionar Bodega" id="btnBuscarBodega" class="btn btn-success" />
+                    </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" @*class="col-sm-2 control-label"*@>Producto</label>
+                            @*<div class="col-sm-10">*@
+                                <input type="text" class="form-control input-sm" id="txtProductoBuscar" placeholder="código o num parte" autocomplete="off">
+                                <input type="button" class="btn btn-default btn-sm" id="btnMdlProductoBuscar" value="Buscar" />
+                           @* </div> *@
+
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" @*class="col-sm-2 control-label"*@>Cantidad</label>
+                            @*<div class="col-sm-10">*@
+                                <input type="text" class="form-control input-sm" id="txtCantidad" placeholder="ej. 5 - 10 - 20" autocomplete="off">
+                            @*</div>*@
+                        </div>
+                        <div id="mdlCantidadTablaRepuestos"></div>
+</form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade " id="mdlEliminar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Quitar</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Cantidad</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="txtCantidadEliminar" placeholder=" " autocomplete="off">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger QuitarRepuestoActividad" data-dismiss="modal">Quitar</button>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade " id="mdlAgregarPreventivo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Quitar</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">¿Cuantos más?</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="txtCantidadAgregarPreventivo" placeholder=" " autocomplete="off">
+
+                        </div>
+                    </div>
+                    <span class="lead">Necesitará aprobación para retirar la cantidad seleccionada</span>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary btnGuardarAgregarPreventivo" data-dismiss="modal">Solicitar</button>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade " id="mdlDuplicado" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Posible Duplicado</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label"></label>
+                        <div class="col-sm-10">
+                            <p>producto que trata de agregar esta asociado también a las siguientes actividad(es):</p>
+                            <div id="listaActividadesEnProducto">
+
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">ah, entonces no</button>
+                <button type="button" class="btn btn-primary btnConfirmarAgregar " data-dismiss="modal">Agregar igual</button>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade " id="mdlAvisoAprobador" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">¿Quieres Avisar al aprobador?</h4>
+            </div>
+            <div class="modal-body">               
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">correo aprobador</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="txtMailAprobador" placeholder="">
+
+                            </div>
+                        </div>
+                        <span class="lead">Se le enviará un aviso al aprobador con su solicitud</span>
+                    </form>               
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">No enviar aún</button>
+                <button type="button" class="btn btn-primary btnConfirmarAprobador " data-dismiss="modal">Enviar</button>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade " id="mdlCerrarOt" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-admin" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p style="text-align:right">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>
+                </p>
+                <h4 class="modal-title" id="myModalLabel">Cerrar OT</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Fecha Aviso Operaciones</label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control" id="txtFechaAvisoOperaciones" placeholder="Fecha" autocomplete="off">
+                            <input type="time" class="form-control" id="txtHoraAvisoOperaciones" placeholder="Fecha" autocomplete="off">
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Fecha Intervención</label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control" id="txtFechaIntervencion" placeholder="Fecha" autocomplete="off">
+                            <input type="time" class="form-control" id="txtHoraIntervencion" placeholder="Hora" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Minutos en mantención</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="txtTiempoIntervencion" placeholder="tiempo en minutos.." autocomplete="off" value="0">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Origen de Falla</label>
+                        <div class="col-sm-10">
+                            @Html.DropDownList("IdOrigenDefalla", null, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Tipo Falla</label>
+                        <div class="col-sm-10">
+                            <select id="IdTipoDeFalla" class="form-control"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label"></label>
+                        <div class="col-sm-10">
+                            <input type="checkbox" id="chkOperativa"> Máquina lista para operaciones.
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Observaciones de cierre</label>
+                        <div class="col-sm-10">
+                            <textarea id="observacionDeCierre" rows="2" cols="120"></textarea>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-success cerrarGuardarOt">Finalizar OT</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade " id="mdlActividadCorrectivas" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p style="text-align:right">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>
+                </p>
+                <h4 class="modal-title" id="myModalLabel">Agregar Actividad</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Actividad</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="actividadCorrectivaNueva" id="actividadCorrectivaNueva" placeholder="su actividad aquí" autocomplete="off">
+
+                        </div>
+                    </div>
+                </div>
+                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Listo</button>
+                <button type="button" class="btn btn-success" id="btnGuardarActividadesMasiva">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="mdlBodegas" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Bodegas</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <p>Seleccione Bodega</p>
+                    <div id="VerSeleccionarBodega"> </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+@Scripts.Render("~/bundles/handsomeTable")
+@Scripts.Render("~/bundles/switch")
+
+    <script type="text/javascript">
+        var IdMaquina = 0;
+        var idManoDeObra = 0;
+        var minutos = 0;
+        var valor = 0;
+        var $boton;
+
+        var idActividadCorrectiva = 0 //guarda la activdad que se selecciona al vincula a un repuesto Correctivo
+        var idRepuestoCorrectiva = 0; //guarda la activdad que se selecciona al vincula a un repuesto Correctivo
+
+        var idDetallePreventivo = 0;
+
+
+        var idActividadPreventiva = 0;
+        var idProductoPreventivo = 0;
+
+
+        $(document).ready(function () {
+
+            buscarOt(); // busca la ot apenas carga la página
+
+            $(document).on('click', '#agregarActividadesCorrectivasModal', function () {
+                $("#mdlActividadCorrectivas").modal('show');
+            });
+
+
+            $(document).on('click', '.cerrarOt', function () {
+               var IdCierre = $("#idOt").val();
+                ot = verFallasOt(IdCierre);
+
+                $.ajax({
+                    url: '@Url.Action("VerTipoDeFalla", "OT")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    data: JSON.stringify({ IdMAquina: IdMaquina }),
+                    success: function (data) {
+                        data = eval(data);
+                        var texto = "";
+                        $.each(data, function (i, item) {
+                            texto += "<option value='" + item.Id + "'>" + item.DescripcionFalla + "</option>";
+                        });
+                        
+                        $("#IdTipoDeFalla").html(texto);
+
+                        $("#IdTipoDeFalla").val(ot.IdFalla);
+                        $("#IdOrigenDefalla").val(ot.IdOrigen);
+                        $("#txtFechaAvisoOperaciones").val(ot.FechaAvisoOperaciones);
+                        $("#txtHoraAvisoOperaciones").val(ot.HoraAvisoOperaciones);
+                        $("#txtFechaIntervencion").val(ot.FechaIntervencionMaquina);
+                        $("#txtHoraIntervencion").val(ot.HoraIntervencionMaquina);
+                        $("#mdlCerrarOt").modal('show');
+                    }
+
+                });
+
+            });
+
+            //cargarActividadesCorrectivas();
+
+            $(".cerrarGuardarOt").click(function () {
+
+                $.ajax({
+                    url: '@Url.Action("CerrarOtOperaciones", "OT")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    data: JSON.stringify({ horaAvisoOperaciones: $("#txtFechaAvisoOperaciones").val() + ' ' + $("#txtHoraAvisoOperaciones").val(), horaIntervencionMaquina: $("#txtFechaIntervencion").val() + ' ' + $("#txtHoraIntervencion").val(), minutosDeIntervencion: $("#txtTiempoIntervencion").val(), quedoOperativa: $("#chkOperativa").prop('checked'), observaciones: $("#observacionDeCierre").val(), Id: $("#idOt").val(), IdOrigen: $("#IdOrigenDefalla").val(), IdFalla: $("#IdTipoDeFalla").val() }),
+                    success: function (data) {
+                        data = eval(data);
+                        if (data.Resultado == "Guardado") {
+                            $.notificar({ text: 'OT Cerrada', title: 'Todo listo', type: 'success' });
+                        }
+                        else {
+                            $.notificar({ text: 'no pudimos cerra esta ot', title: 'Error', type: 'danger' });
+                        }
+                      
+                        $("#mdlCerrarOt").modal('hide');
+                    }
+                });
+            });
+
+            $(".listoTermine").click(function () {
+                $("#mdlAvisoAprobador").modal('show');
+
+            });
+
+            $("#avisaSolicitud").click(function () {
+
+                $("#mdlAvisoAprobador").modal('show');
+
+            });
+
+
+            $(".btnConfirmarAprobador").click(function () {
+
+                $.ajax({
+                    url: '@Url.Action("EnviarEmailAprobador", "gestionRepuestos")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    data: JSON.stringify({ id: $("#idOt").val(), correo: $("#txtMailAprobador").val() }),
+                    success: function (data) {
+                        $.notificar({ text: 'Correo enviado', title: 'Todo listo', type: 'success' });
+                        cargarRepuestosSolicitadosPreventivo();
+                        $("#mdlVerRepuestos").modal('hide');
+
+                    }
+                });
+
+            });
+
+
+            var container = document.getElementById('actividadesCorrectivasMasivas');
+            hot = new Handsontable(container, {
+                data: [[""]],
+                fixedColumnsLeft: 0,
+                minSpareRows: 0,
+                minSpaceCols: 0,
+                rowHeaders: true,
+                colHeaders: ["Nombre Actividad"],
+                contextMenu: false,
+                //afterChange : cambio
+            });
+
+
+            $(document).on('click', '.btnAgregarPreventivo', function () {
+                idActividadPreventiva = $(this).attr('idactividad');
+                idProductoPreventivo = $(this).attr('idrecurso');
+                $("#mdlAgregarPreventivo").modal('show');
+
+            });
+
+            $(document).on('click', '.btnGuardarAgregarPreventivo', function () {
+
+                $.ajax({
+                    url: '@Url.Action("GuardarRecursoOtPreventivo", "OT")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    data: JSON.stringify({ idDetalle: idActividadPreventiva, idProducto: idProductoPreventivo, cantidad: $("#txtCantidadAgregarPreventivo").val(), aprobado: false }), // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+                        $.notificar({ text: 'Repuesto agregado', title: 'Todo listo', type: 'success' });
+                        cargarRepuestosSolicitadosPreventivo();
+                        $("#mdlVerRepuestos").modal('hide');
+
+                    }
+                });
+
+            });
+
+
+            $("#btnGuardarActividadesMasiva").click(function () {
+                var actividades = [];
+                for (var i = 0; i < hot.countRows() ; i++) {
+                    var actividad = {};
+                    actividad = hot.getDataAtCell(i, 0);
+                    actividades.push(actividad);
+                }
+                console.log('guardaCorrectiva');
+
+                $.ajax({
+                    url: '@Url.Action("GuardarActividadesMasiva", "OT")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    data: JSON.stringify({ actividades: actividades, idOt: $("#idOt").val() }), // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+                        $.notificar({ text: 'Agregamos tus actividades', title: 'Todo listo', type: 'success' });
+                        VerRepuestosCorrectivosSolicitados();
+                        cargarActividadesCorrectivas();
+                       // $("#mdlActividadCorrectivas").modal('hide');
+                        ////BORRAR LOS DATOS DE UNA GRID HANDSONTABLE↨
+                        for (var i = 0; i < hot.countRows() ; i++) {
+                            var actividad = {};
+                            actividad = hot.setDataAtCell(i, 0, '');
+                            actividades.push(actividad);                        
+                          
+                            //volerALista();
+
+                        }
+                        cargarActividadesCorrectivas();
+                    }
+                });
+
+
+            });
+
+            $("#btnMdlProductoBuscar").click(function () {
+
+                $.ajax({
+                    url: '@Url.Action("VerProductos", "OT")',
+                    datatype: 'json',
+                    type: 'POST',
+                    async: false,
+                    data: { Busqueda: $("#txtProductoBuscar").val(), bodegaId: $("#txtidBodega").attr('idbodega') }, // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+
+                        var r = eval(data);
+
+                        $("#mdlCantidadTablaRepuestos").jsonTabla({ tabla: r, lengthMenu: [[5, 10, 25], [5, 10, 25]] });
+                        
+                        $("#mdlCantidadTablaRepuestos .dt-buttons").hide();
+
+                        $("#mdlCantidadTablaRepuestos #DataTables_Table_3_length").hide();
+
+                    }
+                });
+
+            });
+
+
+
+
+            // *****************************************BODEGAS***************************************
+            $("#btnBuscarBodega").click(function () {
+                $("#mdlBodegas").modal('show');
+
+                $.ajax({
+                    url: '@Url.Action("PermisoUsuario", "PermisosBodega")',
+                    datatype: 'json',
+                    type: 'POST',
+                    async: true,
+                    //data: { Busqueda: $("#txtProductoBuscar").val(), bodegaId: $("#idBodega").val() }, // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+
+                        var r = eval(data);
+
+                        $("#VerSeleccionarBodega").jsonTabla({ tabla: r, lengthMenu: [[5, 10, 25], [5, 10, 25]] });
+
+                    }
+                });
+
+            });
+
+
+            $(document).on('click', '.Seleccionar', function () {
+
+                idBodega = $(this).attr('idbodega');
+                $("#txtidBodega").attr('idbodega', idBodega);
+                var Bod = $(this).closest('tr').find("td:eq(0)").html();
+                $("#txtidBodega").val(Bod);
+                $("#mdlBodegas").modal('hide');
+
+            });
+
+            $(document).on('click', '.seleccionarProducto', function () {
+
+                idRepuestoCorrectiva = $(this).attr('idproducto');
+
+
+                var boton = $(this);
+                var val = false;
+
+                $('#verAsociarRepuestoActividad tbody').find('tr').each(function (i, item) {
+
+                    if ($(item).css('background-color') == 'rgb(243, 146, 0)' && $("#txtCantidad").val() > 0) //-------- **Recordar que edge utiliza RGB **-----------
+                    {
+                        val = true;
+                    }
+                });
+
+
+
+                if (val == false) {
+                    $.notificar({ text: 'Debe seleccionar un repuesto y una cantidad', title: 'Error', type: 'danger' });
+                }
+                else {
+
+                    var actividades = "";
+                    var requiereConfirmacion = false;
+                    var productoNuevo = $(this).closest('tr').find('td:eq(0)').html();
+                    $("#verRepuestosSolicitados tbody").find('tr').each(function (i, item) {
+
+                        if ($.trim($(item).find('td:eq(1)').find('p:eq(1)').text()) == $.trim(productoNuevo)) {
+                            actividades += "<p>" + $.trim($(item).find('td:eq(1)').find('p:eq(0)').text()) + "</p>";
+                            requiereConfirmacion = true;
+                        }
+
+                    });
+
+                    $("#listaActividadesEnProducto").html(actividades)
+
+
+                    if (requiereConfirmacion == false) {
+
+                        agregarRepuestocorrectivo(idRepuestoCorrectiva);
+
+                    }
+                    else {
+                        $("#mdlDuplicado").modal('show');
+                    }
+
+                }
+             
+            });
+
+
+            $(".btnConfirmarAgregar").click(function () {
+
+                agregarRepuestocorrectivo(idRepuestoCorrectiva);
+
+            });
+
+            $(document).on('click', '.eliminar', function () {
+
+                var boton = $(this);
+                var id = $(this).attr('id');
+
+                $.ajax({
+                    url: '@Url.Action("EliminarSolicitudDeRepuesto", "OT")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    data: JSON.stringify({ id: id }),
+                    success: function (data) {
+                        data = eval(data);
+                        if (data.Resultado == "Guardado") {
+                            $.notificar({ text: 'Repuesto Eliminado', title: 'Todo listo', type: 'success' });
+                            VerRepuestosCorrectivosSolicitados();
+                        }
+                        else {
+                            $.notificar({ text: 'No es posible eliminar', title: 'Todo listo', type: 'danger' });
+                        }
+                    }
+                });
+
+            });
+
+
+            @*$(document).on('click', '.guardarRepuestoActividad', function () {
+
+            var boton = $(this);
+            var val = false;
+
+            $('#verAsociarRepuestoActividad tbody').find('tr').each(function (i, item) {
+
+                if ($(item).css('background-color') == 'rgb(243, 146, 0)' && productoEncontrado == true && $("#txtCantidad").val() > 0) //-------- **Recordar que edge utiliza RGB **-----------
+                {
+                    val = true;
+                }
+            });
+
+            if (val == false) {
+                $.notificar({ text: 'Debe seleccionar un repuesto y una actividad', title: 'Error', type: 'danger' });
+            }
+            else {
+
+                if ($("#tipoOt").text() == '2' || $("#tipoOt").text() == '6') {
+
+                    $.ajax({
+                        url: '@Url.Action("GuardarRecursoOtPreventivo", "OT")',
+                        datatype: 'json',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        async: true,
+                        data: JSON.stringify({ idDetalle: idDetallePreventivo, idProducto: idRepuestoCorrectiva, cantidad: $("#txtCantidad").val(), aprobado: false }), // o sin stringify para datos primitivos  {rut : item.rut },
+                        success: function (data) {
+                            $.notificar({ text: 'Repuesto agregado', title: 'Todo listo', type: 'success' });
+                            cargarRepuestosSolicitadosPreventivo();
+                            $("#mdlVerRepuestos").modal('hide');
+
+                        }
+                    });
+                }
+                else
+                {
+
+                    $.ajax({
+                        url: '@Url.Action("GuardarRecursoOtCorrectivo", "OT")',
+                        datatype: 'json',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        async: true,
+                        data: JSON.stringify({ idDetalle: idActividadCorrectiva, idProducto: idRepuestoCorrectiva, cantidad: $("#txtCantidad").val(), aprobado: false }), // o sin stringify para datos primitivos  {rut : item.rut },
+                        success: function (data) {
+                            $.notificar({ text: 'Repuesto agregado', title: 'Todo listo', type: 'success' });
+                            VerRepuestosCorrectivosSolicitados();
+                            $("#mdlVerRepuestos").modal('hide');
+
+                        }
+                    });
+
+                }
+
+                // $.notificar({ text: 'Exito', title: 'Todo listo', type: 'success' });
+            }
+
+        });*@
+
+            $("#btnBuscar").click(function () {
+
+                //if ($("#idOt").val() == '' || $("#txtidBodega").val() == '') {
+                //    $.notificar({ text: 'Seleccione boega y OT', title: 'Falta información', type: 'danger' });
+                //    return;
+                //}
+                buscarOt();
+
+
+            });
+
+
+
+
+            $(document).on('click', ".btnEliminar", function () {
+
+                $boton = $(this);
+                var maximo = parseInt($boton.closest('tr').find('td:eq(3)').html()) - parseInt($boton.closest('tr').find('td:eq(4)').html());
+
+                $("#txtCantidadEliminar").unbind('keyup').keyup(function () {
+
+                    if ($("#txtCantidadEliminar").val() < 0) {
+                        $("#txtCantidadEliminar").val('0');
+                    }
+
+
+                    if (parseInt($("#txtCantidadEliminar").val()) > maximo) {
+                        $("#txtCantidadEliminar").val(maximo);
+                    }
+
+                });
+
+                $("#txtCantidadEliminar").val(maximo);
+                $("#mdlEliminar").modal('show');
+
+
+
+            });
+
+
+            $(document).on('click', ".btnEliminarPreventivo", function () {
+
+                $boton = $(this);
+                var maximo = parseInt($boton.closest('tr').find('td:eq(3)').html()) - parseInt($boton.closest('tr').find('td:eq(4)').html());
+
+                $("#txtCantidadEliminar").unbind('keyup').keyup(function () {
+
+                    if ($("#txtCantidadEliminar").val() < 0) {
+                        $("#txtCantidadEliminar").val('0');
+                    }
+
+
+                    if (parseInt($("#txtCantidadEliminar").val()) > maximo) {
+                        $("#txtCantidadEliminar").val(maximo);
+                    }
+
+                });
+
+                $("#txtCantidadEliminar").val(maximo);
+                $("#mdlEliminar").modal('show');
+
+
+
+            });
+
+
+
+            $(document).on('click', '.agregarProducto', function () {
+
+
+                $.ajax({
+                    url: '@Url.Action("VerAsociarRepuestoActividad", "OT")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ idOt: $("#idOt").val() }),
+                    async: false,
+                    success: function (data2) {
+                        data2 = eval(data2);
+
+                        $("#verAsociarRepuestoActividad").jsonTabla({ tabla: data2, lengthMenu: [[5, 10], [5, 10]] });
+
+                        $("#verAsociarRepuestoActividad .dt-buttons").hide();
+
+                        $("#verAsociarRepuestoActividad #DataTables_Table_1_length").hide();
+
+                    }
+                });
+
+
+                $('#verAsociarRepuestoActividad tbody').find('tr').each(function (i, item) {
+                    $(item).css('background-color', '');
+                    $(item).css('color', '');
+                });
+                productoEncontrado = false;
+                $("#txtProducto").val('');
+                $("#mdlVerRepuestos").modal('show');
+
+            });
+
+
+
+
+
+
+            $(document).on('click', '.QuitarRepuestoActividad', function () {
+
+
+                if ($("#tipoOt").text() == '2' || $("#tipoOt").text() == '6') {
+                    $.ajax({
+                        url: '@Url.Action("QuitarRecursoOtPreventivo", "GestionRepuestos")',
+                        datatype: 'json',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        async: true,
+                        data: JSON.stringify({ idDetalle: $boton.attr('idactividad'), idProducto: $boton.attr('idrecurso'), cantidad: $("#txtCantidadEliminar").val(), aprobado: ($boton.attr('estado') == 0) ? false : true }), // o sin stringify para datos primitivos  {rut : item.rut },
+                        success: function (data) {
+                            $.notificar({ text: 'Repuesto quitado', title: 'Todo listo', type: 'success' });
+                            cargarRepuestosSolicitadosPreventivo();
+                            $("#mdlEliminar").modal('hide');
+
+
+
+                        }
+                    });
+
+                }
+                else {
+                    $.ajax({
+                        url: '@Url.Action("QuitarRecursoOtCorrectivo", "GestionRepuestos")',
+                        datatype: 'json',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        async: true,
+                        data: JSON.stringify({ idDetalle: $boton.attr('idactividad'), idProducto: $boton.attr('idrecurso'), cantidad: $("#txtCantidadEliminar").val(), aprobado: ($boton.attr('estado') == 0) ? false : true }), // o sin stringify para datos primitivos  {rut : item.rut },
+                        success: function (data) {
+                            $.notificar({ text: 'Repuesto quitado', title: 'Todo listo', type: 'success' });
+                            VerRepuestosCorrectivosSolicitados();
+                            $("#mdlEliminar").modal('hide');
+
+                        }
+                    });
+                }
+
+
+            });
+
+            $(document).on('click', '.seleccionarActividad', function () {
+
+                var boton = $(this);
+
+                idActividadCorrectiva = $(this).attr('id');
+
+                $('#verAsociarRepuestoActividad').find('tr').each(function (i, item) {
+
+                    $(item).css('background-color', '');
+                    $(item).css('color', '');
+
+
+                });
+
+                $(boton).closest('tr').css('background-color', '#f39200');
+                $(boton).closest('tr').css('color', '#ffffff');
+
+            });
+
+            $(document).on('click', ".Cantidad", function () {
+                idDetallePreventivo = $(this).closest('tr').find('td:eq(0)').html();
+                valor = $(this).attr('valor');
+                $("#mdlCantidadTablaRepuestos").html('');
+                $("#mdlCantidad").modal('show');
+
+
+            });
+
+            $('#mdlCantidad').on('shown.bs.modal', function (e) {       //al abrir entrega el foco a la caja de texto
+                $("#txtProducto").focus();
+
+            });
+
+
+            $("#txtProducto").typeahead({
+
+                source: function (query, process) {
+                    var nombres = [];
+
+                    var obj = {};
+                    obj.busqueda = $("#txtProducto").val();
+                    //  obj.cantidad = 20;
+                    $.ajax({
+                        url: '@Url.Action("VerProductos", "OT")',
+                        type: "POST",
+                        async: true,
+                        data: { busqueda: obj.busqueda },
+                        dataType: "JSON",
+                        success: function (datos) {
+                            // var objeto = eval(datos.d);
+
+                            objeto = eval(datos);
+                            $.map(objeto, function (item) {
+                                var nombre = item.Codigo + " " + item.Descripcion;
+                                var itm = {
+                                    // rut: item.Rut,
+                                    name: item.Descripcion,
+                                    id: item.Id,
+                                    //cargo: item.Cargo,
+                                    toString: function () {
+                                        return JSON.stringify(this);
+                                    },
+                                    toLowerCase: function () {
+                                        return this.name.toLowerCase();
+                                    },
+                                    indexOf: function (string) {
+                                        return String.prototype.indexOf.apply(this.name, arguments);
+                                    },
+                                    replace: function (string) {
+                                        var value = '';
+                                        value += this.name;
+                                        if (typeof (this.level) != 'undefined') {
+                                            value += ' <span class="pull-right muted">';
+                                            value += this.level;
+                                            value += '</span>';
+                                        }
+                                        return String.prototype.replace.apply('<div style="padding: 1px 2px; font-size: 12px;">' + value + '</div>', arguments);
+                                    }
+                                };
+                                nombres.push(itm);
+                            });
+                            return process(nombres);
+                        }
+                    });
+                },
+                matcher: function () {
+                    return true;
+                },
+                property: 'name',
+                items: 10,
+                minLength: 3,
+                updater: function (item) {
+                    productoEncontrado = true;
+                    var item = JSON.parse(item);
+                    productoId = item.id;
+                    idRepuestoCorrectiva = item.id;
+                    return item.name;
+                }
+            });
+
+
+        });
+
+
+        function agregarRepuestocorrectivo(idRepuestoCorrectiva) {
+            $.ajax({
+                url: '@Url.Action("GuardarRecursoOtCorrectivo", "OT")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ idDetalle: idActividadCorrectiva, idProducto: idRepuestoCorrectiva, cantidad: $("#txtCantidad").val(), aprobado: false }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    $("#mdlCantidad").modal('hide');
+                    VerRepuestosCorrectivosSolicitados();
+
+                    $("#txtCantidad").val('')
+                    $.notificar({ text: 'Repuesto agregado', title: 'Todo listo', type: 'success' });
+                }
+            });
+        }
+
+
+        function VerRepuestosCorrectivosSolicitados() {
+            $.ajax({
+                url: '@Url.Action("VerRepuestosSolicitadosCorrectivo", "GestionRepuestos")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ idOt: $("#idOt").val(),idBodega:$("#txtidBodega").attr('idbodega') }),
+                async: true,
+                success: function (data) {
+                    data = eval(data);
+                    console.log(data);
+                    $("#verRepuestosSolicitados").jsonTabla({ tabla: data });
+
+                }
+            });
+
+        }
+
+
+
+        function cargarRepuestosSolicitadosPreventivo() {
+
+            $.ajax({
+                url: '@Url.Action("VerRepuestosSolicitadosPreventivos", "GestionRepuestos")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ idOt: $("#idOt").val(), idBodega: $("#txtidBodega").attr('idbodega') }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    $("#verRepuestosSolicitados").jsonTabla({ tabla: data });
+
+                }
+            });
+
+        }
+
+
+        function cargarActividadesCorrectivas()
+        {
+            console.log('asasas');
+            $.ajax({
+                url: '@Url.Action("VerActividadesCorrectivasOT", "OT")', //muestra todas las actividades
+                datatype: 'json',
+                type: 'POST',
+                async: false,
+                data: { id: $("#idOt").val() }, // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+
+                    var r = eval(data);
+
+                    $("#listaActividadesCorrectivas").jsonTabla({ tabla: r,lengthMenu : [[-1, 10, 25], ["Todo", 10, 25]] });
+
+                    $(".bootstrap-switch-default").bootstrapSwitch({ //carga los switch
+                        onText : 'Si',
+                        offText : 'No',
+                    });
+
+
+
+
+                    //al cambiar un switch actualiza la información
+                    $('.bootstrap-switch-default').on('switchChange.bootstrapSwitch', function(event, state) {
+                        var chk = $(this);
+
+                        $.ajax({
+                            url: '@Url.Action("ActualizarAvanceOt", "OT")',
+                            datatype: 'json',
+                            type: 'POST',
+                            async: true,
+                            data: { id: $(this).attr('id'),estado: (state?100:0) , idTipo :1 }, // o sin stringify para datos primitivos  {rut : item.rut },
+                            success: function (data2) {
+                                console.log(data2);
+
+                                if(data2.Resultado == "Cerrada")
+                                {
+                                    $.notificar({ text: 'La ot se encuentra cerrada', type: 'danger' });
+                                    chk.bootstrapSwitch('state', !state, !state);
+
+                                }
+                                else
+                                {
+                                    data2 = eval(data2);
+                                    //avanza o retrocede la barra de progreso
+                                    $(".progress-bar").html(data2[0].porcentajeFinalizado + '%');
+                                    $(".progress-bar").css('width',data2[0].porcentajeFinalizado + '%');
+
+
+                                    if(data[0].porcentajeFinalizado == 100)
+                                    {
+                                        $("#felicitacion").html('<p class="lead"><i class="fa fa-smile-o fa-4" style="margin-right:15px"></i>Excelente trabajo a todo el equipo!!</p>')
+                                    }
+                                    else
+                                    {
+                                        $("#felicitacion").html('');
+                                    }
+                                }
+
+                            }
+                        });
+
+
+                    });
+
+                }
+            });
+        }
+
+
+
+        function verFallasOt(id) {
+            var ot = {};
+            $.ajax({
+                url: '@Url.Action("VerFallasOt", "OT")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: false,
+                data: JSON.stringify({ id: id }),
+                success: function (data) {
+                    ot = eval(data);
+
+                }
+            });
+            return ot;
+        }
+
+        function buscarOt()
+        {
+            if ($("#idOt").val() == "")
+            {
+                $.notificar({ text: 'escriba el numero de su OT', type: 'danger' });
+            }
+
+
+            $("#panelGestion").hide();
+            $("#panelActividadesCorrectivas").css('display', 'none');
+
+            $.ajax({
+                url: '@Url.Action("verOt", "GestionRepuestos")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: false,
+                data: JSON.stringify({ idOt: $("#idOt").val() }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    IdMaquina = data.IdMaquina;
+                    $("#panelGestion").show();
+
+                    $("#tipoOt").text(data.IdTipoOt);
+                    $("#maquina").text(data.Maquina.Codigo);
+                    if (data.MaquinaPadre != null) {
+                        $("#padre").text(data.MaquinaPadre.Codigo);
+                    }
+
+                    if ($("#tipoOt").text() == '2' || $("#tipoOt").text() == '6') {
+                        $("#panelActividadesCorrectivas").css('display', 'none');
+                        $("#agregarProducto").css('display', 'none');
+                    }
+                    else {
+                        $("#panelActividadesCorrectivas").css('display', 'block');
+                        $("#agregarProducto").css('display', 'block');
+                    }
+
+                    if ($("#tipoOt").text() == '2' || $("#tipoOt").text() == '6') {
+                        cargarRepuestosSolicitadosPreventivo();
+                    }
+                    else {
+                        VerRepuestosCorrectivosSolicitados();
+                        cargarActividadesCorrectivas();
+                    }
+                }
+            });
+
+
+
+        }
+
+    </script>
+}

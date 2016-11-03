@@ -1,0 +1,154 @@
+﻿
+@{
+    ViewBag.Title = "HistoricoPrecios";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Historial de precios</h2>
+
+
+<div class="well">
+    <div class="form-horizontal">
+        <h4>Escriba el código, nombre, o cualquier texto que identifiqué un producto.</h4>
+        <hr />
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Producto</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control col-lg-6" id="txtProducto" readonly placeholder="Código, Descripción o parte" autocomplete="off" >
+                </div>
+            </div>
+         
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="button" id="btnVer" class="btn btn-success">Buscar</button>
+                </div>
+            </div>
+        </form>
+           
+
+        </div>
+    </div>
+
+<h2>Precios</h2>
+<p class="lead">Aquí se mostrarán todas las comprás realizadas</p>
+<div id="precios">
+
+</div>
+
+<div class="modal fade " id="mdlCantidad" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-admin" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p style="text-align:right">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>
+                </p>
+                <h4 class="modal-title" id="myModalLabel">Producto</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Producto</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="txtProductoBuscar" placeholder="código o num parte" autocomplete="off">
+                            <input type="button" class="btn btn-default" id="btnMdlProductoBuscar" value="Buscar" />
+                        </div>
+
+                    </div>
+                 
+                    <div id="mdlCantidadTablaRepuestos"></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<h2>Proveedores</h2>
+<div id="proveedores">
+
+</div>*@
+
+
+
+@section Scripts
+{
+    <script type="text/javascript">
+     
+    $(document).ready(function () {
+
+        $("#btnVer").click(function () {         
+            $("#mdlCantidad").modal('show'); 
+        });
+
+
+        $("#btnMdlProductoBuscar").click(function () {
+
+            $.ajax({
+                url: '@Url.Action("BuscarProductos", "AbastecimientoOC")',
+                datatype: 'json',
+                type: 'POST',
+                async: true,
+                data: { Busqueda: $("#txtProductoBuscar").val(), bodegaId: $("#idBodega").val() }, // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+
+                    var r = eval(data);
+
+                    $("#mdlCantidadTablaRepuestos").jsonTabla({ tabla: r, lengthMenu: [[5, 10, 25], [5, 10, 25]] });
+
+                }
+            });
+
+        });
+
+
+
+
+        $(document).on('click', ".seleccionarProducto", function () {
+
+            var productoId = $(this).attr('idproducto');
+
+            $("#mdlCantidad").modal('hide');
+            $("#txtProducto").val($(this).closest('tr').find('td:eq(1)').html() + ' - ' + $(this).closest('tr').find('td:eq(2)').html());
+            verPrecios(productoId);
+
+
+
+        });
+
+      
+
+
+    });
+
+
+        function verPrecios(productoId)
+        {
+            $.ajax({
+                url: '@Url.Action("VerPrecios", "AbastecimientoOc")',
+                datatype: 'json',
+                type: 'POST',
+                async: true,
+                data: { producto: productoId }, // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+
+                    var r = eval(data);
+                    if (r.length > 0) {
+                        $("#precios").jsonTabla({ tabla: r });
+                    }
+                    else
+                    {
+                        $.notificar({ text: 'No hay compras para este código', title: 'Todo listo', type: 'danger' });
+                    }
+
+                }
+            });
+        }
+
+    </script>
+}

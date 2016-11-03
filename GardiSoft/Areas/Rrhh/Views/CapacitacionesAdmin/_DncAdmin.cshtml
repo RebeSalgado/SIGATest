@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Entidades.Rrhh.Capacitaciones.Dnc>
+
+
+<table class="table table-striped table-bordered table-hover" >
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SubProyecto.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.usuarioCreador)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.anio)
+            </th>
+
+
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.SubProyecto.Nombre)
+        </td>       
+        <td>
+            @Html.DisplayFor(modelItem => item.usuarioCreador)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.anio)
+        </td>
+      
+       
+    </tr>
+}
+        </tbody>
+    @*<tfoot>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SubProyecto.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.usuarioCreador)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.anio)
+            </th>
+
+
+        </tr>
+    </tfoot>*@
+</table>

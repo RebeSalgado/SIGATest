@@ -1,0 +1,240 @@
+﻿
+@{
+    ViewBag.Title = "Categoria";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Categorías</h2>
+
+@*-- AGREGAR --*@
+
+<div class="well">
+    <div class="form-horizontal">
+        <h4>Utilice el formulario para agregar o modificar nuevas categorías</h4>
+        <hr />
+
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Nombre Categoría</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" id="txtNombreCategoria" placeholder="escriba aquí el nombre de la nueva categoría">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Cdigo CCC</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" id="txtCCC" placeholder="escriba aquí el C.C.C.">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Guardar" id="guardar" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+
+    <div class="VerCategorias"> Categorías</div>
+</div>
+
+
+@*--MODAL MODIFICAR --*@
+
+<div class="modal fade " id="mdlModificar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Categoría</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="NombreCat" class="col-sm-2 control-label">Nombre Categoría</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="txtNuevoNombre" placeholder="Nuevo Nombre" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="CodigoCCC" class="col-sm-2 control-label">CCC</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="txtNuevoCCC" placeholder="Nuevo CCC" autocomplete="off">
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success GuardarCategoria" data-dismiss="modal">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*--MODAL ELIMINAR --*@
+
+<div class="modal fade " id="mdlEliminar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Eliminar Cateogria</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="NombrePlan" class="col-sm-2 control-label">Nombre Plan</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control " disabled id="txtEliminarCateogria" placeholder=" " autocomplete="off">
+                        </div>
+                        <div class="col-sm-10">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger EliminarCateogria" data-dismiss="modal">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            var idCategoria = 0;
+
+            var CCC 
+
+            CargarCategorias();
+
+            // GUARDAR NUEVO PLAN
+
+            $("#guardar").click(function () {
+
+                $.ajax({
+                    url: '@Url.Action("GuardarCategoria", "Categorias")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    data: JSON.stringify({ NombreCategoria: $("#txtNombreCategoria").val(), CCC: $("#txtCCC").val() }), // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+                        data = eval(data);
+                        if (data.Resultado == "Guardado") {
+                            $.notificar({ text: 'Guardado', title: 'Exito', type: 'success' });
+                            CargarCategorias();
+                            $("#txtNombreCategoria").val('')
+                            $("#txtCCC").val('')
+                        }
+                        else {
+                            $.notificar({ text: 'no se pudo guardar', title: 'ups', type: 'danger' });
+                        }
+                        //$("#VerReporte").jsonTabla({ tabla: data });
+                    }
+                });
+            });
+        });
+
+        //CARGAR PLANES
+
+        function CargarCategorias()
+        {
+            $.ajax({
+                url: '@Url.Action("VerCategorias", "Categorias")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+               // data: JSON.stringify({Id: $("#Id").val(), Nombre: $("#Nombre").val() }),
+                async: true,
+                success: function (data) {
+                    data = eval(data);
+
+                    $(".VerCategorias").jsonTabla({ tabla: data });
+                }
+            });
+        }
+
+        // MODIFICAR
+
+        $(document).on('click', ".Modificar", function () {
+            idCategoria = $(this).attr('idCategoria');
+
+            $("#mdlModificar").modal('show');
+            var cant = $(this).closest('tr').find("td:eq(1)").html();
+            $("#txtNuevoNombre").val(cant);
+
+            var CCC = $(this).closest('tr').find("td:eq(2)").html();
+            $("#txtNuevoCCC").val(CCC);
+
+        });
+
+        $(document).on('click', ".GuardarCategoria", function () {
+            $.ajax({
+                url: '@Url.Action("ModificarCategoria", "Categorias")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ Id: idCategoria, Nombre: $("#txtNuevoNombre").val(), CCC: $("#txtNuevoCCC").val() }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    if (data.Resultado == "Guardado") {
+                        $.notificar({ text: 'Categoria modificado', title: 'Todo listo', type: 'success' });
+                        CargarCategorias();
+                    }
+                    else {
+                        $.notificar({ text: 'No se puede modificar.', title: 'Todo listo', type: 'danger' });
+                    }
+
+
+                }
+            });
+
+        });
+
+        // ELIMINAR
+
+        $(document).on('click', ".Eliminar", function () {
+            idCategoria = $(this).attr('idCategoria');
+
+            $("#mdlEliminar").modal('show');
+            var cant = $(this).closest('tr').find("td:eq(1)").html();
+            $("#txtEliminarCateogria").val(cant);
+
+        });
+
+
+        $(document).on('click', ".EliminarCateogria", function () {
+            $.ajax({
+                url: '@Url.Action("EliminarCategoria", "Categorias")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ Id: idCategoria }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    if (data.Resultado == "Guardado") {
+                        $.notificar({ text: 'Categoría Eliminada', title: 'Todo listo', type: 'success' });
+                        CargarCategorias();
+                    }
+                    else {
+                        $.notificar({ text: 'No se puede Eliminar la categoría.', title: 'Todo listo', type: 'danger' });
+                    }
+
+
+                }
+            });
+
+        });
+
+    </script>
+}

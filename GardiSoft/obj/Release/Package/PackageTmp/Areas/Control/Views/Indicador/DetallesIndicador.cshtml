@@ -1,0 +1,65 @@
+﻿@model Entidades.Control.Indicador
+
+
+@{
+    
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div>
+    <h4>Indicador</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Area.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Area.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Nivel_Control.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nivel_Control.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Proyecto.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Proyecto.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Turno.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Turno.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Frecuencia)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Frecuencia)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "EditarIndicador", new { id = Model.Id_Indicador }) |
+    @Html.ActionLink("Volver a Indicador", "Index")
+</p>

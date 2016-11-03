@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Entidades.Rrhh.Capacitaciones.Trabajadores>
+
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>
+                Aspecto
+            </th>
+            <th>
+                Tipo
+            </th>
+            <th>
+                Nombre
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Trimestre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Objetivo)
+            </th>
+            <th>
+                Capacitación
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+  <tbody>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Aspecto.Nombre)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Tipo.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NombreTrabajador)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Trimestre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Objetivo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NombreCapacitacion)
+            </td>
+
+            <td>
+              
+                  <a href="#" class="quitar" id="@item.Id">Quitar</a> 
+                @*@Html.ActionLink("Quitar", "Delete", new { id = item.Id })*@
+            </td>
+        </tr>
+    }
+        </tbody>
+</table>
+

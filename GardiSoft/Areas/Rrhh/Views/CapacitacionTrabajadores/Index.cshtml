@@ -1,0 +1,387 @@
+﻿@model Entidades.Rrhh.Capacitaciones.Trabajadores
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Inscripción</h2>
+
+
+@Html.AntiForgeryToken()
+
+<div class="well">
+    <div class="row">
+        <h4 style="padding-left:20px;">Utilice el formulario para agregar trabajadores a su solicitud de capacitación</h4>
+        <hr />
+
+        <div class="col-md-6">
+            <div class="form-horizontal" style="margin-top:20px;">
+
+                <input type="hidden" id="idDnc" value="@ViewBag.Id" />
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.RutTrabajador, "Rut/Nombre trabajador", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-6">
+                        @Html.EditorFor(model => model.RutTrabajador, new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                        @Html.ValidationMessageFor(model => model.RutTrabajador, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Trimestre, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-6">
+                        @Html.EditorFor(model => model.Trimestre, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Trimestre, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Objetivo, new { @class = "control-label col-md-2" })
+                    <div class="col-md-6">
+                        @Html.TextAreaFor(model => model.Objetivo, 3, 5, new { @class = "form-control", @rows = "4"  })
+                        @Html.ValidationMessageFor(model => model.Objetivo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IdTipo, "Tipo", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-6">
+                        @Html.DropDownList("IdTipo", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.IdTipo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IdAspecto, "Aspecto", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-6">
+                        @Html.DropDownList("IdAspecto", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.IdAspecto, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.NombreCapacitacion, "Nombre Capacitación", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-6">
+                        @Html.EditorFor(model => model.NombreCapacitacion, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.NombreCapacitacion, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th colspan="2" style="text-align:center" id="nombre"></th>
+                    </tr>
+                    <tr>
+                        <th>Capacitación Realizada</th>
+                        <th>Asistencia</th>
+                    </tr>
+
+
+                </thead>
+                <tbody id="capacitacionesExternas"></tbody>
+            </table>
+
+
+        </div>
+
+
+    </div>
+    @if(ViewBag.Abierta)
+    {
+    <div class="row">
+        <div class="form-group">
+            <div class="col-md-4" style="text-align:right">
+
+                <button id="agregar" class="btn btn-success">Agregar</button>
+            </div>
+            <div class="col-md-8" style="text-align:right">
+
+                <button id="agregar" class="btn btn-primary" data-toggle="modal" data-target="#mensajeCerrar">Guardar y Cerrar</button>
+            </div>
+        </div>
+    </div>
+    }else
+    {
+        <p class="lead">El periodo de DNC se encuentra cerrado</p>
+    }
+</div>
+
+
+<h2>Trabajadores Inscritos</h2>
+<div id="trabajadores">
+
+    @Html.Action("VerTrabajadores", new { id = ViewBag.Id })
+
+</div>
+
+<div class="modal fade" id="mensajeCerrar">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Gracias!</h4>
+            </div>
+            <div class="modal-body">
+                <p>Su solicitud ha sido guardada. Puede volver aquí hasta el <b>20/12/2015</b> para realizar cambios</p>
+            </div>
+            <div class="modal-footer">
+               
+                <button type="button" class="btn btn-primary" id="nosVemos">Entendido, nos vemos</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+@section Scripts{
+
+
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+
+
+            $('#Objetivo').tooltip({
+                placement: "top",
+                trigger: "focus",
+                title: "Una buena justificación, es importante para nosotros dar prioridad a las solicitudes"
+                
+
+            });
+
+            $("#nosVemos").click(function () {
+
+                location.href= "@Url.Action("Index","Home",new { Area=""})"
+
+            });
+
+
+            $("#RutTrabajador").typeahead({
+                source: function (query, process) {
+                    var nombres = [];
+
+                    var obj = {};
+                    obj.busqueda = $("#RutTrabajador").val();
+                    obj.cantidad = 20;
+                    $.ajax({
+                        url: 'http://informatica.gardilcic.cl/webservice/rrhhService.svc/BuscarTrabajadores',
+                        type: "POST",
+                        async: true,
+                        data: JSON.stringify(obj),
+                        dataType: "JSON",
+                        success: function (datos) {
+                            var objeto = eval(datos.d);
+
+                            $.map(objeto, function (item) {
+                                var nombre = item.ApellidoPaterno + " " + item.ApellidoMaterno + " " + item.Nombre;
+                                var itm = {
+                                    rut: item.Rut,
+                                    name: nombre,
+                                    id: item.Id,
+                                    cargo: item.Cargo,
+                                    toString: function () {
+                                        return JSON.stringify(this);
+                                    },
+                                    toLowerCase: function () {
+                                        return this.name.toLowerCase();
+                                    },
+                                    indexOf: function (string) {
+                                        return String.prototype.indexOf.apply(this.name, arguments);
+                                    },
+                                    replace: function (string) {
+                                        var value = '';
+                                        value += this.name;
+                                        if (typeof (this.level) != 'undefined') {
+                                            value += ' <span class="pull-right muted">';
+                                            value += this.level;
+                                            value += '</span>';
+                                        }
+                                        return String.prototype.replace.apply('<div style="padding: 1px 2px; font-size: 12px;">' + value + '</div>', arguments);
+                                    }
+                                };
+                                nombres.push(itm);
+                            });
+                            return process(nombres);
+                        }
+                    });
+                },
+                matcher: function () {
+                    return true;
+                },
+                property: 'name',
+                items: 10,
+                minLength: 3,
+                updater: function (item) {
+                    var item = JSON.parse(item);
+                    $("#nombre").html(item.name)
+
+                    $.ajax({
+                        url: '@Url.Action("VerCursosExternos", "CapacitacionTrabajadores")',
+                        datatype: 'html',
+                        type: 'GET',
+                        async: true,
+                        data: { rut: item.rut },
+                        success: function (data) {
+                            var data = eval(data);
+
+                            var texto = "";
+                            $.each(data, function (i, item) {
+
+                                texto += "<tr><td>" + item.x.Curso + "</td><td>" + item.x.Asistencia + "%</td></tr>"
+
+
+                            });
+                            $("#capacitacionesExternas").html(texto);
+
+
+                        }
+                    });
+
+                    return item.rut;
+                }
+            });
+        });
+
+
+        $(".quitar").on('click', function () {
+
+            var $fila = $(this).closest("tr");
+            var id = $(this).attr('id');
+            $.ajax({
+                url: '@Url.Action("Eliminartrabjador", "CapacitacionTrabajadores")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: false,
+                data: JSON.stringify({ id: id }),
+                success: function (data) {
+                    var data = eval(data);
+
+                    if(data.Resultado == "exito")
+                    {
+                        $.notificar({ title: "Éxito", text: "Solicitud eliminada", type: 'warning' });
+                        $fila.remove();
+
+                    }
+                    else
+                    {
+                        $.notificar({ title: "Error", text: "no pudimos quitar esta solicitud :(", type: 'danger' });
+                    }
+
+                }
+
+            });
+
+        });
+
+
+
+        $("#agregar").on('click', function () {
+
+
+            //validaciones..
+
+            if ($("#Trimestre").val() < 1 || $("#Trimestre").val() > 4)
+            {
+                $.notificar({ title: 'Error', text: 'El trimestre no es válido, debe ser un valor entre 1 y 4',type:'error' });
+                return;
+            }
+
+
+            var objeto = {};
+            objeto.rutTrabajador = $("#RutTrabajador").val();
+            objeto.trimestre = $("#Trimestre").val();
+            objeto.objetivo = $("#Objetivo").val();
+            objeto.IdTipo = $("#IdTipo").val();
+            objeto.IdAspecto = $("#IdAspecto").val();
+            objeto.idDnc = $("#idDnc").val();
+            objeto.NombreTrabajador = $("#nombre").html();
+            objeto.NombreCapacitacion = $("#NombreCapacitacion").val();
+
+            $.ajax({
+                url: '@Url.Action("AgregarTrabajador", "CapacitacionTrabajadores")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: false,
+                data: JSON.stringify({ trabajadores: objeto }),
+                success: function (data) {
+                    var data = eval(data);
+
+                    if (data.Resultado == "exito") {
+                        $.notificar({ title: 'Exito', text: 'Trabajador Agregado' });
+
+                        $.ajax({
+                            url: '/Rrhh/CapacitacionTrabajadores/VerTrabajadores?id=' + $("#idDnc").val(),
+                            dataType: "html",
+                            type: 'POST',
+                            success: function (data) {
+
+                                $('#trabajadores').html(data);
+                            }
+                        });
+
+
+                    }
+                    else {
+                        $.notificar({ title: 'error', text: ':(', type: 'danger' });
+                    }
+
+                    $("#RutTrabajador").val('');
+
+
+
+
+
+
+
+
+
+                }
+            });
+
+
+        });
+
+
+
+
+        function onSuccess(datos) {
+
+            if (datos.Id == "agregado") {
+
+                new PNotify({
+                    title: 'Agregado',
+                    text: 'Trabajador agregado a la lista.',
+                    type: 'success'
+                });
+
+                $("#RutTrabajador").val('');
+                $.ajax({
+                    url: '@Url.Action("VerTrabajadores", "CapacitacionTrabajadores")',
+                    datatype: 'html',
+                    success: function (data) {
+
+
+
+
+
+                    }
+                });
+
+            }
+
+
+        }
+    </script>
+}

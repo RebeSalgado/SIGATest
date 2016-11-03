@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Entidades.Control.Nivel_Control>
+
+
+<div class="well" style="overflow-x:auto ">
+    <p>
+        @Html.ActionLink("Crear Nuevo Nivel", "CrearNivel")
+    </p>
+    <table class="table table-hover">
+        <tr>
+            <th class="success">
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th class="success"></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.ActionLink("Editar", "EditarNivel", new { id = item.Id_Nivel }) |
+                    @Html.ActionLink("Detalles", "DetallesNivel", new { id = item.Id_Nivel }) |
+                    @Html.ActionLink("Borrar", "BorarNivel", new { id = item.Id_Nivel })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

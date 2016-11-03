@@ -1,0 +1,158 @@
+﻿@model Entidades.Rrhh.Capacitaciones.ExternaTrabajadores
+
+@{
+    ViewBag.Title = "AgregarTrabajador";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Agregar Trabajadores</h2>
+
+<div class="well">
+    <div class="form-horizontal">
+        <h4>Utilice el formulario para inscribir trabajadores</h4>
+        <span class="label label-info">@ViewBag.Estado</span>
+
+        @using (Ajax.BeginForm("GuardarTrabajador", "Externas", new AjaxOptions { OnSuccess = "onSuccess" }))
+        {
+            @Html.AntiForgeryToken()
+            <hr />
+            @Html.Hidden("IdCapacitacionExterna", (object)ViewBag.IdCapacitacionExterna)
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.RutTrabajador, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.RutTrabajador, new { htmlAttributes = new { @class = "form-control", @AutoComplete = "off" } })
+                    @Html.ValidationMessageFor(model => model.RutTrabajador, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.NombreTrabajador, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.NombreTrabajador, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.NombreTrabajador, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.FechaNacimientoTrabajador, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.FechaNacimientoTrabajador, new { htmlAttributes = new { @class = "form-control", @AutoComplete = "off" } })
+                  @Html.ValidationMessageFor(model => model.FechaNacimientoTrabajador, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Sexo, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("sexo", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Sexo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.IdComuna, "Comuna", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("IdComuna", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.IdComuna, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.IdEscolaridad, "Escolaridad", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("IdEscolaridad", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.IdEscolaridad, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.IdNivel, "Nivel", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("IdNivel", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.IdNivel, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Franquicia, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Franquicia, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Franquicia, "", new { @class = "text-danger" })
+                    <button value="calcular franquicia" class="btn btn-primary" ><i class="fa fa-calculator" aria-hidden="true"></i>Calcular</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Cargo, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Cargo, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Cargo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            if (ViewBag.Estado == "Ingresado")
+            {
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">                  
+                     <input type="submit" value="Agregar" class="btn btn-success" />
+                </div>
+            </div>
+            }
+
+        }
+    </div>
+
+</div>
+
+<h2>Trabajadores Inscritos</h2>
+
+<div id="listaTrabajadores">
+
+</div>
+
+
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $("#RutTrabajador").trabajadores({ Nombre: $("#NombreTrabajador"), Cargo: $("#Cargo") });
+
+            $("#FechaNacimientoTrabajador").calendario();
+
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("VerTrabajadores","Externas")',
+                data: {id : $("#IdCapacitacionExterna").val()},
+                success: function (msg) {
+
+
+
+                    $("#listaTrabajadores").html(msg);
+                }
+            });
+
+        });
+
+
+        function onSuccess() {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("VerTrabajadores","Externas")',
+                data: { id: $("#IdCapacitacionExterna").val() },
+                success: function (msg) {
+
+
+
+                    $("#listaTrabajadores").html(msg);
+                }
+            });
+
+        }
+
+    </script>
+}

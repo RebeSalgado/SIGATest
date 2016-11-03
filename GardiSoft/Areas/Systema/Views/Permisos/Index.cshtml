@@ -1,0 +1,70 @@
+﻿@model IEnumerable<Entidades.Sys.Permisos>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Permisos</h2>
+
+<p>
+    @Html.ActionLink("Agregar un permiso", "Create")
+</p>
+<table class="table" id="tabla">
+    <thead>
+        <tr>
+            <th>
+               Modulo
+            </th>
+            <th>
+               Menú
+            </th>
+            <th>
+               Acción
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Usuario.Email)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SubMenu.Menu.Modulo.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SubMenu.Menu.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SubMenu.Titulo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Usuario.Email)
+                </td>
+                <td>
+                        
+                    @Html.ActionLink("Eliminar", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+  
+@section Scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $("#tabla").tabla();
+            
+        });
+
+    </script>
+}

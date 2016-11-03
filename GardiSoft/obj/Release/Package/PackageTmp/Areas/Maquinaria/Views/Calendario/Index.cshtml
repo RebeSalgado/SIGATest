@@ -1,0 +1,105 @@
+﻿
+@{
+    ViewBag.Title = "Calendario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>Calendario de mantenciones</h2>
+<div class="well">
+    <div class="form-horizontal">
+        <h4>Seleccione una ubicación</h4>
+
+        @Html.AntiForgeryToken()
+        <hr />
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Ubicación</label>
+                <div class="col-md-6">
+                    @Html.DropDownList("IdUbicacion", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>          
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10" style="text-align:left">
+                    <input type="button" value="Filtrar" id="btnGenerarInforme" class="btn btn-success" />
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<div id="calendario">
+
+    <p class="lead">Cuando seleccione una ubicación la lista aparecerá</p>
+
+</div>
+
+
+
+
+@section Scripts
+{
+
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+
+
+            $("#btnGenerarInforme").click(function () {
+                 $.ajax({
+                    url: '@Url.Action("CalendarioMantenimiento", "Calendario")',
+                    datatype: 'json',
+                    type: 'POST',
+                    async: true,
+                    data: { IdUbicacion: $("#IdUbicacion").val()},
+                    success: function (data) {
+                        var r = eval(data);
+                        $("#calendario").jsonTabla({ tabla: r });
+                    }
+                 });
+            });
+
+
+            $(document).on('click', '.generarOt', function () {          
+                var btn = $(this);
+                  $.ajax({
+                    url: '@Url.Action("GenerarOt", "Calendario")',
+                    datatype: 'json',
+                    type: 'POST',
+                    async: true,
+                    data: {IdMaquina: $(this).attr('id'), Frecuencia : $(this).attr('frecuencia')},
+                    success: function (data) {
+                        var r = eval(data);
+                        //  $("#calendario").jsonTabla({ tabla: r });
+                        if(r.Resultado == 1)
+                        {
+                            $.notificar({ text: 'OT Generada', title: 'Exito', type: 'success' });
+                            $(btn).val('Ot Abierta');
+                            $(btn).prop('disabled', true);
+                            $(btn).addClass('btn-danger');
+
+                        }
+                        else
+                        {
+                            $.notificar({ text: 'Error', title: 'Exito', type: 'danger' });
+                        }
+
+                    }
+                });
+                
+
+               
+            });
+
+        });
+
+    </script>
+}
+

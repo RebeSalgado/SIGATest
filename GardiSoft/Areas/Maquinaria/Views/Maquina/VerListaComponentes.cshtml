@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Entidades.Uma.HistoricoComponentes>
+
+
+<table class="table table-hover">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Componente.Codigo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Maquina.Codigo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaAsignacion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaDesignacion)
+        </th>
+        <th>
+           Tipo de Horometro
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Componente.Codigo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Maquina.Codigo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaAsignacion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaDesignacion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Ubicacion)
+        </td>
+        <td>
+            <a class="quitar" idComponente="@item.IdComponente">Quitar</a>
+            @*@Html.ActionLink("Quitar", "DesaociarComponente", new { id=item.Id })*@ 
+          
+        </td>
+    </tr>
+}
+
+</table>

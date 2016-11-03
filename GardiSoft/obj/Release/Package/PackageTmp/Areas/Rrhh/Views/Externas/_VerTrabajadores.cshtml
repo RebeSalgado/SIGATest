@@ -1,0 +1,78 @@
+﻿@model IEnumerable<Entidades.Rrhh.Capacitaciones.ExternaTrabajadores>
+
+
+<table class="table">
+    <tr>
+        <th>
+            Comuna
+        </th>
+        <th>
+           Escolaridad
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Externa.Otec)
+        </th>
+        <th>
+            Nivel
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RutTrabajador)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NombreTrabajador)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaNacimientoTrabajador)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Sexo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Franquicia)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Cargo)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Comunas.Comuna)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Escolaridad.Descripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Externa.Otec)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nivel.Nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RutTrabajador)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NombreTrabajador)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaNacimientoTrabajador)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Sexo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Franquicia)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Cargo)
+        </td>
+        <td>           
+            @Html.ActionLink("Quitar", "Delete", new { id=item.Id })
+        </td>
+       
+    </tr>
+}
+
+</table>

@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{967DC3E0-C0A5-4548-8A13-C4058E494A58}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Entidades</RootNamespace>
+    <AssemblyName>Entidades</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Contabilidad\GuiaDespacho\Detalle.cs" />
+    <Compile Include="Contabilidad\GuiaDespacho\Evento.cs" />
+    <Compile Include="Contabilidad\GuiaDespacho\Folios.cs" />
+    <Compile Include="Contabilidad\GuiaDespacho\GuiaDespacho.cs" />
+    <Compile Include="Contabilidad\GuiaDespacho\Referencia.cs" />
+    <Compile Include="Contabilidad\GuiaDespacho\Situacion.cs" />
+    <Compile Include="Control\Area.cs" />
+    <Compile Include="Control\Control.cs" />
+    <Compile Include="Control\ControlIndicador.cs" />
+    <Compile Include="Control\Indicador.cs" />
+    <Compile Include="Control\Indicadores.cs" />
+    <Compile Include="Control\Kpi.cs" />
+    <Compile Include="Control\Nivel_Control.cs" />
+    <Compile Include="Control\Proyecto.cs" />
+    <Compile Include="Control\Turno.cs" />
+    <Compile Include="Control\Unidades.cs" />
+    <Compile Include="Control\Valores.cs" />
+    <Compile Include="Global\Trabajador.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rrhh\Asistente\Atencion.cs" />
+    <Compile Include="Rrhh\Asistente\AtencionDetalle.cs" />
+    <Compile Include="Rrhh\Asistente\SubTipoAtencion.cs" />
+    <Compile Include="Rrhh\Asistente\TipoAtencion.cs" />
+    <Compile Include="Rrhh\Capacitaciones\Aspecto.cs" />
+    <Compile Include="Rrhh\Capacitaciones\Categoria.cs" />
+    <Compile Include="Rrhh\Capacitaciones\DncEstados.cs" />
+    <Compile Include="Rrhh\Capacitaciones\Escolaridad.cs" />
+    <Compile Include="Rrhh\Capacitaciones\Externa.cs" />
+    <Compile Include="Rrhh\Capacitaciones\ExternaTrabajadores.cs" />
+    <Compile Include="Rrhh\Capacitaciones\Nivel.cs" />
+    <Compile Include="Rrhh\Capacitaciones\Comunas.cs" />
+    <Compile Include="Rrhh\Capacitaciones\CursoTrabajadores.cs" />
+    <Compile Include="Rrhh\Capacitaciones\Dnc.cs" />
+    <Compile Include="Rrhh\Capacitaciones\Capacitacion.cs" />
+    <Compile Include="Rrhh\Capacitaciones\HistoricoOtic.cs" />
+    <Compile Include="Rrhh\Capacitaciones\Tipo.cs" />
+    <Compile Include="Rrhh\Capacitaciones\TipoCapacitacion.cs" />
+    <Compile Include="Rrhh\Capacitaciones\TipoEfc.cs" />
+    <Compile Include="Rrhh\Capacitaciones\Trabajadores.cs" />
+    <Compile Include="Rrhh\Seleccion2016.cs" />
+    <Compile Include="Rrhh\Tarja\Tarja.cs" />
+    <Compile Include="Rrhh\Tarja\TarjaCodigos.cs" />
+    <Compile Include="Rrhh\Tarja\TarjaTrabajadores.cs" />
+    <Compile Include="Rrhh\Tarja\TarjaUbicaciones.cs" />
+    <Compile Include="Sys\Aplicaciones.cs" />
+    <Compile Include="Sys\ControlDeCambios.cs" />
+    <Compile Include="Sys\keyAttribute.cs" />
+    <Compile Include="Sys\Menu.cs" />
+    <Compile Include="Sys\Modulo.cs" />
+    <Compile Include="Sys\Perfil.cs" />
+    <Compile Include="Sys\Permisos.cs" />
+    <Compile Include="Sys\SubMenu.cs" />
+    <Compile Include="Sys\SubProyecto.cs" />
+    <Compile Include="Sys\TipoSoporte.cs" />
+    <Compile Include="Sys\Usuario.cs" />
+    <Compile Include="Uma\Actividades.cs" />
+    <Compile Include="Uma\ActividadMaster.cs" />
+    <Compile Include="Uma\CalendarioOperacionesPermisos.cs" />
+    <Compile Include="Uma\DetalleOt.cs" />
+    <Compile Include="Uma\FallasOt.cs" />
+    <Compile Include="Uma\HistoricoComponentes.cs" />
+    <Compile Include="Uma\Lectura.cs" />
+    <Compile Include="Uma\Maquina.cs" />
+    <Compile Include="Uma\MaquinaActividad.cs" />
+    <Compile Include="Uma\OrigenDeFalla.cs" />
+    <Compile Include="Uma\OT.cs" />
+    <Compile Include="Uma\OtDetalleCorrectivo.cs" />
+    <Compile Include="Uma\OtManoDeObra.cs" />
+    <Compile Include="Uma\OtRepuestosEntregados.cs" />
+    <Compile Include="Uma\OtRepuestosSolicitados.cs" />
+    <Compile Include="Uma\PermisosBodega.cs" />
+    <Compile Include="Uma\Plan.cs" />
+    <Compile Include="Uma\PlanMaster.cs" />
+    <Compile Include="Uma\PlanPartes.cs" />
+    <Compile Include="Uma\PlanPartesMaster.cs" />
+    <Compile Include="Uma\RepuestoActividadMaster.cs" />
+    <Compile Include="Uma\RepuestoCorrectivosEntregados.cs" />
+    <Compile Include="Uma\Repuestos.cs" />
+    <Compile Include="Uma\RepuestosActividades.cs" />
+    <Compile Include="Uma\RepuestosAlternativos.cs" />
+    <Compile Include="Uma\RepuestosCorrectivos.cs" />
+    <Compile Include="Uma\RepuestosOriginales.cs" />
+    <Compile Include="Uma\Servicios.cs" />
+    <Compile Include="Uma\TipoMaquina.cs" />
+    <Compile Include="Uma\TipoOt.cs" />
+    <Compile Include="Uma\TipoRecurso.cs" />
+    <Compile Include="Uma\TiposDeFalla.cs" />
+    <Compile Include="Uma\Ubicacion.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

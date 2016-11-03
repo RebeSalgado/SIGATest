@@ -1,0 +1,9 @@
+C:\SIGA\Entidades\bin\Debug\Entidades.dll
+C:\SIGA\Entidades\bin\Debug\Entidades.pdb
+C:\SIGA\Entidades\obj\Debug\Entidades.csprojResolveAssemblyReference.cache
+C:\SIGA\Entidades\obj\Debug\Entidades.dll
+C:\SIGA\Entidades\obj\Debug\Entidades.pdb
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\Entidades\bin\Debug\Entidades.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\Entidades\bin\Debug\Entidades.pdb
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\Entidades\obj\Debug\Entidades.dll
+C:\Users\rsalgado\Documents\Visual Studio 2015\Projects\SIGA\Entidades\obj\Debug\Entidades.pdb

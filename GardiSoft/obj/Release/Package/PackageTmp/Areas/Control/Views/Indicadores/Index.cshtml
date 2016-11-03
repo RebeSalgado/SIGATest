@@ -1,0 +1,377 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Indicadores </h2>
+
+@*-- AGREGAR --*@
+
+<p style="text-align:right">
+    <input type="submit" value="Agregar" class="btn btn-primary" onclick="$('#agregar').toggle(500)" />
+</p>
+    <div class="well" id="agregar" style="display:none">
+
+        <div class="form-horizontal">
+            <h4>Utilice el formulario para agregar nuevos Indicadores</h4>
+            <hr />
+
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Descripción</label>
+                <div class="col-md-10">
+                    <input type="text" class="form-control" id="txtDescripcion">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Unidad</label>
+                <div class="col-md-10">
+                    <input type="text" class="form-control txtUnidad" name="idunidad" disabled autocomplete="off">
+                    <input type="submit" value="Seleccionar Unidad" class="btn btn-success btnUnidad" />
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Nivel</label>
+                <div class="col-md-10">
+                    <input type="text" class="form-control" id="txtNivel">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Tolerancia 1</label>
+                <div class="col-md-10">
+                    <input type="text" class="form-control" id="txtTolerancia1">
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Tolerancia 2</label>
+                <div class="col-md-10">
+                    <input type="text" class="form-control" id="txtTolerancia2">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2" for="Estado">Estado</label>
+                <div class="col-md-10">
+                    <select class="form-control valid" id="ddlEstado" name="Estado">
+                        <option value="False">Desactivo</option>
+                        <option value="True">Activo</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Guardar Indicador" id="btnGuardarKPI" class="btn btn-success">
+                </div>
+            </div>
+        </div>
+        
+    </div>
+<div id="VerKPI">Indicadores</div>
+
+@*--MODAL MODIFICAR --*@
+
+<div class="modal fade " id="mdlModificar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Indicador</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Descripción</label>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" id="txtModDescripcion">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Unidad</label>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control txtUnidad" name="idunidad"  disabled autocomplete="off">
+                            <input type="submit" value="Seleccionar Unidad"  class="btn btn-success btnUnidad " />
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Nivel</label>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" id="txtModNivel">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Tolerancia 1</label>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" id="txtModTolerancia1">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Tolerancia 2</label>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" id="txtModTolerancia2">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="Estado">Estado</label>
+                        <div class="col-md-10">
+                            <select class="form-control valid" id="ModddlEstado" name="Estado">
+                                <option value="False">Desactivo</option>
+                                <option value="True">Activo</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success GuardarIndicadorModificado" data-dismiss="modal">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@*--MODAL ELIMINAR --*@
+
+<div class="modal fade " id="mdlEliminar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Eliminar Indicador</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="NombrePlan" class="col-sm-2 control-label">Nombre Indicador</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control " disabled id="txtEliminarIndicador" placeholder=" " autocomplete="off">
+                        </div>
+                        <div class="col-sm-10">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="EliminarIndicador" data-dismiss="modal">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*MODAL UNIDADES*@
+
+<div class="modal fade" id="mdlUnidades" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Unidades</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <p>Seleccione Unidad</p>
+                    <div id="VerSeleccionarUnidad"> </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            CargarKPI();
+            CargarUnidades();
+            var idunidad = 0;
+        });
+
+        //CARGAR KPI
+        function CargarKPI() {
+            $.ajax({
+                url: '@Url.Action("CargarKPI", "Indicadores")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                //data: JSON.stringify({ idPlan: $("#idPlan").val() }),
+                async: true,
+                success: function (data) {
+                    data = eval(data);
+
+                    $("#VerKPI").jsonTabla({ tabla: data });
+                }
+            });
+        }
+
+        //CARGAR UNIDADES
+        function CargarUnidades() {
+            $.ajax({
+                url: '@Url.Action("CargarUnidades", "Indicadores")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                //data: JSON.stringify({ idPlan: $("#idPlan").val() }),
+                async: true,
+                success: function (data) {
+                    data = eval(data);
+
+                    $("#VerSeleccionarUnidad").jsonTabla({ tabla: data });
+                }
+            });
+        }
+
+        
+        // GUARDAR NUEVO INDICADOR 
+
+        $("#btnGuardarKPI").click(function () {
+            $.ajax({
+                url: '@Url.Action("GuardarKPI", "Indicadores")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ Descripcion: $("#txtDescripcion").val(), Unidad: $(".txtUnidad").attr('idunidad'), Nivel: $("#txtNivel").val(), Tolerancia1: $("#txtTolerancia1").val(), Tolerancia2: $("#txtTolerancia2").val(), Estado: $("#ddlEstado").val(), }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    if (data.Resultado == "Guardado") {
+                        $.notificar({ text: 'Guardado', title: 'Exito', type: 'success' });
+                        CargarKPI();
+                        $("#txtDescripcion").val('');
+                        $(".txtUnidad").val('');
+                        $("#txtNivel").val('');
+                        $("#txtTolerancia1").val('');
+                        $("#txtTolerancia2").val('');
+                        $("#ddlEstado").val('');
+                    }
+                    else {
+                        $.notificar({ text: 'no se pudo guardar', title: 'ups', type: 'danger' });
+                    }
+                    //$("#VerReporte").jsonTabla({ tabla: data });
+                }
+            });
+        });
+
+        // SELECCIONAR 
+        $(".btnUnidad").click(function () {
+            $("#mdlUnidades").modal('show');
+
+        });
+
+
+
+        $(document).on('click', '.Seleccionar', function () {
+
+            idunidad = $(this).attr('idunidad');
+            $(".txtUnidad").attr('idunidad', idunidad);
+            var unidad = $(this).closest('tr').find("td:eq(1)").html();
+            $(".txtUnidad").val(unidad);
+            $("#mdlUnidades").modal('hide');
+
+        });
+
+        // ELIMINAR INDICADOR 
+
+        $(document).on('click', ".Eliminar", function () {
+            idindicador = $(this).attr('idindicador');
+
+            $("#mdlEliminar").modal('show');
+            var cant = $(this).closest('tr').find("td:eq(0)").html();
+            $("#txtEliminarIndicador").val(cant);
+
+        });
+
+
+        $(document).on('click', "#EliminarIndicador", function () {
+            $.ajax({
+                url: '@Url.Action("EliminarIndicador", "Indicadores")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ id: idindicador }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    if (data.Resultado == "Guardado") {
+                        $.notificar({ text: 'Indicador Eliminado', title: 'Todo listo', type: 'success' });
+                        CargarKPI();
+                    }
+                    else {
+                        $.notificar({ text: 'No se puede Eliminar Indicador.', title: 'Todo listo', type: 'danger' });
+                    }
+
+
+                }
+            });
+
+        });
+
+        // MODIFICAR
+
+        $(document).on('click', ".Modificar", function () {
+            idindicador = $(this).attr('idindicador');
+
+            $("#mdlModificar").modal('show');
+
+            var Descripcion = $(this).closest('tr').find("td:eq(0)").html();
+            $("#txtModDescripcion").val(Descripcion);
+
+            var Nivel = $(this).closest('tr').find("td:eq(2)").html();
+            $("#txtModNivel").val(Nivel);
+
+            var Tolerancia1 = $(this).closest('tr').find("td:eq(3)").html();
+            $("#txtModTolerancia1").val(Tolerancia1);
+
+            var Tolerancia2 = $(this).closest('tr').find("td:eq(4)").html();
+            $("#txtModTolerancia2").val(Tolerancia2);
+
+            var Estado = $(this).closest('tr').find("td:eq(5)").html();
+            $("#ddlModEstado").val(Estado);
+
+        });
+
+        $(document).on('click', ".GuardarIndicadorModificado", function () {
+            $.ajax({
+                url: '@Url.Action("ModificarIndicadores", "Indicadores")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ Id: idindicador, Descripcion: $("#txtModDescripcion").val(), Unidad: $(".txtUnidad").attr('idunidad'), Nivel: $("#txtModNivel").val(), Tolerancia1: $("#txtModTolerancia1").val(), Tolerancia2: $("#txtModTolerancia2").val(), Estado: $("#ddlModEstado").val(), }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    if (data.Resultado == "Guardado") {
+                        $.notificar({ text: 'Plan modificado', title: 'Todo listo', type: 'success' });
+
+                    }
+                    else {
+                        $.notificar({ text: 'No se puede modificar.', title: 'Todo listo', type: 'danger' });
+                    }
+
+
+                }
+            });
+
+        });
+
+    </script>
+    
+    }

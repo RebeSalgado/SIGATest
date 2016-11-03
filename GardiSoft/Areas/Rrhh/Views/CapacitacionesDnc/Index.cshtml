@@ -1,0 +1,125 @@
+﻿@model Entidades.Rrhh.Capacitaciones.Dnc
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Bienvenidos a DNC @(DateTime.Now.Year + 1)</h2>
+<hr />
+<br />
+<br />
+
+@using (Html.BeginForm("Create", "CapacitacionesDnc", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row" style="min-height:400px;margin-bottom:10px">
+        <div class="col-lg-12">
+         
+
+          
+            @if (ViewBag.Dncs.Count > 0)
+            {
+                <h5>Selecciona un subproyecto para continuar trabajando en una DNC o <a href="#"  class="crear">Crear una para otro subproyecto</a> </h5>
+                <div class="col-md-4" style="margin-top:20px;">
+                    @foreach (Entidades.Rrhh.Capacitaciones.Dnc item in ViewBag.Dncs)
+                    {
+                    <div class="list-group">
+                        <a class="list-group-item" href="@Url.Action("Index","CapacitacionTrabajadores",new { Id = item.Id, Area = "Rrhh" }) ">
+                            <span class="badge"><li class="glyphicon glyphicon-pencil"></li></span>
+                            DNC de @item.SubProyecto.Nombre
+                        </a>
+
+                    </div>
+
+
+                    }
+                </div>
+
+
+            }
+            else
+            {
+                <p class="lead">Hola, esto está muy vacío, para comenzar debes <buttom class="btn btn-primary crear">Crear una DNC</buttom> </p>
+
+            }
+
+
+
+        </div>
+
+        <div class="modal" id="mdCrear">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button class="close" aria-hidden="true" type="button" data-dismiss="modal">X</button>
+                        <h4 class="modal-title">Nueva DNC</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+
+                            <div class="form-horizontal">
+                                <h4>Para comenzar una nueva DNC seleccione el proyecto.</h4>
+                                <hr />
+
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.IdSubproyecto, "Subproyecto", htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.DropDownList("IdSubproyecto", null, htmlAttributes: new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.IdSubproyecto, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.anio, "Año", htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.anio, new { htmlAttributes = new { @class = "form-control", @Value = (DateTime.Now.Year + 1) } })
+                                        @Html.ValidationMessageFor(model => model.anio, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default" type="button" data-dismiss="modal">Cancelar</button>
+                        <input type="submit" value="Comenzar" class="btn btn-success" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+}
+
+
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $(".crear").on('click', function () {
+
+                $("#mdCrear").modal('show');
+
+            });
+
+
+        });
+
+
+
+    </script>
+
+
+}

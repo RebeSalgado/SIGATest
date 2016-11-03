@@ -1,0 +1,90 @@
+﻿@model IEnumerable<Entidades.Sys.Modulo> 
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron" style="background-image: url('@Url.Content("~/Content/Imagenes/mineroEncuesta3.png")');
+    background-repeat: no-repeat;  
+    background-position: right;  ">
+
+   
+    
+        <h1>SIGA</h1>
+    <div class="row">
+        <p class="lead" style="margin-right:10%">Un diseño más comodo que se luce en cualquier navegador y dispositivo.</p>
+    </div>
+
+    
+</div>
+
+
+
+<div class="row container">
+    
+    @Html.Action("Submenu", "Home", new { area = "", id = ViewBag.Modulo })
+
+</div>
+
+
+<div class="row">
+   
+    <h2>Módulos</h2>
+    @if (Model != null)
+    {
+        foreach (var item in Model)
+        {
+            <div class="col-lg-4 col-md-7">
+                <div class="panel panel-primary">
+                    <div class="panel-heading" style="background-color:@item.Color !important">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="glyphicon @item.Glyhicon white tileIcon"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+
+                                <div class="huge">0</div>
+                                <div>Novedades</div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="/Home/Index/@item.Id">
+                   
+                        <div class="panel-footer">
+                            <span class="pull-left">@item.Alias</span>
+                            <span class="pull-right"><i class="glyphicon glyphicon-arrow-right"></i></span>
+                            <div class="clearfix"></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        }
+
+
+    }
+</div>
+
+
+
+
+    <div class="modal" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">En construcción</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Los enanos estan trabajando tán rápido como pueden para migrar todo, favor un poco de paciencia.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Esperaré</button>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+

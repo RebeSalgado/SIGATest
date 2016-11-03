@@ -1,0 +1,90 @@
+﻿
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Detección de Capacitaciones</h2>
+
+@using (Ajax.BeginForm("Buscar", new AjaxOptions { OnComplete = "onSuccess", UpdateTargetId = "Dncs" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="well">
+        <div class="form-inline">
+            <h4>Administre sus DNC</h4>
+            <hr />
+            <div class="form-group">
+                @Html.Label("Año")
+                @Html.DropDownList("periodo", null, htmlAttributes: new { @class = "form-control" })
+
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10" style="text-align:right">
+                    <input type="submit" value="Buscar" class="btn btn-success" />
+                </div>
+            </div>
+             <div class="form-group">
+                <div class="col-md-offset-2 col-md-10" style="text-align:right">
+                    <input type="button" value="Descargar presupuesto" class="btn btn-primary" id="descargar" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+<h2>Dncs Ingresadas</h2>
+<div id="Dncs">
+    
+    <p class="lead">Hola, esto está muy solo utiliza la busqueda para encontrar solicitudes de capacitación.</p>
+
+
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+        function onSuccess() {
+
+
+      
+
+        }
+
+        $(document).ready(function () {
+
+
+
+        
+
+
+            $("#descargar").on('click', function () {
+
+                $.ajax({
+                    url: '@Url.Action("verPresupuesto","CapacitacionesAdmin")',
+                    datatype: 'html',
+                    success: function (data) {
+                        
+                        var ruta = '@Url.Content("/ArchivosExcel/rrhh/")' +data.ruta;
+                        window.location.href = ruta;
+                        new PNotify({
+                            title: 'Descargado',
+                            text: 'Su excel está listo!',
+                            type: 'success'
+                        });
+
+
+
+                    }
+                });
+
+            });
+
+        });
+
+    </script>
+}
+
+

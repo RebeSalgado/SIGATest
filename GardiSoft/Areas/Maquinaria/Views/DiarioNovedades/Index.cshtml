@@ -1,0 +1,215 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="well">
+    <div class="form-horizontal">
+        <h4>Seleccione las Fechas para ver el diario de novedades</h4>
+
+
+        <hr />
+        <div class="form-inline">
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Fecha de Inicio</label>
+                <div class="col-sm-10">
+                    <input type="date" class="form-control" name="fechaInicio" id="fechaInicio" placeholder="" autocomplete="off">
+
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Fecha de Termino</label>
+                <div class="col-sm-10">
+                    <input type="date" class="form-control" id="fechaTermino" autocomplete="off">
+                </div>
+            </div>
+           
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Ubicación</label>
+                <div class="col-sm-10">
+                   <select class="obra form-control">     
+
+                   </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10" style="text-align:left">
+                    <input type="submit" value="Buscar" id="btnBuscar" class="btn btn-success" />
+                    <input type="submit" value="Descargar en Excel" id="btnBuscarExcel" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h1>OT con trabajo pendiente</h1>
+<div id="otsPendientes"></div>
+
+<h1>OT Finalizadas</h1>
+<div id="otscerradas"></div>
+
+<div class="modal fade" id="mdlVerExcel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Actividad</h4>
+            </div>
+            <div class="modal-body">
+                <div id="excelDiario"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default listoTermine" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    @Scripts.Render("~/bundles/handsomeTable")
+
+    <script type="text/javascript">
+
+        $(document).ready(function () { 
+        $.ajax({
+            url: '@Url.Action("CentrosResponsabilidad", "Reporte")',
+            datatype: 'json',
+            type: 'POST',
+            contentType: 'application/json',
+            //  data: JSON.stringify({ idactividad: $("#idactividad").val() }),
+            async: true,
+            success: function (data) {
+                data = eval(data);
+                var texto = "<option value=-1>Seleccione</option>";
+
+                $.each(data, function (i, item) {
+                    //texto += "<option value=" + item.idCResp + ">" + item.Centro + "</option>";
+                    texto += "<option value=" + item.id + ">" + item.RutaCompleta + "</option>";
+                });
+
+                $(".obra").each(function (i, item) {
+                    $(item).html(texto);
+                });
+            }
+        });
+
+        $("#btnBuscarExcel").click(function () {
+            console.log($(".obra").val());
+            $.ajax({
+                url: '@Url.Action("VerOtsDiarioExcel", "DiarioNovedades")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: false,
+                data: JSON.stringify({ fechaInicio: $("#fechaInicio").val(), fechaTermino: $("#fechaTermino").val(), cerrada: 'false', ubicacion: $(".obra").val() }),
+                success: function (data) {
+
+                    data = eval(data);
+                    $("#excelDiario").jsonTabla({ tabla: data, lengthMenu: [[5, 10, 25], [5, 10, 25]] });
+                    $("#mdlVerExcel").modal('show');
+
+                }
+            });
+        });
+
+        $("#btnBuscar").click(function () {
+            console.log($(".obra").val());
+            $.ajax({
+                url: '@Url.Action("VerOtsDiario", "DiarioNovedades")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: false,
+                data: JSON.stringify({ fechaInicio: $("#fechaInicio").val(), fechaTermino: $("#fechaTermino").val(), cerrada: 'false', ubicacion: $(".obra").val() }),
+                success: function (data) {
+
+                    data = eval(data);
+
+                    $("#otsPendientes").html('');
+
+                    $.each(data,function(i,item){
+                        var texto = "";
+                        texto+=   '<div class="panel panel-default">';
+                        texto += '   <div class="panel-heading"><b>OT: ' + item.Ot + '</b> | Tipo: ' + item.Tipo + ' | fecha: ' + item.FechaCreacion + ' | Maquina: <b>' + item.codigo + '</b> | Creador: ' + item.AbiertaPor + '</div>';
+                        texto += '  <div class="panel-body">';
+                        texto += '  <div class="actividades'+item.Ot+'"></div>';
+                        //texto += '    <p><b>Aviso Operaciones:</b> ' + item.HoraAviso + ' | <b>Hora intervencion:</b> ' + item.HoraIntervencion + ' </p> <b>Operativa:</b> ' + item.Operativa + ' </p>';
+                        texto += '    <p><b>Descripcion:</b> <p>' + item.Observaciones.replace(/\*/g,'</p><p>') + '</p>';
+                        texto+=   ' </div>';
+                        texto+=   '  </div>';
+                        $("#otsPendientes").append(texto);
+
+                        $.ajax({
+                            url: '@Url.Action("VerOtsPendientesActividades", "DiarioNovedades")',
+                            datatype: 'json',
+                            type: 'POST',
+                            contentType: 'application/json',
+                            async: false,
+                            data: JSON.stringify({ idOT: item.Ot}),
+                            success: function (data) {
+                                data = eval(data);
+                                $(".actividades" + item.Ot).jsonTabla({ tabla: data, lengthMenu: [[5, 10, 25], [5, 10, 25]] });
+                            }
+                        });
+
+
+                    });
+
+
+                }
+            });
+
+            $.ajax({
+                url: '@Url.Action("VerOtsDiario", "DiarioNovedades")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ fechaInicio: $("#fechaInicio").val(), fechaTermino: $("#fechaTermino").val(), cerrada: 'true', ubicacion: $(".obra").val() }),
+                success: function (data) {
+
+                    data = eval(data);
+
+                    $("#otscerradas").html('');
+                    $.each(data, function (i, item) {
+                        var texto = "";
+                        texto += '<div class="panel panel-default">';
+                        texto += '   <div class="panel-heading"><b>OT: ' + item.Ot + '</b> | Tipo: ' + item.Tipo + ' | fecha: ' + item.FechaCreacion + ' | Maquina: ' + item.codigo + ' | Creador: ' + item.AbiertaPor + '</div>';
+                        texto += '  <div class="panel-body">';
+                        texto += '  <div class="actividades' + item.Ot + '"></div>';
+                        texto += '     <p><b>Aviso Operaciones:</b> ' + item.HoraAviso + ' ' + item.HoraAviso2 + ' | <b>Hora intervencion:</b> ' + item.HoraIntervencion + ' ' + item.HoraIntervencion2 + ' | <b>Hora Termino y aviso:</b> ' + item.HoraTerminoIntervencion + ' ' + item.HoraTerminoIntervencion2  +'</p>' + '<p><b>Tiempo total proceso: </b>'+item.TiempoTotal+ '</p>'+'<p><b>Tiempo Espera Intervención: </b>'+item.EsperaPorIntervencion+ '</p>'+'<p><b>Tiempo Intervencion-Aviso: </b>'+item.TimepoIntervencionAviso + '</p><b>Operativa:</b> ' + item.Operativa + ' </p>';
+                        texto += '    <p><b>Descripcion:</b> ' + item.Observaciones + '</p>';
+                        texto += ' </div>';
+                        texto += '  </div>';
+                        $("#otscerradas").append(texto);
+
+                        $.ajax({
+                            url: '@Url.Action("VerOtsPendientesActividades", "DiarioNovedades")',
+                            datatype: 'json',
+                            type: 'POST',
+                            contentType: 'application/json',
+                            async: false,
+                            data: JSON.stringify({ idOT: item.Ot }),
+                            success: function (data) {
+                                data = eval(data);
+                                $(".actividades" + item.Ot).jsonTabla({ tabla: data, lengthMenu: [[5, 10, 25], [5, 10, 25]] });
+                            }
+                        });
+
+                    });
+
+
+                }
+            });
+
+         
+
+        });
+
+        });
+
+
+    </script>
+}

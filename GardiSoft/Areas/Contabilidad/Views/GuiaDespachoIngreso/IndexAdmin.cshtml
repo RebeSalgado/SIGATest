@@ -1,0 +1,115 @@
+﻿@model IEnumerable<Entidades.Contabilidad.GuiaDespacho.GuiaDespacho>
+
+@{
+    ViewBag.Title = "VerGuias";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Mis guías De Despacho</h2>
+<div class="well">
+    <div class="form-inline">
+        <h4>Utilice el formulario para crear una guía</h4>
+        <hr />
+        <p>
+            @Html.ActionLink("Crear Guía", "VerGuias", "",  new { @Class = "btn btn-success" })
+        </p>
+    </div>
+</div>
+
+<h2>Mis guías digitadas</h2>
+<h4>Este listado muestra todas las guias que haz digitado</h4>
+<table class="table table-responsive">
+    <thead>
+        <tr>
+
+            <th>
+                @Html.DisplayNameFor(model => model.FolioDocumento)
+            </th>
+            <th>Autor</th>
+            <th>
+                @Html.DisplayNameFor(model => model.Observaciones)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.RutReceptor)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.GiroReceptor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DireccionReceptor)
+            </th>
+
+
+
+            <th>
+                @Html.DisplayNameFor(model => model.Fecha)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Estado)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.FolioDocumento)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Usuario);
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Observaciones)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.RutReceptor)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.GiroReceptor)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DireccionReceptor)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fecha)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Estado)
+                </td>
+                <td>
+
+                    @Html.ActionLink("Ver", "VerGuiasAdmin", new { id = item.Id }) |
+                    @*   @Html.ActionLink("Eliminar", "Eliminar", new { id = item.Id })*@
+
+                </td>
+            </tr>
+
+
+        }
+    </tbody>
+</table>
+
+@section scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+          var t =   $(".table").tabla();
+        //  t.search('elgueda').draw();
+         
+          
+        });
+    </script>
+
+}

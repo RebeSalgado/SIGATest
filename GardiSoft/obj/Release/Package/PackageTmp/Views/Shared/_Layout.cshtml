@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>@ViewBag.Title - Gardilcic</title>
+    @Styles.Render("~/Content/css")
+  @*  @Scripts.Render("~/bundles/modernizr")*@
+
+</head>
+<body>
+    <div id="wrap">
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                       <img src="~/Imagenes/logo2.png" width="128" style="padding-top:5px;"/>
+                </div>
+                @Html.Action("menu","Home", new { area = "", id = ViewBag.Modulo })
+             
+            </div>
+        </div>
+        <div class="container body-content">
+            @RenderBody()
+            <hr />
+
+        </div>
+    </div>
+    <footer id="footer" class="midnight-blue">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                    @DateTime.Now.Year  Gardilcic.
+                </div>
+                <div class="col-sm-6">
+                    <ul class="pull-right">
+                        <li><a href="#">Inicio</a></li>
+                        <li><a href="#">Quienes Somos</a></li>
+                        <li><a href="#">Info.</a></li>
+                        <li><a href="#">Contacto</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    @Scripts.Render("~/bundles/jquery")
+   
+    @Scripts.Render("~/bundles/bootstrap")
+
+    @RenderSection("scripts", required: false)
+
+    @RenderSection("scriptsController", required: false)
+
+
+
+
+
+
+</body>
+</html>
+
+@section Scripts
+{
+
+    <script type="text/javascript">
+
+    $(document).ready(function () {
+
+
+
+    });
+
+    function onSuccess(data)
+    {
+        $.notificar({ text: 'Guardado', title: 'Exito', type: 'success' });
+    }
+
+    </script>
+}

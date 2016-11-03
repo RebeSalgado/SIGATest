@@ -1,0 +1,649 @@
+﻿
+@{
+    ViewBag.Title = "AdministrarPlan";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Plan Partes</h2>
+
+@*-- AGREGAR --*@
+
+
+
+
+
+<input type="hidden" id="idPlan" value="@ViewBag.Id" />
+
+<div class="well">
+    <div class="form-horizontal">
+        <h4>Ingresa Nuevo Plan Partes a : @ViewBag.Plan</h4>
+        <hr />
+
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Plan Partes</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" id="txtNombrePlan" placeholder="escriba aquí el nombre del Plan">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" value="Agregar" id="Agregar" class="btn btn-success"><i class="glyphicon glyphicon-floppy-disk"></i>  Agregar</button>
+            </div>
+        </div>
+    </div>
+    @*<div class="VerPlanPartes" id="VerPlanPartes"> PLAN PARTES</div>*@
+</div>
+
+<div class="VerPlanPartes" id="VerPlanPartes"> PLAN PARTES</div>
+
+
+
+
+<div class="modal fade " id="mdlActividad" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Agregar Actividad</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Actividad</label>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" id="txtDescripcionActividad" placeholder="escriba aqui la descripcion de la actividad">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Frecuencia </label>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" id="txtFrecuenciaActividad" placeholder="Frecuencia de la actividad ">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Minutos</label>
+                        <div class="col-md-10">
+
+                            <input type="text" class="form-control" id="txtTiempoActividad" placeholder="Tiempo Estimado en minutos">
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" value="Agregar" class="btn btn-success agregarActividadGuardar"><i class="glyphicon glyphicon-floppy-disk Agregar"></i>  Agregar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade " id="mdlModificarActividad" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Agregar Actividad</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Actividad</label>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" id="mtxtDescripcionActividad" placeholder="escriba aqui la descripcion de la actividad">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Frecuencia </label>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" id="mtxtFrecuenciaActividad" placeholder="Frecuencia de la actividad ">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Minutos</label>
+                        <div class="col-md-10">
+
+                            <input type="text" class="form-control" id="mtxtTiempoActividad" placeholder="Tiempo Estimado en minutos">
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" value="Agregar" class="btn btn-success agregarActividadModificar"><i class="glyphicon glyphicon-floppy-disk Agregar"></i>  Agregar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade " id="mdlEliminarParte" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Agregar Actividad</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <p>Eliminará la parte y todas sus actividades</p>
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" value="Eliminar" class="btn btn-danger btnEliminarParte">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade " id="mdlEliminarActividad" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Agregar Actividad</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <p>Eliminará la actividad y todos sus repuestos</p>
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" value="Eliminar" class="btn btn-danger btnEliminarActividad">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade " id="mdlEliminarRepuesto" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Agregar Actividad</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <p>Eliminará el repuesto de la actividad</p>
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" value="Eliminar" class="btn btn-danger btnEliminarRepuesto">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade " id="mdlVerRepuestos" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-admin" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p style="text-align:right">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>
+                </p>
+                <h4 class="modal-title" id="myModalLabel">Producto</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Producto</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="txtProductoBuscar" placeholder="código o num parte" autocomplete="off">
+                            <input type="button" class="btn btn-default" id="btnMdlProductoBuscar" value="Buscar" />
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Cantidad</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control " id="txtCantidad" placeholder="ej. 5 - 10 - 20" autocomplete="off">
+                        </div>
+                    </div>
+                    <div id="VerRepuestos"></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var idPlan = 0;
+            var idactividad = 0;
+            var idParte = 0;
+            var idRepuesto = 0;
+            CargarPlan();
+        });
+
+        $(document).on('click', ".SeleccionRepuesto", function () {
+            var $boton = $(this);
+            $.ajax({
+                url: '@Url.Action("AsociarRepuestoActividadAux", "AdministrarRepuestos")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ idActividad: idactividad, idRecurso: $boton.attr('idrepuesto'), Cantidad: $("#txtCantidad").val() }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    if (data.Resultado == "Guardado") {
+                        $.notificar({ text: 'Guardado', title: 'Exito', type: 'success' });
+
+                        $("#txtRepuesto").val('');
+                        $("#txtActividad").val('');
+                        CargarPlan();
+                        $("#mdlVerRepuestos").modal('hide');
+                    }
+                    else {
+                        $.notificar({ text: 'no se pudo guardar', title: 'ups', type: 'danger' });
+                    }
+                    //$("#VerReporte").jsonTabla({ tabla: data });
+                }
+            });
+        });
+
+        $(document).on('click', '.agregarRepuesto', function () {
+            idactividad = $(this).attr('idActividad');
+            $("#mdlVerRepuestos").modal('show');
+
+        });
+
+        $("#btnMdlProductoBuscar").click(function () {
+
+            $.ajax({
+                url: '@Url.Action("VerProductos", "AdministrarRepuestos")',
+                datatype: 'json',
+                type: 'POST',
+                async: true,
+                data: { Busqueda: $("#txtProductoBuscar").val() }, // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+
+                    var r = eval(data);
+
+                    $("#VerRepuestos").jsonTabla({ tabla: r, lengthMenu: [[5, 10, 25], [5, 10, 25]] });
+
+                }
+            });
+
+        });
+
+        $(document).on('click', '.eliminarRepuesto', function () {
+
+            idRepuesto = $(this).attr('idRepuesto');
+            $("#mdlEliminarRepuesto").modal('show');
+
+
+
+        });
+
+        $(document).on('click', '.btnEliminarRepuesto', function () {
+
+            $.ajax({
+                url: '@Url.Action("EliminarRepuestoAux", "AdministrarActividad")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ id: idRepuesto }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    if (data.Resultado == "Guardado") {
+                        $.notificar({ text: 'Guardado', title: 'Exito', type: 'success' });
+                        CargarPlan();
+                    }
+                    else {
+                        $.notificar({ text: 'no se pudo guardar', title: 'ups', type: 'danger' });
+                    }
+                    $("#mdlEliminarRepuesto").modal('hide');
+                }
+            });
+
+        });
+
+
+
+
+        $(document).on('click', '.editarActividad', function () {
+            idactividad = $(this).attr('idActividad');
+
+            $("#mtxtDescripcionActividad").val($(this).closest('tr').find('th:eq(0)').html());
+
+            $("#mtxtFrecuenciaActividad").val($(this).closest('tr').find('th:eq(1)').html());
+
+            $("#mtxtTiempoActividad").val($(this).closest('tr').find('th:eq(2)').html());
+
+            $("#mdlModificarActividad").modal('show');
+
+        });
+
+
+        $(document).on('click', '.agregarActividadModificar', function () {
+
+            var actividad = {};
+            actividad.Descripcion = $("#mtxtDescripcionActividad").val();
+            actividad.MinutosEstimados = $("#mtxtFrecuenciaActividad").val();
+            actividad.Frecuencia = $("#mtxtTiempoActividad").val();
+            actividad.Id = idactividad;
+
+            $.ajax({
+                url: '@Url.Action("ModificarActividadAux", "AdministrarActividad")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ actividad: actividad}), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    if (data.Resultado == "Guardado") {
+                        $.notificar({ text: 'Guardado', title: 'Exito', type: 'success' });
+                        CargarPlan();
+                    }
+                    else {
+                        $.notificar({ text: 'no se pudo guardar', title: 'ups', type: 'danger' });
+                    }
+                    $("#mdlModificarActividad").modal('hide');
+                }
+            });
+
+        });
+
+
+        //AGREGAR PLAN PARTES
+        $("#Agregar").click(function () {
+
+            $.ajax({
+                url: '@Url.Action("GuardarPlanPartesAux", "Plan")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ nombrePlan: $("#txtNombrePlan").val(), idPlan: $("#idPlan").val() }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    if (data.Resultado == "Guardado") {
+                        $.notificar({ text: 'Guardado', title: 'Exito', type: 'success' });
+                        CargarPlan();
+                    }
+                    else {
+                        $.notificar({ text: 'no se pudo guardar', title: 'ups', type: 'danger' });
+                    }
+                    //$("#VerReporte").jsonTabla({ tabla: data });
+                }
+            });
+        });
+
+
+
+
+        // ELIMINAR PLAN PARTES
+
+        $(document).on('click', ".EliminarParteActividad", function () {
+            idParte = $(this).attr('idparte');
+
+            $("#mdlEliminarParte").modal('show');
+
+
+
+        });
+
+        $(document).on('click', '.btnEliminarActividad', function () {
+
+
+
+            $.ajax({
+                url: '@Url.Action("EliminarActividadAux", "AdministrarActividad")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ id: idactividad }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    if (data.Resultado == "Guardado") {
+                        $.notificar({ text: 'Plan Eliminado', title: 'Todo listo', type: 'success' });
+                        CargarPlan();
+                    }
+                    else {
+                        $.notificar({ text: 'No se puede Eliminar Plan.', title: 'Todo listo', type: 'danger' });
+                    }
+                    $("#mdlEliminarActividad").modal('hide');
+
+
+                }
+            });
+
+        });
+
+
+        $(document).on('click', "#EliminarPlanP", function () {
+            $.ajax({
+                url: '@Url.Action("EliminarPlanPartesAux", "Plan")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: true,
+                data: JSON.stringify({ id: idplan }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    if (data.Resultado == "Guardado") {
+                        $.notificar({ text: 'Plan Eliminado', title: 'Todo listo', type: 'success' });
+                        CargarPlan();
+                    }
+                    else {
+                        $.notificar({ text: 'No se puede Eliminar Plan.', title: 'Todo listo', type: 'danger' });
+                    }
+
+
+
+                }
+            });
+
+        });
+
+
+        $(document).on('click', '.btnEliminarParte', function () {
+
+                           $.ajax({
+                    url: '@Url.Action("EliminarPlanPartesAux", "Plan")',
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    async: true,
+                    data: JSON.stringify({ id: idParte }), // o sin stringify para datos primitivos  {rut : item.rut },
+                    success: function (data) {
+                        data = eval(data);
+                        if (data.Resultado == "Guardado") {
+                            $.notificar({ text: 'parte Eliminado', title: 'Todo listo', type: 'success' });
+                            CargarPlan();
+                        }
+                        else {
+                            $.notificar({ text: 'No se puede Eliminar Plan.', title: 'Todo listo', type: 'danger' });
+                        }
+                        $("#mdlEliminarParte").modal('hide');
+
+                    }
+                });
+
+
+
+        });
+
+
+        $(document).on('click', '.agregarActividad', function () {
+            idParte = $(this).attr('idparte');
+            $("#mdlActividad").modal('show');
+
+
+        });
+
+        $(document).on('click', '.eliminarActividad', function () {
+            idactividad = $(this).attr('idActividad');
+            $("#mdlEliminarActividad").modal('show');
+
+        });
+
+
+        $(".agregarActividadGuardar").click(function () {
+
+            $.ajax({
+                url: '@Url.Action("GuardarActividadAux", "AdministrarActividad")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: false,
+                data: JSON.stringify({ idparte:idParte, Descripcion: $("#txtDescripcionActividad").val(), Frecuencia: $("#txtFrecuenciaActividad").val(), MinutosEstimados: $("#txtTiempoActividad").val() }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+                    if (data.Resultado == "Guardado") {
+                        $.notificar({ text: 'Guardado', title: 'Exito', type: 'success' });
+
+                        $("#txtDescripcionActividad").val('');
+                        $("#txtFrecuenciaActividad").val('');
+                        $("#txtTiempoActividad").val('');
+                        $("#mdlActividad").modal('hide');
+                        cargarParte(idParte);
+                    }
+                    else {
+                        $.notificar({ text: 'no se pudo guardar', title: 'ups', type: 'danger' });
+                    }
+                    //$("#VerReporte").jsonTabla({ tabla: data });
+                }
+            });
+        });
+
+
+        // ADMINISTRAR
+
+        //SOLUCION..
+
+        $(document).on('click', ".Administrar", function () {
+            idactividad = $(this).attr('idactividad');
+            location.href = '@Url.Action("Index", "AdministrarActividad")' + '/index/' + idactividad;
+        });
+
+        function FactoryParte(id,Nombre)
+        {
+            return '<div class="panel panel-default" id="' + id + '"> <div class="panel-heading">' + Nombre + '</div> <div class="panel-body"><p style="text-align:right"><button type="button" class="btn btn-default EliminarParteActividad" idParte="' + id + '"> Eliminar Parte </button> <button type="button" class="btn btn-default agregarActividad" idParte="' + id + '"> Agregar Actividad </button> </p>  '
+
+                + '<table class="table"> <thead> <tr> <th class="col-xs-3 col-md-3"><h4>Actividad</h4></th> <th class="col-xs-3 col-md-3"><h4>Frecuencia</h4></th> <th class="col-xs-1 col-md-1"><h4>Minutos</h4></th><th class="col-xs-1 col-md-1"><h4>Acciones</h4></th> </tr> </thead> <tbody> </tbody> </table>'
+
+                 +   '<div class="actividades">' + FactoryListaActividades(id) + '</div></div></div></div>';
+        }
+
+        function FactoryListaActividades(id)
+        {
+            var texto = "";
+               $.ajax({
+                url: '@Url.Action("VerPartesActividadAux", "Plan")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: false,
+                data: JSON.stringify({ idparte: id }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+
+
+                    $.each(data, function (i, item) {
+
+
+                        texto += '<table class="table table-bordered"> <thead> <tr> <th class="col-xs-3 col-md-3">' + item.Descripcion + '</th> <th class="col-xs-3 col-md-3">' + item.frecuencia + '</th> <th class="col-xs-1 col-md-1">' + item.MinutosEstimados + '</th><th class="col-xs-1 col-md-1"><i idActividad="' + item.id + '" class="fa fa-pencil-square-o fa-2x editarActividad" aria-hidden="true"></i><i idActividad="' + item.id + '" style="margin-left:10px" class="fa fa-trash fa-2x eliminarActividad" aria-hidden="true"></i><i style="margin-left:10px" idActividad="' + item.id + '" class="fa fa-plus fa-2x agregarRepuesto" aria-hidden="true"></i></th> </tr> </thead> <tbody>'
+                            + FactoryListaRepuestos(item.id)  + '</tbody> </table>';
+
+                    });
+                   // console.log(texto);
+
+
+                }
+            });
+
+            return texto;
+        }
+
+        function cargarParte(id)
+        {
+            CargarPlan();
+        }
+
+        //CARGAR PLAN PARTES
+        function CargarPlan() {
+            $.ajax({
+                url: '@Url.Action("VerPlanPartesAux", "Plan")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ idPlan: $("#idPlan").val() }),
+                async: false,
+                success: function (data) {
+                    data = eval(data);
+                    var partes = "";
+                    $.each(data, function (i, item) {
+
+                        partes += FactoryParte(item.Id, item.Nombre);
+
+                    });
+
+                    $("#VerPlanPartes").html(partes);
+                }
+            });
+        }
+
+        function FactoryListaRepuestos(id) {
+            var texto = "";
+            $.ajax({
+                url: '@Url.Action("VerRepuestosPorActividadAux", "Plan")',
+                datatype: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                async: false,
+                data: JSON.stringify({ idActividad: id }), // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    data = eval(data);
+
+
+                    $.each(data, function (i, item) {
+
+
+                        texto += '<tr> <td class="col-xs-3 col-md-3">' + item.Nombre + '</td> <td class="col-xs-3 col-md-3">' + item.Descripcion + '</td> <td class="col-xs-1 col-md-1">' + item.cantidad + ' (' + item.unidad + ')' + '</td><td class="col-xs-1 col-md-1"><i idRepuesto="' + item.Id + '" style="margin-left:10px"  class="fa fa-trash fa-2x eliminarRepuesto" aria-hidden="true"></i></td> </tr> ';
+
+                    });
+                    // console.log(texto);
+
+
+                }
+            });
+
+            return texto;
+        }
+
+
+    </script>
+}

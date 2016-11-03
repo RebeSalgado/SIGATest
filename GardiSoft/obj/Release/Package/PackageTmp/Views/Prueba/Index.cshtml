@@ -1,0 +1,1065 @@
+﻿@{
+    ViewBag.Title = "VerBuscarCapacitacion";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class='container contenido'>
+    <legend>Ver Atenciones <span style="font-size: 10px;margin-left:10px;" id="version">ver. 0.0 </span></legend>
+
+    <div class="span12" id="atencionResumen">
+        <div class="form-horizontal">
+
+            <div id="cabeceraBusqueda" class="span11">
+                <button id="btnNuevaAtencion" class="m-btn purple" style="float:right;margin-left:20px">Nueva Atención</button>
+                <button id="btnVerResumen" class="m-btn green " style="float:right;margin-left:20px">Ver en Excel</button>
+
+                <input type="text" id="txtCodigo" class="texto_buscador_bodega" style="padding: 5px 0 3px 7px !important; margin-right: 10px;" placeholder="Rut del trabajador">
+                <button id="btnBuscarHistorial" class="m-btn" style=" float:left;margin-top: 4px; margin-left: 3px;margin-right: 20px"><img width="20px" src="libs/img/icono_buscar.png"></button>
+                <div style="margin-top:10px"> <input type="checkbox" id="chkCerradas"> Incluir cerradas </div>
+            </div>
+
+
+
+            <div class="row span8" style="margin-top:15px">
+                <h4>Atenciones</h4>
+
+                <div id="atenciones" style="border-right:  #ccc solid 1px;">
+
+                </div>
+            </div>
+
+            <div class="row span3" style="margin-top:15px;">
+                <h4>Áreas</h4>
+                <div id="tipoAtenciones">
+
+
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="span12" id="AtencionConsulta" style="display: none">
+        <button id="btnVerFicha" class="m-btn blue" style="float:right;margin-left:20px">Ver Ficha</button>
+        <!--<button id="btnVerAdjuntos" class="m-btn purple" style="float:right;margin-left:20px">Ver Adjuntos</button>-->
+        <button href='#dlgCerrarAtencion' data-toggle='modal' class="m-btn black" style="float:right;margin-left:20px">Cerrar Atención</button>
+        <button id="btnVolverResumen" class="m-btn" style="float:right;margin-left:20px">Volver al Resumen</button>
+        <button href='#dlgEliminarAtencion' data-toggle='modal' class="m-btn red" style="float:right;margin-left:20px">Eliminar Atención</button>
+
+        <div class="encabezadoFicha" idcabecera="" style="width: 100%;min-height:100px">
+
+            <div style="float:left;padding: 0px 15px 15px 15px">
+
+                <img src="libs/img/usuario_pcm.png" width="64px" style="background-color: #27ae60;" />
+
+
+            </div>
+            <div style="float:left;padding-left: 10px;padding-right: 10px">
+                <p><input id="nombreAtencion" placeholder='Escriba el nombre del trabajador aquí' style='width: 350px; border: white none 0'> </p>
+                <p><select id="ddlArea" style="font-size: 16px;"><option id="0">Área</option></select> - <select id="ddlSubArea" style="font-size: 16px;"><option id="0">Sub Área</option></select></p>
+                <p></p>
+            </div>
+
+        </div>
+
+
+        <div id="atencion" style="font-size: 18px;clear: both;margin-top: 25px;">
+            <p style="margin-top:30px;"><div class="indicadorAtencion"></div> Atendido por <b>selgueda</b> el <b>01-01-2015</b> </p>
+            <!--<p>  Atendido por selgueda el 01-01-2015</p>-->
+
+            <p class="resolucion">Resolución:</p>
+            <textarea class="diagnostico"></textarea>
+        </div>
+
+    </div>
+
+
+    <div class="span12" id="FichaConsulta" style="display: none">
+
+        <button id="btnVolver" class="m-btn" style="float:right;margin-left:20px">Volver</button>
+
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#home" data-toggle="tab">Datos Trabajador</a></li>
+            <li><a href="#profile" data-toggle="tab">Grupo Familiar</a></li>
+
+
+            <!--<li><a href="#settings">Settings</a></li>-->
+        </ul>
+
+
+        <div class="tab-content">
+            <div class="tab-pane active" id="home">
+
+                <h3>Datos del trabajador</h3>
+                <div class="span4">
+                    <div class="control-group">
+                        <label class="control-label" for="fechainicial">RUT: </label>
+                        <div class="controls">
+                            <input type="text" class="input-large" id="txtFichaRut" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="fechainicial">Nombre: </label>
+                        <div class="controls">
+                            <input type="text" class="input-large" id="txtFichaNombre" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="fechainicial">Apellidos: </label>
+                        <div class="controls">
+                            <input type="text" class="input-large" id="txtFichaApellido" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="fechainicial">Email: </label>
+                        <div class="controls">
+                            <input type="text" class="input-large" id="txtFichaEmail" />
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="span4">
+                    <div class="control-group">
+                        <label class="control-label" for="fechainicial">Telefono 1: </label>
+                        <div class="controls">
+                            <input type="text" class="input-large" id="txtFichaTelefono1" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="fechainicial">Telefono 2: </label>
+                        <div class="controls">
+                            <input type="text" class="input-large" id="txtFichaTelefono2" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="fechainicial">Domicilio : </label>
+                        <div class="controls">
+                            <input type="text" class="input-large" id="txtFichaDomicilio" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="fechainicial">Fecha Nacimiento : </label>
+                        <div class="controls">
+                            <input type="text" class="input-large" id="txtFichaNacimiento" />
+                        </div>
+                    </div>
+
+                    <button id="btnguardarFichaEncabezado" class="m-btn green" style="float:right;margin-left:20px">Guardar</button>
+
+                </div>
+
+            </div>
+            <div class="tab-pane" id="profile">
+
+                <h3>Grupo Familiar</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Parentesco</th>
+                            <th>rut</th>
+                            <th>Nombres</th>
+                            <th>Apellidos</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="parientes"></tbody>
+                    <footer>
+                        <tr>
+                            <td colspan='9' style="text-align: right">
+                                <img class="agregarGrupoFamiliar" src='libs/img/agregar.png' width="32" />
+                            </td>
+                        </tr>
+                    </footer>
+
+                </table>
+
+
+            </div>
+
+            <div class="tab-pane" id="settings">...</div>
+        </div>
+
+
+
+
+    </div>
+
+
+
+
+</div>
+
+
+<div id="dlgDocumentos" class="modal hide fade" tabindex="-1" role="dialog">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Documentos del trabajador</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal" id="form_nuevo">
+            <div class="alert mmensajes" style="display:none;">
+                <button type="button" class="close" onclick="$('.alert').hide()">&times;</button>
+                <strong>Mensaje : </strong><span id="mmensaje"></span>
+            </div>
+            <div class="row" style="padding-left: 80px;font-size: 16px;margin-bottom:30px;">
+                <p><a href="">Documento de ejemplo 1</a> </p>
+                <p><a href="">Documento de ejemplo 2</a> </p>
+                <p><a href="">Documento de ejemplo 3</a> </p>
+            </div>
+
+            <div class="control-group" style="clear:both">
+                <label class="control-label" for="txtArchivo">Seleccione Archivo</label>
+                <div class="controls">
+                    <div id="mulitplefileuploader">Adjuntar</div>
+                    <div id="status"></div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button id="btnEliminarCancelar" class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+        <button id="btnEliminarAceptar" class="btn btn-danger">Eliminar</button>
+    </div>
+</div>
+
+
+
+<div id="dlgCerrarAtencion" class="modal hide fade" tabindex="-1" role="dialog">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Cerrar</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal" id="form_nuevo">
+            <div class="alert mmensajes" style="display:none;">
+                <button type="button" class="close" onclick="$('.alert').hide()">&times;</button>
+                <strong>Mensaje : </strong><span id="mmensaje"></span>
+
+
+            </div>
+            <p>¿Cerrar la atención actual?</p>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button id="btnEliminarCancelar" class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+        <button id="btnCerrarAtencion" class="btn btn-danger">Cerrar la atención</button>
+    </div>
+</div>
+
+<div id="dlgEliminarAtencion" class="modal hide fade" tabindex="-1" role="dialog">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Eliminar</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal" id="form_nuevo">
+            <div class="alert mmensajes" style="display:none;">
+                <button type="button" class="close" onclick="$('.alert').hide()">&times;</button>
+                <strong>Mensaje : </strong><span id="mmensaje"></span>
+
+
+            </div>
+            <p>Desea eliminar esta atención del sistema? </p>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button id="btnEliminarCancelar" class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+        <button id="btnEliminarAtencion" class="btn btn-danger">Eliminar la atención</button>
+    </div>
+</div>
+
+
+
+
+@section Scripts
+{
+<script type="text/javascript">
+
+  
+    var idMaquina = '';
+    var dias = '';
+    var rut = '';
+    var idFicha = 0;
+
+    $(document).ready(function () {
+
+        $("#version").text('ver. 0.9');
+
+
+        $("#txtFichaNacimiento").calendario();
+
+
+        $("#txtCodigo").keyup(function () {
+            console.log('asasasas');
+            if ($("#txtCodigo").val() == '') {
+                $("#chkCerradas").prop('checked', false);
+                cargarAtenciones();
+            }
+
+        });
+
+
+        $('#btnVerResumen').click(function () {
+
+            $('#mensaje').html(' Se esta generando el archivo Excel,  por favor espere.');
+            $('.mensajes').removeClass('alert-success').fadeIn(1000).delay(6000).fadeOut(2000);
+
+            $('#btnVolverResumen').prop('disabled', true);
+            $(this).css("disabled", true);
+
+            var obj = {};
+            obj.usuario = $('#sesion_usuario').val();
+            obj.token = $.cookie('PHPSESSID');
+            obj.Fecha = $('#txtFecha').val();
+            $.ajax({
+                type: "POST",
+                url: "http://informatica.gardilcic.cl/webservice/rrhhService.svc/VerAtencionesExcel",
+                //   url: "http://localhost:10471/rrhhService.svc/VerAtencionesExcel",
+                data: JSON.stringify(obj),
+                //  dataType: "json",
+                async: false,
+                success: function (datos) {
+                    console.log(datos);
+                    //  var ruta = eval(datos.d);
+                    $('#btnVolverResumen').prop('disabled', false);
+                    // location.href = "http://informatica.gardilcic.cl/webservice/RRHHResources/AsistenteSocial/temp/" + datos.d;
+                    location.href = "http://informatica.gardilcic.cl/webservice/RRHHResources/AsistenteSocial/temp/" + datos.d;
+                    $('#guardar').show();
+
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    $('#btnVolverResumen').prop('disabled', false);
+
+                }
+            });
+
+
+
+
+        });
+
+
+        cargaFichaConfiguracion();
+
+        $("#mulitplefileuploader").uploadFile({
+            url: "modelo/upload.php",
+            method: "POST",
+            allowedTypes: "xml,jpg,png,gif,doc,pdf,zip,xls,xlsx,doc,docx",
+            fileName: "myfile",
+            formData: {
+                "ruta": "../../servicios/InformaticaResources/Documentos/temp/",
+                "nombreArchivo": $("#sesion_usuario").val()
+            },
+            multiple: true,
+            onSuccess: function (files, data, xhr) {
+
+            },
+            onError: function (files, status, errMsg) {
+
+            }
+        });
+
+        $("#btnVerAdjuntos").click(function () {
+
+            $("#dlgAdjuntos").modal('show');
+
+        });
+
+
+        $(document).on('click', '#btnCerrarAtencion', function () {
+
+            var obj = {};
+            obj.usuario = $('#sesion_usuario').val();
+            obj.token = $.cookie('PHPSESSID');
+            obj.id = $(".encabezadoFicha").attr('idcabecera');
+            // http://informatica.gardilcic.cl/webservice/rrhhService.svc/CerrarAtencion
+            $.post('http://informatica.gardilcic.cl/webservice/rrhhService.svc/CerrarAtencion', JSON.stringify(obj), function (data) {
+
+                cargarAtenciones();
+                $("#dlgCerrarAtencion").modal('hide');
+                $("#btnVolverResumen").trigger('click');
+
+            });
+
+
+        });
+
+
+        $(document).on('click', '#btnEliminarAtencion', function () {
+
+            var obj = {};
+            obj.usuario = $('#sesion_usuario').val();
+            obj.token = $.cookie('PHPSESSID');
+            obj.id = $(".encabezadoFicha").attr('idcabecera');
+            // http://informatica.gardilcic.cl/webservice/rrhhService.svc/EliminarAtencion
+            $.post('http://informatica.gardilcic.cl/webservice/rrhhService.svc/EliminarAtencion', JSON.stringify(obj), function (data) {
+                //  $.post('http://informatica.gardilcic.cl/webservice/rrhhService.svc/CerrarAtencion', JSON.stringify(obj), function (data) {
+
+                cargarAtenciones();
+                $("#dlgEliminarAtencion").modal('hide');
+                $("#btnVolverResumen").trigger('click');
+
+            });
+
+
+        });
+
+
+
+        $(document).on('click', '#btnguardarFichaEncabezado', function () {
+
+
+            var obj = {};
+            obj.usuario = $('#sesion_usuario').val();
+            obj.token = $.cookie('PHPSESSID');
+            obj.id = idFicha;
+            obj.nombre = $("#txtFichaNombre").val();
+            obj.apellidos = $("#txtFichaApellido").val();
+            obj.email = $("#txtFichaEmail").val();
+            obj.telefono1 = $("#txtFichaTelefono1").val();
+            obj.telefono2 = $("#txtFichaTelefono2").val();
+            obj.domicilio = $("#txtFichaDomicilio").val();
+            obj.fechaNacimiento = $("#txtFichaNacimiento").val();
+
+
+
+
+            // http://informatica.gardilcic.cl/webservice/xxxxService.svc/GuardaFichaEncabezado
+            $.post('http://informatica.gardilcic.cl/webservice/rrhhService.svc/GuardaFichaEncabezado', JSON.stringify(obj), function (data) {
+                //var data = eval(data.d);
+
+                $.notificar({ title: 'Éxito', message: 'Cambio realizado', type: 'pastel-success', delay: 3000 });
+
+            });
+
+
+        });
+
+
+
+
+        $(document).on('click', '#btnGuardarAtencion', function (item) {
+
+            if (rut == '') {
+                $.notificar({ title: 'RUT', message: 'Debe seleccionar un trabajador', type: 'pastel-danger', delay: 3000 });
+                return;
+            }
+            if ($("#ddlSubArea").val() == '0') {
+                $.notificar({ title: 'Área', message: 'Seleccione área y sub área', type: 'pastel-danger', delay: 3000 });
+                return;
+            }
+
+
+
+
+            var obj = {};
+            obj.usuario = $('#sesion_usuario').val();
+            obj.token = $.cookie('PHPSESSID');
+            obj.rut = rut;
+            obj.idCabecera = $(".encabezadoFicha").attr('idcabecera');
+            obj.subArea = $("#ddlSubArea").val();
+            obj.idDetalle = $(this).parent('div').attr('iddetalle');
+            obj.resolucion = $(this).parent('div').find('.diagnostico').val();
+            obj.fecha = $(this).parent('div').find('.fechaAtencion').val();
+
+            $.ajax({
+                type: 'POST',
+                url: 'http://informatica.gardilcic.cl/webservice/rrhhService.svc/GuardaAtencion',
+                // url: 'http://localhost:10471/rrhhService.svc/GuardaAtencion',
+                data: JSON.stringify(obj),
+                async: false,
+                success: function (datos) {
+
+                    var objeto = eval(datos.d);
+
+                    //                var texto = ' <p style="font-size: 18px;color: #ccc;padding: 25px;">El historial de las atenciones aparecerá aquí </p>';
+                    cargarAtenciones();
+
+                    $("#AtencionConsulta").hide(500);
+                    $("#atencionResumen").show();
+                    //                if (objeto.length > 0)
+                    //                {
+                    //                    texto = '';
+                    //                    $("#ddlArea").val(objeto[0].idTipo);
+                    //                    cargarSubTipoAtenciones();
+                    //                    $("#ddlSubArea").val(objeto[0].idSubTipo);
+                    //                    $("#nombreAtencion").val(objeto[0].nombre + ' ' + objeto[0].apellidos)
+                    //                    $(".encabezadoFicha").attr('idcabecera', objeto[0].idCabecera);
+                    //                }
+                    //
+                    //                texto += '<div idDetalle="0" ><p style="margin-top:30px;"><div class="indicadorAtencion"></div> Atendido por <b>' + $('#sesion_usuario').val() + '</b> en este instante </p>';
+                    //                texto += '<p class="resolucion">Resolución:</p>';
+                    //                texto += '<textarea class="diagnostico" placeholder="escriba aquí su resolución"></textarea></div>';
+                    //
+                    //
+                    //                $.each(objeto, function (i, item) {
+                    //
+                    //
+                    //                    texto += '<div idDetalle="' + item.idDetalle + '" ><p style="margin-top:30px;"><div class="indicadorAtencion"></div> Atendido por <b>' + item.usuarioAtencion + '</b> el <b>' + item.fechaAtencion + '</b> </p>';
+                    //                    texto += '<p class="resolucion">Resolución:</p>';
+                    //                    texto += '<textarea class="diagnostico">' + item.descripcion + '</textarea></div>';
+                    //
+                    //
+                    //                });
+                    //
+                    //                $("#atencion").html(texto);
+
+                }
+            });
+
+
+
+
+        });
+
+
+        $('#nombreAtencion').typeahead({
+            source: function (query, process) {
+                var nombres = [];
+
+                var obj = {};
+                obj.busqueda = $('#nombreAtencion').val();
+                obj.cantidad = 20;
+
+                $.ajax({
+                    url: "http://informatica.gardilcic.cl/webservice/rrhhService.svc/BuscarTrabajadores",
+                    //        url: "http://localhost:10471/rrhhService.svc/BuscarTrabajadores",
+                    type: "POST",
+                    async: false,
+                    data: JSON.stringify(obj),
+                    dataType: "JSON",
+                    success: function (datos) {
+
+                        var objeto = eval(datos.d);
+
+                        if (objeto.length <= 0) {
+                            //$('#txtNombre').val("");
+                            //("000000000000" + $('#txtRut').val()).slice(-12);
+                        }
+                        $.map(objeto, function (item) {
+                            //   var nombre = item.ApellidoPaterno + " " + item.ApellidoMaterno + " " + item.Nombre;
+                            var itm = {
+                                id: item.Id,
+                                name: item.Nombrecompleto,
+                                rut: item.Rut,
+                                toString: function () {
+                                    return JSON.stringify(this);
+                                },
+                                toLowerCase: function () {
+                                    return this.name.toLowerCase();
+                                },
+                                indexOf: function (string) {
+                                    return String.prototype.indexOf.apply(this.name, arguments);
+                                },
+                                replace: function (string) {
+                                    var value = '';
+                                    value += this.name;
+                                    if (typeof (this.level) != 'undefined') {
+                                        value += ' <span class="pull-right muted">';
+                                        value += this.level;
+                                        value += '</span>';
+                                    }
+                                    return String.prototype.replace.apply('<div style="padding: 1px 2px; font-size: 12px;">' + value + '</div>', arguments);
+                                }
+                            };
+                            nombres.push(itm);
+                        });
+                        return process(nombres);
+                    }
+                });
+            },
+            matcher: function () {
+                return true;
+            },
+            property: 'name',
+            items: 10,
+            minLength: 2,
+            updater: function (item) {
+                var item = JSON.parse(item);
+
+                // $('#nombreAtencion').val(item.name);
+                rut = item.rut;
+
+                return item.name;
+
+
+            }
+        });
+
+
+        cargarTipoAtenciones();
+        cargarSubTipoAtenciones();
+        cargarAtenciones();
+
+
+        $(document).on('click', '.GuardarPariente', function () {
+
+            var obj = {};
+            obj.usuario = $('#sesion_usuario').val();
+            obj.token = $.cookie('PHPSESSID');
+            obj.parentesco = $(this).closest('tr').find("input:eq(0)").val();
+            obj.rut = $(this).closest('tr').find("input:eq(1)").val();
+            obj.nombres = $(this).closest('tr').find("input:eq(2)").val();
+            obj.apellidos = $(this).closest('tr').find("input:eq(3)").val();
+            obj.idFicha = idFicha;
+
+
+            // http://informatica.gardilcic.cl/webservice/rrhhService.svc/GuardarFichaGrupoFamiliar
+            $.post('http://informatica.gardilcic.cl/webservice/rrhhService.svc/GuardarFichaGrupoFamiliar', JSON.stringify(obj), function (data) {
+                //var data = eval(data.d);
+                cargarGrupoFamiliar();
+            });
+
+
+        });
+
+        $(".agregarGrupoFamiliar").click(function () {
+
+            $("#parientes").append('<tr><td><input type="text" class="input-large" value="" /> </td> <td><input type="text" class="input-large" value="" /> </td> <td><input type="text" class="input-large" value="" /> </td><td><input type="text" class="input-large" value="" /></td><td><button class="m-btn green GuardarPariente" style="margin-top:-15px;height:30px">Guardar</button> </td></tr>');
+
+        });
+
+        $(document).on('click', '.eliminarPariente', function () {
+
+            var boton = $(this);
+            var obj = {};
+            obj.usuario = $('#sesion_usuario').val();
+            obj.token = $.cookie('PHPSESSID');
+            obj.id = $(boton).closest('tr').attr('id');
+            // http://informatica.gardilcic.cl/webservice/rrhhService.svc/EliminarGrupoFamiliar
+            $.post('http://informatica.gardilcic.cl/webservice/rrhhService.svc/EliminarGrupoFamiliar', JSON.stringify(obj), function (data) {
+                var data = eval(data.d);
+                if (data[0].cantidad > 0) {
+                    $(boton).closest('tr').remove();
+                }
+                else {
+                    $.notificar({ title: 'Error', message: 'No puede quitarse el integrante', type: 'pastel-danger', delay: 3000 });
+                }
+
+            });
+
+
+        });
+
+
+        $(document).on('click', '.tileAtencion', function () {
+
+            cargarAtencion($(this).attr('value'));
+            $("#atencionResumen").hide();
+            $("#AtencionConsulta").show(500);
+
+        });
+
+        $("#btnNuevaAtencion").click(function () {
+
+            $("#nombreAtencion").val('');
+            $("#ddlArea").val(0);
+            $("#ddlSubArea").val(0);
+            $(".encabezadoFicha").attr('idcabecera', 0);
+            $("#atencion").html('<div iddetalle="0"><p style="margin-top:30px;"></p><div class="indicadorAtencion"></div> Atendido por <b>' + $('#sesion_usuario').val() + '</b> el <input type="text" class="fechaAtencion"/> <p></p><p class="resolucion">Resolución:</p><textarea class="diagnostico" placeholder="escriba aquí su resolución"></textarea><br/><button id="btnGuardarAtencion" class="m-btn green" style="float:left;margin-left:60%">Guardar</button></div>');
+
+            $(".fechaAtencion").calendario();
+            $("#atencionResumen").hide();
+            $("#AtencionConsulta").show(500);
+        });
+
+
+        $("#btnVolverResumen").click(function () {
+
+
+            $("#AtencionConsulta").hide();
+            $("#atencionResumen").show(500);
+
+        });
+
+        $("#btnVolver").click(function () {
+
+            $("#AtencionConsulta").show();
+            $("#FichaConsulta").hide();
+        });
+
+
+        $("#ddlArea").change(function () {
+
+            cargarSubTipoAtenciones();
+
+        });
+
+
+        $(document).on('click', '#btnVerFicha', function () {
+            var obj = {};
+            obj.usuario = $('#sesion_usuario').val();
+            obj.token = $.cookie('PHPSESSID');
+            obj.rut = rut;
+            // http://informatica.gardilcic.cl/webservice/rrhhService.svc/VerFicha
+            $.post('http://informatica.gardilcic.cl/webservice/rrhhService.svc/VerFicha', JSON.stringify(obj), function (data) {
+
+                var data = eval(data.d);
+
+                var data = data[0];
+                idFicha = data.id;
+                $("#txtFichaRut").val(data.rut);
+                $("#txtFichaNombre").val(data.Nombre);
+                $("#txtFichaApellido").val(data.Apellidos);
+                $("#txtFichaEmail").val(data.Email);
+                $("#txtFichaTelefono1").val(data.telefono1);
+                $("#txtFichaTelefono2").val(data.telefono2);
+                $("#txtFichaDomicilio").val(data.Domicilio);
+                $("#txtFichaNacimiento").val(data.fechanacimiento);
+                $("#txtFichaCargo").val(data.Cargo);
+
+
+                $("#myTab li").each(function (i, item) {
+
+                    if (i > 1) //desde el segundo tabs en adelante
+                    {
+                        var tipo = $(this).attr('tipo');
+                        cargarDetalle(tipo);
+                    }
+
+                });
+
+
+
+            }, "json");
+
+            // http://informatica.gardilcic.cl/webservice/rrhhService.svc/VerFichaGrupoFamiliar
+
+            cargarGrupoFamiliar();
+
+            $("#AtencionConsulta").hide();
+            $("#FichaConsulta").show();
+
+        });
+
+
+        $(document).on('click', '.guardaDetalle', function () {
+
+            var obj = {};
+            obj.usuario = $('#sesion_usuario').val();
+            obj.token = $.cookie('PHPSESSID');
+            obj.Tipo = $(this).attr('tipo');
+            obj.idFicha = idFicha;
+            obj.Descripcion = $(this).closest('div').find('textArea').val();
+            // http://informatica.gardilcic.cl/webservice/rrhhService.svc/GuardaFichaDetalle
+            $.post('http://informatica.gardilcic.cl/webservice/rrhhService.svc/GuardaFichaDetalle', JSON.stringify(obj), function (data) {
+                cargarDetalle(obj.Tipo);
+            }, "json");
+        });
+
+
+        $(document).on('change', '#chkCerradas', function () {
+
+            cargarAtenciones();
+
+
+        });
+
+        $(document).on('click', '#btnBuscarHistorial', function () {
+
+            var obj = {};
+
+            $("#chkCerradas").prop('checked', true);
+            obj.usuario = $('#sesion_usuario').val();
+            obj.token = $.cookie('PHPSESSID');
+            obj.rut = $("#txtCodigo").val();
+            // http://informatica.gardilcic.cl/webservice/rrhhService.svc/verAtencionesPorRut
+            $.post('http://informatica.gardilcic.cl/webservice/rrhhService.svc/verAtencionesPorRut', JSON.stringify(obj), function (data) {
+                //var data = eval(data.d);      
+
+                var objeto = eval(data.d);
+                $("#atenciones").html('');
+                var texto = ' <p style="font-size: 18px;color: #ccc;padding: 25px;">Hola, Tus atenciones en curso aparecerán aquí. </p>';
+
+                if (objeto.length > 0) {
+                    texto = '';
+                }
+
+                $.each(objeto, function (i, item) {
+
+                    var estado = ''
+                    if (item.estado == "Cerrada") {
+
+                        estado = 'opacity:0.5';
+                    }
+                    texto += '<div value=' + item.id + ' class="tileAtencion" style="min-width: 600px;max-width: 600px;min-height: 60px; border: #e9eaea solid 1px;margin-bottom:15px !important;' + estado + '">';
+                    texto += ' <div style="min-width: 10px;float:left;min-height: 60px;background-color: ' + item.color + '"></div>';
+                    texto += ' <p style="margin-bottom: 5px;font-size: 17px;padding-left: 20px;padding-top:5px;">Trabajador: ' + item.nombre + ' ' + item.apellidos + '</p>';
+                    texto += ' <p style="width:590px;margin-bottom: 0px;padding-top: 5px;text-align: right;;font-size: 15px;">Última Atención: <b>' + item.fechaAtencion + '</b> por ' + item.usuarioAtencion + '</p>';
+                    texto += '  </div>';
+
+                });
+
+                $("#atenciones").html(texto);
+
+
+            });
+
+
+        });
+
+
+    });
+
+
+
+    function cargarAtenciones() {
+        var obj = {};
+        obj.usuario = $('#sesion_usuario').val();
+        obj.token = $.cookie('PHPSESSID');
+        obj.cerrado = $("#chkCerradas").prop('checked');
+
+
+        $.ajax({
+            type: 'POST',
+            // url: 'http://informatica.gardilcic.cl/webservice/rrhhService.svc/VerAtenciones',
+            url: 'http://informatica.gardilcic.cl/webservice/rrhhService.svc/VerAtenciones',
+            data: JSON.stringify(obj),
+            async: false,
+            success: function (datos) {
+
+                var objeto = eval(datos.d);
+
+                var texto = ' <p style="font-size: 18px;color: #ccc;padding: 25px;">Hola, Tus atenciones en curso aparecerán aquí. </p>';
+
+                if (objeto.length > 0) {
+                    texto = '';
+                }
+
+                $.each(objeto, function (i, item) {
+
+                    var estado = ''
+                    if (item.estado == "Cerrada") {
+
+                        estado = 'opacity:0.5';
+                    }
+                    texto += '<div value=' + item.id + ' class="tileAtencion" style="min-width: 600px;max-width: 600px;min-height: 60px; border: #e9eaea solid 1px;margin-bottom:15px !important;' + estado + '">';
+                    texto += ' <div style="min-width: 10px;float:left;min-height: 60px;background-color: ' + item.color + '"></div>';
+                    texto += ' <p style="margin-bottom: 5px;font-size: 17px;padding-left: 20px;padding-top:5px;">Trabajador: ' + item.nombre + ' ' + item.apellidos + '</p>';
+                    texto += ' <p style="width:590px;margin-bottom: 0px;padding-top: 5px;text-align: right;;font-size: 15px;">Última Atención: <b>' + item.fechaAtencion + '</b> por ' + item.usuarioAtencion + '</p>';
+                    texto += '  </div>';
+
+                });
+
+                $("#atenciones").html(texto);
+
+
+            }
+        });
+    }
+
+
+    function cargarTipoAtenciones() {
+        var obj = {};
+        obj.usuario = $('#sesion_usuario').val();
+        obj.token = $.cookie('PHPSESSID');
+
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://informatica.gardilcic.cl/webservice/rrhhService.svc/VerTipoAtenciones',
+            //    url: 'http://localhost:10471/rrhhService.svc/VerTipoAtenciones',
+            data: JSON.stringify(obj),
+            async: false,
+            success: function (datos) {
+
+                var objeto = eval(datos.d);
+
+                var texto = '';
+                var texto2 = '<option value="0">Seleccione Área</option>';
+
+                $.each(objeto, function (i, item) {
+
+
+                    texto2 += '<option value=' + item.id + '>' + item.tipoAtencion + '</option>';
+                    texto += ' <p style="margin-bottom:20px;font-size:15px"><div style="max-width: 15px;max-height: 15px;min-width: 15px;min-height: 15px;background-color: ' + item.Color + ';float: left;margin-right: 10px;"></div> ' + item.tipoAtencion + ' </p>';
+
+                });
+                $("#ddlArea").html(texto2);
+                $("#tipoAtenciones").html(texto);
+
+            }
+        });
+    }
+
+
+    function cargarAtencion(id) {
+        var obj = {};
+        obj.usuario = $('#sesion_usuario').val();
+        obj.token = $.cookie('PHPSESSID');
+        obj.id = id;
+
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://informatica.gardilcic.cl/webservice/rrhhService.svc/verAtencion',
+            //  url: 'http://localhost:10471/rrhhService.svc/verAtencion',
+            data: JSON.stringify(obj),
+            async: false,
+            success: function (datos) {
+                console.log(datos);
+                var objeto = eval(datos.d);
+
+                var texto = ' <p style="font-size: 18px;color: #ccc;padding: 25px;">El historial de las atenciones aparecerá aquí </p>';
+
+                if (objeto.length > 0) {
+                    texto = '';
+                    $("#ddlArea").val(objeto[0].idTipo);
+                    cargarSubTipoAtenciones();
+                    $("#ddlSubArea").val(objeto[0].idSubTipo);
+                    $("#nombreAtencion").val(objeto[0].nombre + ' ' + objeto[0].apellidos);
+                    $(".encabezadoFicha").attr('idcabecera', objeto[0].idCabecera);
+                    rut = objeto[0].ruttrabajador;
+                }
+
+                texto += '<div idDetalle="0" ><p style="margin-top:30px;"><div class="indicadorAtencion"></div> Atendido por <b>' + $('#sesion_usuario').val() + '</b> en este instante </p>';
+                texto += '<p class="resolucion">Resolución:</p>';
+                texto += '<textarea class="diagnostico" placeholder="escriba aquí su resolución"></textarea><button id="btnGuardarAtencion" class="m-btn green" style="float:left;margin-left:60%">Guardar</button></div>';
+
+
+                $.each(objeto, function (i, item) {
+                    texto += '<div style="clear:left" idDetalle="' + item.idDetalle + '" ><p style="margin-top:30px;"><div class="indicadorAtencion"></div> Atendido por <b>' + item.usuarioAtencion + '</b> el <b>' + item.fechaAtencion + '</b> </p>';
+                    texto += '<p class="resolucion">Resolución:</p>';
+                    texto += '<textarea class="diagnostico">' + item.descripcion + '</textarea></div>';
+                });
+
+                $("#atencion").html(texto);
+
+            }
+        });
+    }
+
+
+    function cargarSubTipoAtenciones() {
+        var obj = {};
+        obj.usuario = $('#sesion_usuario').val();
+        obj.token = $.cookie('PHPSESSID');
+        obj.id = $("#ddlArea").val();
+
+
+
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://informatica.gardilcic.cl/webservice/rrhhService.svc/VerSubTipoAtencion',
+            //  url: 'http://localhost:10471/rrhhService.svc/VerSubTipoAtencion',
+            data: JSON.stringify(obj),
+            async: false,
+            success: function (datos) {
+
+                var objeto = eval(datos.d);
+
+
+                var texto2 = '<option value="0">Seleccione Área</option>';
+
+                $.each(objeto, function (i, item) {
+
+
+                    texto2 += '<option value=' + item.id + '>' + item.SubTipo + '</option>';
+
+                });
+                $("#ddlSubArea").html(texto2);
+
+
+
+            }
+        });
+    }
+
+    function cargaFichaConfiguracion() {
+        var obj = {};
+        obj.usuario = $('#sesion_usuario').val();
+        obj.token = $.cookie('PHPSESSID');
+        obj.id = $("#ddlArea").val();
+
+        $.post('http://informatica.gardilcic.cl/webservice/rrhhService.svc/VerFichaConfiguracion', JSON.stringify(obj), function (data) {
+
+            var data = eval(data.d);
+
+
+
+            $.each(data, function (i, item) {
+
+                var ficha = item.FichaItem.replace(/ /g, '');
+                $("#myTab").append('<li tipo="' + ficha + '"><a  href="#' + ficha + '" data-toggle="tab">' + item.FichaItem + '</a></li>');
+                $(".tab-content").append(' <div class="tab-pane" id="' + ficha + '"></div>');
+
+                $('#' + ficha).append('<h3>' + item.FichaItem + '</h3>' + campoResolucion(ficha, '', true, $('#sesion_usuario').val()));
+
+
+
+            });
+
+
+
+        });
+    }
+
+    function campoResolucion(tipo, valor, mostrarBoton, usuario) {
+        return ' <div id="atencion" style="font-size: 18px;clear: both;margin-top: 25px;">' +
+                ' <p style="margin-top:30px;"><div class="indicadorAtencion"></div> Registrado por <b>' + usuario + '</b> el <b>01-01-2015</b> </p>' +
+                '   <p class="resolucion">Detalle:</p>' +
+                '   <textarea class="diagnostico">' + valor + '</textarea>' +
+                ((mostrarBoton) ? ' <button  class="m-btn green guardaDetalle" idDetalle="0" tipo="' + tipo + '"  style="float:left;margin-left:60%">Guardar</button>' : '') +
+                '  </div>';
+    }
+
+    function cargarDetalle(tipo) {
+        var obj2 = {};
+        obj2.usuario = $('#sesion_usuario').val();
+        obj2.token = $.cookie('PHPSESSID');
+        obj2.idFicha = idFicha;
+        obj2.Tipo = tipo;
+        $.post('http://informatica.gardilcic.cl/webservice/rrhhService.svc/VerFichaDetalle', JSON.stringify(obj2), function (data2) {
+
+            data2 = eval(data2.d);
+            console.log(data2);
+            $('#' + tipo).html('<h3>' + tipo + '</h3>' + campoResolucion(tipo, '', true, $('#sesion_usuario').val()));
+
+            $.each(data2, function (i2, item2) {
+
+                $('#' + item2.Tipo).append(campoResolucion(item2.Tipo, item2.Descripcion, false, item2.Usuario));
+
+
+            });
+
+
+
+        });
+    }
+
+
+
+
+    function cargarGrupoFamiliar() {
+        var obj = {};
+        obj.usuario = $('#sesion_usuario').val();
+        obj.token = $.cookie('PHPSESSID');
+        obj.rut = rut;
+        $.post('http://informatica.gardilcic.cl/webservice/rrhhService.svc/VerFichaGrupoFamiliar', JSON.stringify(obj), function (data) {
+
+            var data = eval(data.d);
+
+            var texto = '';
+            $.each(data, function (i, item) {
+                texto += '<tr id="' + item.id + '"><td><input type="text" class="input-large" value="' + item.Tipo + '" /> </td> <td><input type="text" class="input-large" value="' + item.rut + '" /> </td> <td><input type="text" class="input-large" value="' + item.Nombres + '" /> </td><td><input type="text" class="input-large" value="' + item.Apellidos + '" /></td><td style=text-align:center><i class="icon-remove icon-black eliminarPariente"></i> </td></tr>';
+            });
+            $("#parientes").html(texto);
+
+
+        });
+    }
+
+    
+</script>
+
+    }

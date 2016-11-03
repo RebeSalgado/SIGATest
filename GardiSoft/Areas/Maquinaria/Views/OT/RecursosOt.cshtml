@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewBag.Title = "RecursosOt";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Recursos por OT</h2>
+
+
+<div id="listaRecursos"></div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+    $(document).ready(function () {
+
+          $.ajax({
+                url: '@Url.Action("VerRecursosOt", "OT")',
+                datatype: 'json',
+                type: 'POST',
+                async: true,
+               // data: { id: $("#id").val() }, // o sin stringify para datos primitivos  {rut : item.rut },
+                success: function (data) {
+                    var r = eval(data);
+                    $("#listaRecursos").jsonTabla({ tabla: r });
+                }
+            });
+    });
+
+    </script>
+}
+

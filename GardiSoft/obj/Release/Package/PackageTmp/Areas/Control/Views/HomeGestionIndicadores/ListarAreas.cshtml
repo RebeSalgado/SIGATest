@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Entidades.Control.Area>
+
+<div class="well" style="overflow-x:auto ">
+    <p>
+        @Html.ActionLink("Crear Nueva Area", "CrearAreas")
+    </p>
+    <table class="table table-hover">
+        <tr>
+            <th class="success">
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th class="success"></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.ActionLink("Editar", "EditarAreas", new { id = item.Id_Area }) |
+                    @Html.ActionLink("Detalles", "DetallesArea", new { id = item.Id_Area }) |
+                    @Html.ActionLink("Borrar", "BorrarAreas", new { id = item.Id_Area })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
