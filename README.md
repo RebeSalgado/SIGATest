@@ -1,2 +1,2 @@
 # SIGATest
-Una copia del siga publicado como sigatest
+Se crea repositorio para siga test.
